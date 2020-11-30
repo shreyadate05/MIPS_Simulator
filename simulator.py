@@ -7,7 +7,7 @@ ansFile = ""
 data = []
 instructions = []
 
-def initMIPSParser(argv):
+def initMIPS(argv):
     global ansFile
     ansFile = argv[4]
     instructions = parseInstFile(argv[1])
@@ -16,7 +16,6 @@ def initMIPSParser(argv):
 
 def startSimulator(argv):
     try:
-        initMIPSParser(argv)
-    except:
-        print("Something went wrong. Exiting")
-        return -1
+        initMIPS(argv)
+    except Exception as e:
+        print("Something went wrong. \n", e)
