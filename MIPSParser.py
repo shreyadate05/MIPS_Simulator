@@ -3,7 +3,7 @@ from InstructionHelper import parseInstruction
 from utils import parseFile
 
 def parseInstruction(inst):
-
+    pass
 
 def parseInstFile(instFile):
     instList = parseFile(instFile)
