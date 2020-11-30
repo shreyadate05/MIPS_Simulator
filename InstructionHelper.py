@@ -6,6 +6,7 @@ def isValidOpcode(sOpcode):
 # OUTPUT: Instruction object (calling object) initialized
 def parseInstruction(sInstruction):
     sInstruction = sInstruction.replace(',', '')
+    sInstruction = sInstruction.replace('\t', '')
     instParts =  sInstruction.split(" ")
     print(instParts)
 
