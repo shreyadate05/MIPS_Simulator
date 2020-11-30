@@ -1,4 +1,5 @@
 import logging
+import Instruction
 
 log = logging.getLogger("instructionHelper.py")
 
@@ -29,6 +30,13 @@ instructionMap = {
     'BNE': [3],
     'HLT': [0]
 }
+
+# INPUT:  List of strings comprising of opcodes and operands in an instruction
+# OUTPUT: Instruction object for the input instruction
+def getInstruction(instList):
+    i = Instruction()
+    i.createInstruction(instList)
+    return i
 
 def isOpcodeValid(sOpcode):
     return sOpcode in instructionMap.keys()

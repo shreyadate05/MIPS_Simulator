@@ -1,6 +1,7 @@
 import logging
 from InstructionHelper import getInstructionAsList
 from InstructionHelper import isInstructionValid
+from InstructionHelper import getInstruction
 from utils import parseFile
 
 log = logging.getLogger("mipsParser.py")
@@ -12,6 +13,7 @@ def parseInstruction(inst):
     if not isInstructionValid(instList):
         log.error("Invalid Instruction " + inst)
         raise Exception("Invalid Instruction " + inst)
+    return getInstruction(instList)
 
 # INPUT:  file containing all instructions
 # OUTPUT: List of Instruction object formed from given input Instruction List
