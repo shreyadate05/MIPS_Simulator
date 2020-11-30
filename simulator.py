@@ -1,8 +1,9 @@
-import sys
+import logging
 from MIPSParser import parseInstFile
 from MIPSParser import parseDataFile
 from MIPSParser import parseConfFile
 
+log = logging.getLogger("simulator.py")
 ansFile = ""
 data = []
 instructions = []
@@ -16,6 +17,7 @@ def initMIPS(argv):
 
 def startSimulator(argv):
     try:
+        log.info("Starting simulator...")
         initMIPS(argv)
     except Exception as e:
-        print("Something went wrong. \n", e)
+        log.error("Something went wrong. \n", e)

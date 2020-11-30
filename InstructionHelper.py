@@ -1,4 +1,6 @@
-import sys
+import logging
+
+log = logging.getLogger("instructionHelper.py")
 
 # map of instruction opcode to valid number of operands it can have
 instructionMap = {
@@ -8,7 +10,7 @@ instructionMap = {
     'S.D': [2],
     'LD': [2],
     'SD': [2],
-    'L1': [2],
+    'LI': [2],
     'LUI': [2],
     'DADD': [3],
     'DADDI': [3],
@@ -38,20 +40,23 @@ def isNumberOfOperandsValid(instList):
 # OUTPUT: True/False
 def isInstructionValid(instList):
     tempInst = instList
+    print(instList)
     if instList[0].endswith(":"):
         tempInst = tempInst[1:]
     if not isOpcodeValid(tempInst[0]):
+        log.error("Invalid Opcode for Instruction " + " ".join(instList))
         raise Exception("Invalid Opcode for Instruction " + " ".join(instList))
     if not isNumberOfOperandsValid(tempInst):
+        log.error("Invalid number of operands for Instruction " + " ".join(instList))
         raise Exception("Invalid number of operands for Instruction " + " ".join(instList))
     return True
 
 # INPUT:  String containing 1 instruction (eg. LW
 # OUTPUT: Instruction object (calling object) initialized
 def getInstructionAsList(sInstruction):
-    sInstruction = sInstruction.replace(',', '')
-    sInstruction = sInstruction.replace('\t', '')
+    sInstruction = sInstruction.replace(',','')
+    sInstruction = sInstruction.replace('\t','')
     instParts =  sInstruction.split(" ")
-    print(instParts)
+    return instParts
 
 
