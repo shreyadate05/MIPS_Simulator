@@ -1,7 +1,5 @@
 import enum
 
-
-
 class InstructionType(enum.Enum):
     INV  = 0
     MEM  = 1
@@ -17,14 +15,3 @@ class Instruction:
         self.operand3 = None
         self.hasLabel = False
         self.type     = InstructionType.INV
-
-    def isValidOpcode(self):
-
-    # INPUT:  String containing 1 instruction (eg. LW
-    # OUTPUT: Instruction object (calling object) initialized
-    def parseInstruction(self, sInstruction):
-        instParts =  sInstruction.split(" ")
-        print(instParts)
-
-
-
