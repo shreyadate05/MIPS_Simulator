@@ -1,6 +1,7 @@
 import logging
 from Instruction import Instruction
 from Instruction import InstructionType
+from Instruction import InstructionUnit
 
 log = logging.getLogger("instructionHelper.py")
 
@@ -89,6 +90,19 @@ def printInstruction(I):
         log.debug("type: CTRL")
     if I.type == InstructionType.SPCL:
         log.debug("type: SPCL")
+
+    if I.unit == InstructionUnit.INV:
+        log.debug("unit: INV")
+    if I.unit == InstructionUnit.INT:
+        log.debug("unit: INT")
+    if I.unit == InstructionUnit.ADD:
+        log.debug("unit: ADD")
+    if I.unit == InstructionUnit.MUL:
+        log.debug("unit: MUL")
+    if I.unit == InstructionUnit.DIV:
+        log.debug("unit: DIV")
+    if I.unit == InstructionUnit.NON:
+        log.debug("unit: NON")
 
 
 
