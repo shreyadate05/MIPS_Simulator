@@ -16,21 +16,34 @@ def parseInstruction(inst):
         raise Exception("Invalid Instruction " + inst)
     return getInstruction(instList)
 
-# INPUT:  file containing all instructions
-# OUTPUT: Map of of Instruction ID to Instruction Data object formed from given input Instruction List
-def parseInstFile(instFile):
-    instFileList = parseFile(instFile)
-    instructions = { }
-    for inst in instFileList:
-        log.info("Parsing instruction " + inst)
-        inst = parseInstruction(inst)
-        printInstruction(inst)
-        instructions[inst.id] = inst
-
+def logInstructionsMap(instructions):
     for k, v in instructions.items():
         log.debug(str(k) + ":")
         printInstruction(v)
-    return instructions
+
+def logLabelMap(labelMap):
+    for k, v in labelMap.items():
+        log.debug(k + ":" + str(v))
+
+# INPUT:  file containing all instructions
+# OUTPUT: Map of of Instruction ID to Instruction Data object formed from given input Instruction List
+# OUTPUT: Map of of Instruction Label to Instruction Id
+def parseInstFile(instFile):
+    instFileList = parseFile(instFile)
+    instructions = { }
+    labelMap = {}
+
+    for inst in instFileList:
+        log.info("Parsing instruction " + inst)
+        inst = parseInstruction(inst)
+        instructions[inst.id] = inst
+        if inst.hasLabel:
+            labelMap[inst.label] = inst.id
+
+    logInstructionsMap(instructions)
+    logLabelMap(labelMap)
+
+    return instructions,labelMap
 
 # INPUT:  file containing all input data
 # OUTPUT: List of words in data

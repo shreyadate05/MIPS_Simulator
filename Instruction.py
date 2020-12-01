@@ -26,7 +26,7 @@ class Instruction:
         self.id = id
         if instList[0].endswith(":"):
             self.hasLabel = True
-            self.label = instList[0]
+            self.label = instList[0][:-1]
             instList = instList[1:]
         self.opcode = instList[0]
         if len(instList) > 1:

@@ -13,7 +13,7 @@ labelMap = {}
 def initMIPS(argv):
     global ansFile, data, instructions, configs, labelMap
     ansFile = argv[4]
-    instructions = parseInstFile(argv[1])
+    instructions, labelMap = parseInstFile(argv[1])
     data = parseDataFile(argv[2])
     configs = parseConfFile(argv[3])
 
