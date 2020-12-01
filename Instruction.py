@@ -52,15 +52,15 @@ class Instruction:
         non = ['HLT','J', 'BEQ', 'BNE']
 
         if self.opcode in int:
-            self.type = InstructionUnit.INT
+            self.unit = InstructionUnit.INT
         if self.opcode in add:
-            self.type = InstructionUnit.ADD
+            self.unit = InstructionUnit.ADD
         if self.opcode in mul:
-            self.type = InstructionType.MUL
+            self.unit = InstructionUnit.MUL
         if self.opcode in div:
-            self.type = InstructionType.DIV
+            self.unit = InstructionUnit.DIV
         if self.opcode in non:
-            self.type = InstructionType.NON
+            self.unit = InstructionUnit.NON
 
     def createInstruction(self, instList):
         global id

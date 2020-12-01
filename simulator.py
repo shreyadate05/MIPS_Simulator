@@ -7,15 +7,16 @@ log = logging.getLogger("simulator.py")
 ansFile = ""
 data = []
 instructions = {}
-configs = []
 labelMap = {}
+numUnits = {}
+unitCycles = {}
 
 def initMIPS(argv):
-    global ansFile, data, instructions, configs, labelMap
+    global ansFile, data, instructions, labelMap, numUnits, unitCycles
     ansFile = argv[4]
     instructions, labelMap = parseInstFile(argv[1])
     data = parseDataFile(argv[2])
-    configs = parseConfFile(argv[3])
+    numUnits, unitCycles = parseConfFile(argv[3])
 
 def startSimulator(argv):
     try:
