@@ -5,7 +5,7 @@ from Instruction import InstructionType
 log = logging.getLogger("instructionHelper.py")
 
 # map of instruction opcode to valid number of operands it can have
-instructionMap = {
+numOperandsMap = {
     'LW': [2],
     'SW': [2],
     'L.D': [2],
@@ -40,10 +40,10 @@ def getInstruction(instList):
     return i
 
 def isOpcodeValid(sOpcode):
-    return sOpcode in instructionMap.keys()
+    return sOpcode in numOperandsMap.keys()
 
 def isNumberOfOperandsValid(instList):
-    return len(instList[1:]) in instructionMap[instList[0]]
+    return len(instList[1:]) in numOperandsMap[instList[0]]
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: True/False

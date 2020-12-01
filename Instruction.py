@@ -6,8 +6,8 @@ class InstructionType(enum.Enum):
     INV  = 0
     MEM  = 1
     ALU  = 2
-    CTRL = 3
-    SPCL = 4
+    CTRL  = 3
+    SPCL  = 4
 
 class Instruction:
     def __init__(self):
@@ -19,6 +19,20 @@ class Instruction:
         self.label    = ""
         self.type     = InstructionType.INV
         self.id       = 0
+
+    def assignInstType(self):
+        mem = ['LW','SW','L.D','S.D','LD','SD','LI','LUI']
+        alu = ['ADD.D','SUB.D','AND','OR', 'DADDI','DSUBI', 'ANDI','ORI']
+        ctrl = ['J', 'BEQ', 'BNE']
+        spcl = ['HLT']
+        if self.opcode in mem:
+            self.type = InstructionType.MEM
+        if self.opcode in alu:
+            self.type = InstructionType.ALU
+        if self.opcode in ctrl:
+            self.type = InstructionType.CTRL
+        if self.opcode in spcl:
+            self.type = InstructionType.SPCL
 
     def createInstruction(self, instList):
         global id
@@ -35,3 +49,4 @@ class Instruction:
             self.operand2 = instList[2]
         if len(instList) > 3:
             self.operand3 = instList[3]
+        self.assignInstType()
