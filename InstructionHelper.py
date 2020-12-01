@@ -1,5 +1,6 @@
 import logging
-import Instruction
+from Instruction import Instruction
+from Instruction import InstructionType
 
 log = logging.getLogger("instructionHelper.py")
 
@@ -66,5 +67,29 @@ def getInstructionAsList(sInstruction):
     sInstruction = sInstruction.replace('\t','')
     instParts =  sInstruction.split(" ")
     return instParts
+
+def printInstruction(I):
+    log.debug("Opcode: " + I.opcode)
+    log.debug("Operand 1: " + I.operand1)
+    log.debug("Operand 2: " + I.operand2)
+    log.debug("Operand 3: " + I.operand3)
+    log.debug("label: " + I.label)
+    log.debug("id: " + str(I.id))
+    if I.hasLabel:
+        log.debug("hasLabel: True")
+    else:
+        log.debug("hasLabel: False")
+    if I.type == InstructionType.INV:
+        log.debug("type: INV")
+    if I.type == InstructionType.MEM:
+        log.debug("type: MEM")
+    if I.type == InstructionType.ALU:
+        log.debug("type: ALU")
+    if I.type == InstructionType.CTRL:
+        log.debug("type: CTRL")
+    if I.type == InstructionType.SPCL:
+        log.debug("type: SPCL")
+
+
 
 

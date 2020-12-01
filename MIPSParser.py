@@ -2,6 +2,7 @@ import logging
 from InstructionHelper import getInstructionAsList
 from InstructionHelper import isInstructionValid
 from InstructionHelper import getInstruction
+from InstructionHelper import printInstruction
 from utils import parseFile
 
 log = logging.getLogger("mipsParser.py")
@@ -16,14 +17,19 @@ def parseInstruction(inst):
     return getInstruction(instList)
 
 # INPUT:  file containing all instructions
-# OUTPUT: List of Instruction object formed from given input Instruction List
+# OUTPUT: Map of of Instruction ID to Instruction Data object formed from given input Instruction List
 def parseInstFile(instFile):
     instFileList = parseFile(instFile)
-    instructions = []
+    instructions = { }
     for inst in instFileList:
         log.info("Parsing instruction " + inst)
         inst = parseInstruction(inst)
-        instructions.append(inst)
+        printInstruction(inst)
+        instructions[inst.id] = inst
+
+    for k, v in instructions.items():
+        log.debug(str(k) + ":")
+        printInstruction(v)
     return instructions
 
 # INPUT:  file containing all input data

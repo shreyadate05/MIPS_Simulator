@@ -6,10 +6,12 @@ from MIPSParser import parseConfFile
 log = logging.getLogger("simulator.py")
 ansFile = ""
 data = []
-instructions = []
+instructions = {}
+configs = []
+labelMap = {}
 
 def initMIPS(argv):
-    global ansFile
+    global ansFile, data, instructions, configs, labelMap
     ansFile = argv[4]
     instructions = parseInstFile(argv[1])
     data = parseDataFile(argv[2])
