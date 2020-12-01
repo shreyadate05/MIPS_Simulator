@@ -35,20 +35,25 @@ numOperandsMap = {
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: Instruction object for the input instruction
-def getInstruction(instList):
+def getInstructionObject(instList):
     i = Instruction()
     i.createInstruction(instList)
     return i
 
+# INPUT:  List of strings comprising of opcodes and operands in an instruction
+# OUTPUT: True/False if opcodes are valid
 def isOpcodeValid(sOpcode):
     return sOpcode in numOperandsMap.keys()
 
+# INPUT:  List of strings comprising of opcodes and operands in an instruction
+# OUTPUT: True/False if operands are valid
 def isNumberOfOperandsValid(instList):
     return len(instList[1:]) in numOperandsMap[instList[0]]
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: True/False
 def isInstructionValid(instList):
+    instList = [x.upper() for x in instList]
     tempInst = instList
     print(instList)
     if instList[0].endswith(":"):
@@ -60,14 +65,6 @@ def isInstructionValid(instList):
         log.error("Invalid number of operands for Instruction " + " ".join(instList))
         raise Exception("Invalid number of operands for Instruction " + " ".join(instList))
     return True
-
-# INPUT:  String containing 1 instruction (eg. LW
-# OUTPUT: Instruction object (calling object) initialized
-def getInstructionAsList(sInstruction):
-    sInstruction = sInstruction.replace(',','')
-    sInstruction = sInstruction.replace('\t','')
-    instParts =  sInstruction.split(" ")
-    return instParts
 
 def printInstruction(I):
     log.debug("Opcode: " + I.opcode)

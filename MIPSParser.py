@@ -1,8 +1,7 @@
 import logging
 from Instruction import InstructionUnit
-from InstructionHelper import getInstructionAsList
 from InstructionHelper import isInstructionValid
-from InstructionHelper import getInstruction
+from InstructionHelper import getInstructionObject
 from InstructionHelper import printInstruction
 from utils import parseFile
 
@@ -42,11 +41,11 @@ def getNumUnitsCycles(configs):
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: Instruction object formed from given input Instruction List
 def parseInstruction(inst):
-    instList = getInstructionAsList(inst)
+    instList = inst.split()
     if not isInstructionValid(instList):
         log.error("Invalid Instruction " + inst)
         raise Exception("Invalid Instruction " + inst)
-    return getInstruction(instList)
+    return getInstructionObject(instList)
 
 def logInstructionsMap(instructions):
     for k, v in instructions.items():
