@@ -66,7 +66,6 @@ class Instruction:
         global id
         id += 1
         self.id = id
-        instList = [ str.replace(',', '') for str in instList]
         if instList[0].endswith(":"):
             self.hasLabel = True
             self.label = instList[0][:-1]

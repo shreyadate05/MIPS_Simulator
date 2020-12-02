@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG,
                     filename='debug.log',
                     filemode='w')
 
-log = logging.getLogger("main.py")
+log = logging.getLogger("MAIN")
 log.info("STARTING MIPS SIMULATOR")
 
 if __name__ == '__main__':

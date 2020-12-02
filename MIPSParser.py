@@ -1,11 +1,15 @@
 import logging
-from Instruction import InstructionUnit
-from InstructionHelper import isInstructionValid
-from InstructionHelper import getInstructionObject
-from InstructionHelper import printInstruction
-from utils import parseFile
+from mipsHelper import *
+from logHelper import *
+from utils import *
 
-log = logging.getLogger("mipsParser.py")
+log = logging.getLogger("MIPS Parser")
+
+# INPUT:  file containing all input data
+# OUTPUT: List of words in data
+def parseDataFile(dataFile):
+    data = parseFile(dataFile)
+    return data
 
 # INPUT:  List of strings comprising of unit, num_units, cycles
 # OUTPUT: Map of unit:num_units and unit:cycles
@@ -18,7 +22,6 @@ def getNumUnitsCycles(configs):
     if adder:
         addData = adder[0].split(":")
         addData = addData[1].split(",")
-        print(addData)
         numUnits[InstructionUnit.ADD] = int(addData[0])
         unitCycles[InstructionUnit.ADD] = int(addData[1])
 
@@ -38,23 +41,27 @@ def getNumUnitsCycles(configs):
 
     return numUnits, unitCycles
 
+# INPUT:  file containing all configs for functional units
+# OUTPUT: Map of of Instruction Unit to number of units available
+# OUTPUT: Map of of Instruction Unit to latency in cycles for each unit
+def parseConfFile(confFile):
+    configs = parseFile(confFile)
+    numUnits, unitCycles = getNumUnitsCycles(configs)
+    log.debug("Map of <unit: number of units available> is: ")
+    log.debug(numUnits)
+    log.debug("Map of <unit: latency in number of cycles> is: ")
+    log.debug(unitCycles)
+    return numUnits, unitCycles
+
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: Instruction object formed from given input Instruction List
 def parseInstruction(inst):
     instList = inst.split()
+    instList = [str.replace(',', '') for str in instList]
     if not isInstructionValid(instList):
         log.error("Invalid Instruction " + inst)
         raise Exception("Invalid Instruction " + inst)
     return getInstructionObject(instList)
-
-def logInstructionsMap(instructions):
-    for k, v in instructions.items():
-        log.debug(str(k) + ":")
-        printInstruction(v)
-
-def logLabelMap(labelMap):
-    for k, v in labelMap.items():
-        log.debug(k + ":" + str(v))
 
 # INPUT:  file containing all instructions
 # OUTPUT: Map of of Instruction ID to Instruction Data object formed from given input Instruction List
@@ -65,26 +72,17 @@ def parseInstFile(instFile):
     labelMap = {}
 
     for inst in instFileList:
-        log.info("Parsing instruction " + inst)
+        strInst = inst
+        log.info("Parsing instruction " + strInst)
         inst = parseInstruction(inst)
         instructions[inst.id] = inst
         if inst.hasLabel:
             labelMap[inst.label] = inst.id
 
+        if inst.type == InstructionType.CTRL and inst.operand3 not in labelMap.keys():
+            log.error("Invalid label in instruction " + strInst)
+            raise Exception("Invalid label in instruction " + strInst)
+
     logInstructionsMap(instructions)
     logLabelMap(labelMap)
-
     return instructions,labelMap
-
-# INPUT:  file containing all input data
-# OUTPUT: List of words in data
-def parseDataFile(dataFile):
-    data = parseFile(dataFile)
-    return data
-
-def parseConfFile(confFile):
-    configs = parseFile(confFile)
-    numUnits, unitCycles = getNumUnitsCycles(configs)
-    print(numUnits)
-    print(unitCycles)
-    return numUnits, unitCycles

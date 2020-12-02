@@ -1,15 +1,17 @@
 import logging
-from MIPSParser import parseInstFile
-from MIPSParser import parseDataFile
-from MIPSParser import parseConfFile
+from mipsParser import *
+from mipsHelper import *
 
-log = logging.getLogger("simulator.py")
+log = logging.getLogger("MIPS Simulator")
 ansFile = ""
+registers = getRegisters()
+numOperands = getNumOperands()
 data = []
-instructions = {}
-labelMap = {}
-numUnits = {}
-unitCycles = {}
+instructions = {} # id: <Instruction Object>
+labelMap = {}     # label: id of instruction at which label exists
+numUnits = {}     # InstructionUnit : number of units present
+unitCycles = {}   # InstructionUnit : latency in cycles for each unit
+
 
 def initMIPS(argv):
     global ansFile, data, instructions, labelMap, numUnits, unitCycles
