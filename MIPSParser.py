@@ -22,22 +22,22 @@ def getNumUnitsCycles(configs):
     if adder:
         addData = adder[0].split(":")
         addData = addData[1].split(",")
-        numUnits[InstructionUnit.ADD] = int(addData[0])
-        unitCycles[InstructionUnit.ADD] = int(addData[1])
+        numUnits["ADDER"] = int(addData[0])
+        unitCycles["ADDER"] = int(addData[1])
 
     multiplier = [s for s in configs if "multiplier" in s]
     if multiplier:
         mulData = multiplier[0].split(":")
         mulData = mulData[1].split(",")
-        numUnits[InstructionUnit.MUL] = int(mulData[0])
-        unitCycles[InstructionUnit.MUL] = int(mulData[1])
+        numUnits["MULTIPLIER"] = int(mulData[0])
+        unitCycles["MULTIPLIER"] = int(mulData[1])
 
     divider = [s for s in configs if "divider" in s]
     if divider:
         divData = divider[0].split(":")
         divData = divData[1].split(",")
-        numUnits[InstructionUnit.DIV] = int(divData[0])
-        unitCycles[InstructionUnit.DIV] = int(divData[1])
+        numUnits["DIVIDER"] = int(divData[0])
+        unitCycles["DIVIDER"] = int(divData[1])
 
     return numUnits, unitCycles
 
@@ -47,11 +47,7 @@ def getNumUnitsCycles(configs):
 def parseConfFile(confFile):
     configs = parseFile(confFile)
     numUnits, unitCycles = getNumUnitsCycles(configs)
-    log.debug("Map of <unit: number of units available> is: ")
-    log.debug(numUnits)
-    log.debug("Map of <unit: latency in number of cycles> is: ")
-    log.debug(unitCycles)
-    return numUnits, unitCycles
+    return getUnits(numUnits, unitCycles)
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: Instruction object formed from given input Instruction List

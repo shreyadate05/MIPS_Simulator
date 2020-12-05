@@ -10,16 +10,24 @@ def logInstructionsMap(instructions):
 
 def logLabelMap(labelMap):
     log.debug("Label map <label: instruction id> is: ")
-    for k, v in labelMap.items():
-        log.debug(k + ":" + str(v))
+    log.debug(labelMap)
+
+def printUnit(unit):
+    log.debug("name: " + unit.name)
+    log.debug("totalUnits: " + str(unit.totalUnits))
+    log.debug("availableUnits: " + str(unit.availableUnits))
+    log.debug("totalCycleCounts: " + str(unit.totalCycleCounts))
+    log.debug("availableCycleCounts: " + str(unit.availableCycleCounts))
+    log.debug("instructionsOccupying: " + " ".join(unit.instructionsOccupying))
 
 def printInstruction(I):
+    log.debug("id: " + str(I.id))
     log.debug("Opcode: " + I.opcode)
     log.debug("Operand 1: " + I.operand1)
     log.debug("Operand 2: " + I.operand2)
     log.debug("Operand 3: " + I.operand3)
     log.debug("label: " + I.label)
-    log.debug("id: " + str(I.id))
+    log.debug("unit: " + I.unit)
     if I.hasLabel:
         log.debug("hasLabel: True")
     else:
@@ -34,19 +42,6 @@ def printInstruction(I):
         log.debug("type: CTRL")
     if I.type == InstructionType.SPCL:
         log.debug("type: SPCL")
-
-    if I.unit == InstructionUnit.INV:
-        log.debug("unit: INV")
-    if I.unit == InstructionUnit.INT:
-        log.debug("unit: INT")
-    if I.unit == InstructionUnit.ADD:
-        log.debug("unit: ADD")
-    if I.unit == InstructionUnit.MUL:
-        log.debug("unit: MUL")
-    if I.unit == InstructionUnit.DIV:
-        log.debug("unit: DIV")
-    if I.unit == InstructionUnit.NON:
-        log.debug("unit: NON")
 
 
 

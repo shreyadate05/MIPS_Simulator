@@ -9,14 +9,6 @@ class InstructionType(enum.Enum):
     CTRL  = 3
     SPCL  = 4
 
-class InstructionUnit(enum.Enum):
-    INV  = 0
-    INT  = 1
-    ADD  = 2
-    MUL  = 3
-    DIV  = 4
-    NON  = 5
-
 class Instruction:
     def __init__(self):
         self.opcode   = ""
@@ -27,10 +19,10 @@ class Instruction:
         self.label    = ""
         self.type     = InstructionType.INV
         self.id       = 0
-        self.unit     = InstructionUnit.INV
+        self.unit     = ""
 
     def assignInstType(self):
-        mem = ['LW','SW','L.D','S.D','LD','SD','LI','LUI']
+        mem = ['LW','SW','LI','LUI']
         alu = ['ADD.D','SUB.D','AND','OR', 'ANDI','ORI', 'DADD', 'DSUB', 'DADDI','DSUBI', 'MUL.D', 'DIV.D']
         ctrl = ['J', 'BEQ', 'BNE']
         spcl = ['HLT']
@@ -44,23 +36,25 @@ class Instruction:
             self.type = InstructionType.SPCL
 
     def assignInstUnit(self):
-        int = ['LW','SW','L.D','S.D','LD','SD','LI','LUI',
-               'AND','OR', 'ANDI','ORI', 'DADD', 'DADDI','DSUB', 'DSUBI']
+        int = ['LI','LUI','AND','OR', 'ANDI','ORI', 'DADD', 'DADDI','DSUB', 'DSUBI']
+        mem = ['L.D','S.D','LD','SD','LW','SW']
         add = ['ADD.D','SUB.D']
         mul = ['MUL.D']
         div = ['DIV.D']
-        non = ['HLT','J', 'BEQ', 'BNE']
+        branch = ['HLT','J', 'BEQ', 'BNE']
 
         if self.opcode in int:
-            self.unit = InstructionUnit.INT
+            self.unit = "INTEGER"
+        if self.opcode in mem:
+            self.unit = "MEMORY"
         if self.opcode in add:
-            self.unit = InstructionUnit.ADD
+            self.unit = "ADDER"
         if self.opcode in mul:
-            self.unit = InstructionUnit.MUL
+            self.unit = "MULTIPLIER"
         if self.opcode in div:
-            self.unit = InstructionUnit.DIV
-        if self.opcode in non:
-            self.unit = InstructionUnit.NON
+            self.unit = "DIVIDER"
+        if self.opcode in branch:
+            self.unit = "BRANCH"
 
     def createInstruction(self, instList):
         global id

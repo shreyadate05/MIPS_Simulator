@@ -1,6 +1,8 @@
 import logging
 import re
 from instruction import *
+from unit import *
+from logHelper import *
 
 log = logging.getLogger("MIPS Helper")
 
@@ -28,7 +30,29 @@ def getRegisters():
     }
     return registers
 
+# INPUT:  Maps <unit_name: number_of_units> and <unit_name: cycles_for_unit>
+# OUTPUT: Map <unit_name: unit object>
+def getUnits(numUnits, unitCycles):
+    units = {}
+    units["ADDER"] = createAdderUnit()
+    units["MULTIPLIER"] = createMultiplierUnit()
+    units["DIVIDER"] = createDividerUnit()
+    units["INTEGER"] = createIntegerUnit()
+    units["MEMORY"] = createMemoryUnit()
+    units["BRANCH"] = createBranchUnit()
 
+    print(numUnits)
+    for key in numUnits:
+        units[key].totalUnits = numUnits[key]
+        units[key].availableUnits = units[key].totalUnits
+        units[key].totalCycleCounts = unitCycles[key]
+        units[key].availableCycleCounts = units[key].totalCycleCounts
+
+    log.debug("Map of <unit_name: unit_object> is: ")
+    for key in units:
+        log.debug(key + ":")
+        log.debug(printUnit(units[key]))
+    return units
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: Instruction object for the input instruction
