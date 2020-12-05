@@ -1,6 +1,5 @@
 import sys
 import logging
-import datetime
 from simulator import startSimulator
 
 logging.basicConfig(level=logging.DEBUG,

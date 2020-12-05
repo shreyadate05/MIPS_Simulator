@@ -13,7 +13,7 @@ def logLabelMap(labelMap):
     log.debug(labelMap)
 
 def printUnit(units):
-    log.debug("Map of <unit_name: unit_object> is: ")
+    log.debug("\nMap of <unit_name: unit_object> is: \n")
     for key in units:
         log.debug(key + ":")
         unit = units[key]
@@ -23,6 +23,7 @@ def printUnit(units):
         log.debug("totalCycleCounts: " + str(unit.totalCycleCounts))
         log.debug("availableCycleCounts: " + str(unit.availableCycleCounts))
         log.debug("instructionsOccupying: " + " ".join(unit.instructionsOccupying))
+        log.debug("\n")
 
 def printInstruction(I):
     log.debug("id: " + str(I.id))

@@ -1,24 +1,21 @@
 from mipsParser import *
-from mipsHelper import *
 from pipeline_basic import *
-from mipsDefs import *
+from mipsHelper import *
+import mipsDefs
 
 log = logging.getLogger("MIPS Simulator")
 
 def triggerPipeline():
-    global resultMatrix
-    resultMatrix = start()
-    log.debug(resultMatrix)
+    mipsDefs.resultMatrix = start()
+    log.debug(mipsDefs.resultMatrix)
 
 def initMIPS(argv):
-    global ansFile, registers, numOperands,  data, instructions, labelMap, units
-    global iBlockSize, iBlocks
-    ansFile = argv[4]
-    registers = getRegisters()
-    numOperands = getNumOperands()
-    instructions, labelMap = parseInstFile(argv[1])
-    data = parseDataFile(argv[2])
-    units, iBlocks, iBlockSize = parseConfFile(argv[3])
+    mipsDefs.ansFile = argv[4]
+    mipsDefs.registers = getRegisters()
+    mipsDefs.numOperands = getNumOperands()
+    mipsDefs.instructions, mipsDefs.labelMap = parseInstFile(argv[1])
+    mipsDefs.data = parseDataFile(argv[2])
+    mipsDefs.units, mipsDefs.iBlocks, mipsDefs.iBlockSize = parseConfFile(argv[3])
 
 def startSimulator(argv):
     try:

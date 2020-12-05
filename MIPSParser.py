@@ -41,8 +41,10 @@ def parseInstFile(instFile):
 
     for inst in instFileList:
         strInst = inst
-        log.info("Parsing instruction " + strInst)
+        log.debug("Parsing instruction " + strInst)
         inst = parseInstruction(inst)
+        printInstruction(inst)
+        log.debug("\n")
         instructions[inst.id] = inst
         if inst.hasLabel:
             labelMap[inst.label] = inst.id
@@ -51,6 +53,6 @@ def parseInstFile(instFile):
             log.error("Invalid label in instruction " + strInst)
             raise Exception("Invalid label in instruction " + strInst)
 
-    logInstructionsMap(instructions)
+    #logInstructionsMap(instructions)
     logLabelMap(labelMap)
     return instructions,labelMap

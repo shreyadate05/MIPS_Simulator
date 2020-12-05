@@ -1,4 +1,5 @@
 from mipsHelper import *
+import mipsDefs
 
 log = logging.getLogger("MIPS Pipeline")
 
@@ -14,35 +15,31 @@ isStalled = False
 done = False
 
 def fetch():
-    global instructions, units, registers
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] FETCH")
+    log.debug(mipsDefs.instructions)
 
 
 def issue():
-    global instructions, units, registers
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] ISSUE")
 
 
 def read():
-    global instructions, units, registers
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] READ")
 
 
 def execute():
-    global instructions, units, registers
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] EXECUTE")
 
 
 def write():
-    global instructions, units, registers
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
     global clockCount, isStalled, done, programCounter
     log.debug("[ " + str(clockCount) + " ] WRITE")
@@ -50,7 +47,6 @@ def write():
     programCounter += 1
 
 def start():
-    global instructions, units, registers
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
     global clockCount, isStalled, done
     res = []
@@ -66,6 +62,9 @@ def start():
         write()
 
         clockCount += 1
-        log.debug("\n------------------------------------------\n")
+        if clockCount == 5:
+            done = True
+
+        log.debug("\n")
 
     return res
