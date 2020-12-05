@@ -9,8 +9,17 @@ class InstructionType(enum.Enum):
     CTRL  = 3
     SPCL  = 4
 
+class PipeStage(enum.Enum):
+    INIT  = 0
+    FETCH  = 1
+    ISSUE  = 2
+    READ  = 3
+    EXEC  = 4
+    WRITE = 5
+
 class Instruction:
     def __init__(self):
+        self.id       = 0
         self.opcode   = ""
         self.operand1 = ""
         self.operand2 = ""
@@ -18,8 +27,9 @@ class Instruction:
         self.hasLabel = False
         self.label    = ""
         self.type     = InstructionType.INV
-        self.id       = 0
         self.unit     = ""
+        self.isComplete = False
+        self.pipeStage = PipeStage.INIT
 
     def assignInstType(self):
         mem = ['LW','SW','LI','LUI']

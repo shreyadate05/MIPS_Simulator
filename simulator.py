@@ -11,13 +11,14 @@ def triggerPipeline():
     log.debug(resultMatrix)
 
 def initMIPS(argv):
-    global ansFile, data, instructions, labelMap, numUnits, unitCycles, registers, numOperands
+    global ansFile, registers, numOperands,  data, instructions, labelMap, units
+    global iBlockSize, iBlocks
     ansFile = argv[4]
     registers = getRegisters()
     numOperands = getNumOperands()
     instructions, labelMap = parseInstFile(argv[1])
     data = parseDataFile(argv[2])
-    units = parseConfFile(argv[3])
+    units, iBlocks, iBlockSize = parseConfFile(argv[3])
 
 def startSimulator(argv):
     try:

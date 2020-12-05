@@ -12,13 +12,17 @@ def logLabelMap(labelMap):
     log.debug("Label map <label: instruction id> is: ")
     log.debug(labelMap)
 
-def printUnit(unit):
-    log.debug("name: " + unit.name)
-    log.debug("totalUnits: " + str(unit.totalUnits))
-    log.debug("availableUnits: " + str(unit.availableUnits))
-    log.debug("totalCycleCounts: " + str(unit.totalCycleCounts))
-    log.debug("availableCycleCounts: " + str(unit.availableCycleCounts))
-    log.debug("instructionsOccupying: " + " ".join(unit.instructionsOccupying))
+def printUnit(units):
+    log.debug("Map of <unit_name: unit_object> is: ")
+    for key in units:
+        log.debug(key + ":")
+        unit = units[key]
+        log.debug("name: " + unit.name)
+        log.debug("totalUnits: " + str(unit.totalUnits))
+        log.debug("availableUnits: " + str(unit.availableUnits))
+        log.debug("totalCycleCounts: " + str(unit.totalCycleCounts))
+        log.debug("availableCycleCounts: " + str(unit.availableCycleCounts))
+        log.debug("instructionsOccupying: " + " ".join(unit.instructionsOccupying))
 
 def printInstruction(I):
     log.debug("id: " + str(I.id))
@@ -28,10 +32,17 @@ def printInstruction(I):
     log.debug("Operand 3: " + I.operand3)
     log.debug("label: " + I.label)
     log.debug("unit: " + I.unit)
+
+    if I.isComplete:
+        log.debug("isComplete: True")
+    else:
+        log.debug("isComplete: False")
+
     if I.hasLabel:
         log.debug("hasLabel: True")
     else:
         log.debug("hasLabel: False")
+
     if I.type == InstructionType.INV:
         log.debug("type: INV")
     if I.type == InstructionType.MEM:
@@ -42,6 +53,20 @@ def printInstruction(I):
         log.debug("type: CTRL")
     if I.type == InstructionType.SPCL:
         log.debug("type: SPCL")
+
+    if I.pipeStage == PipeStage.INIT:
+        log.debug("pipeStage: INIT")
+    if I.pipeStage == PipeStage.FETCH:
+        log.debug("pipeStage: FETCH")
+    if I.pipeStage == PipeStage.ISSUE:
+        log.debug("pipeStage: ISSUE")
+    if I.pipeStage == PipeStage.READ:
+        log.debug("pipeStage: READ")
+    if I.pipeStage == PipeStage.EXEC:
+        log.debug("pipeStage: EXEC")
+    if I.pipeStage == PipeStage.WRITE:
+        log.debug("pipeStage: WRITE")
+
 
 
 

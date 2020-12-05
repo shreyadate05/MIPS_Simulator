@@ -1,6 +1,4 @@
-import logging
 import re
-from instruction import *
 from unit import *
 from logHelper import *
 
@@ -41,17 +39,12 @@ def getUnits(numUnits, unitCycles):
     units["MEMORY"] = createMemoryUnit()
     units["BRANCH"] = createBranchUnit()
 
-    print(numUnits)
     for key in numUnits:
         units[key].totalUnits = numUnits[key]
         units[key].availableUnits = units[key].totalUnits
         units[key].totalCycleCounts = unitCycles[key]
         units[key].availableCycleCounts = units[key].totalCycleCounts
-
-    log.debug("Map of <unit_name: unit_object> is: ")
-    for key in units:
-        log.debug(key + ":")
-        log.debug(printUnit(units[key]))
+    printUnit(units)
     return units
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
@@ -96,12 +89,41 @@ def areOperandsValid(opCode, operandList):
 def isNumberOfOperandsValid(instList):
     return len(instList[1:]) in getNumOperands()[instList[0]]
 
+# INPUT:  List of strings comprising of unit, num_units, cycles
+# OUTPUT: Map of unit:num_units and unit:cycles
+def getNumUnitsCycles(configs):
+    numUnits = {}
+    unitCycles = {}
+    configs = [x.lower() for x in configs]
+
+    adder = [s for s in configs if "adder" in s]
+    if adder:
+        addData = adder[0].split(":")
+        addData = addData[1].split(",")
+        numUnits["ADDER"] = int(addData[0])
+        unitCycles["ADDER"] = int(addData[1])
+
+    multiplier = [s for s in configs if "multiplier" in s]
+    if multiplier:
+        mulData = multiplier[0].split(":")
+        mulData = mulData[1].split(",")
+        numUnits["MULTIPLIER"] = int(mulData[0])
+        unitCycles["MULTIPLIER"] = int(mulData[1])
+
+    divider = [s for s in configs if "divider" in s]
+    if divider:
+        divData = divider[0].split(":")
+        divData = divData[1].split(",")
+        numUnits["DIVIDER"] = int(divData[0])
+        unitCycles["DIVIDER"] = int(divData[1])
+
+    return numUnits, unitCycles
+
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: True/False
 def isInstructionValid(instList):
     instList = [x.upper() for x in instList]
     tempInst = instList
-    print(instList)
     if instList[0].endswith(":"):
         tempInst = tempInst[1:]
 
@@ -118,3 +140,11 @@ def isInstructionValid(instList):
         raise Exception("Invalid number of operands for Instruction " + " ".join(instList))
 
     return True
+
+def getICacheConfigs(icache):
+    icacheTemp = icache.split(",")
+    iBlocks = icacheTemp[0].split(":")[1]
+    iBlockSize = icacheTemp[1]
+    log.debug("I-Cache number of blocks: " + str(iBlocks))
+    log.debug("I-Cache block size      : " + str(iBlockSize))
+    return iBlocks, iBlockSize
