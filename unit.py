@@ -6,7 +6,6 @@ class Unit:
         self.totalCycleCounts = 0
         self.availableCycleCounts = 0
         self.instructionsOccupying = []
-        self.isOccupied = False
 
 def createAdderUnit():
     adder = Unit()

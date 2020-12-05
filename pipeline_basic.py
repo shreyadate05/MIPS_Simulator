@@ -1,4 +1,5 @@
 from mipsHelper import *
+import logging
 import mipsDefs
 
 log = logging.getLogger("MIPS Pipeline")
@@ -14,10 +15,15 @@ programCounter = 0
 isStalled = False
 done = False
 
+instructionDependencyDAG = {}
+
 def fetch():
-    global fetchQueue, issueQueue
+    global fetchQueue, issueQueue, instructionDependencyDAG
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] FETCH")
+
+    if not continueExecution(isStalled, programCounter, instructionDependencyDAG):
+        return
 
     if len(fetchQueue) != 0:
         issueQueue.append(fetchQueue.pop(0))
@@ -27,27 +33,63 @@ def fetch():
 
 
 def issue():
-    global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
+    global fetchQueue, issueQueue, readQueue, instructionDependencyDAG
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] ISSUE")
 
+    if len(issueQueue) == 0:
+        return
+
+    currInst = issueQueue[0]
+
+    if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
+        return
+
+    if not isUnitAvailable(currInst):
+        updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, mipsDefs.units[currInst.unit].instructionsOccupying)
+        return
+
+    occupyUnit(mipsDefs.units[currInst.unit], currInst.id)
+
 
 def read():
-    global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
+    global readQueue, execQueue, writeQueue, instructionDependencyDAG
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] READ")
 
+    if len(readQueue) == 0:
+        return
+
+    currInst = readQueue[0]
+    if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
+        return
+
 
 def execute():
-    global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
+    global execQueue, writeQueue, instructionDependencyDAG
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] EXECUTE")
 
+    if len(execQueue) == 0:
+        return
+
+    currInst = execQueue[0]
+    if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
+        return
+
 
 def write():
-    global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
+    global writeQueue, instructionDependencyDAG
     global clockCount, isStalled, done, programCounter
     log.debug("[ " + str(clockCount) + " ] WRITE")
+
+    if len(writeQueue) == 0:
+        return
+
+    currInst = writeQueue[0]
+    if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
+        return
+
 
     programCounter += 1
 
