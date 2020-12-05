@@ -53,6 +53,9 @@ def parseInstFile(instFile):
             log.error("Invalid label in instruction " + strInst)
             raise Exception("Invalid label in instruction " + strInst)
 
-    #logInstructionsMap(instructions)
+    log.debug("Total Number of instructions: " + str(len(instructions)) + "\n")
+
     logLabelMap(labelMap)
+    log.debug("Total Number of labels: " + str(len(labelMap)) + "\n")
+
     return instructions,labelMap

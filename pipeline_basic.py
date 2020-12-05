@@ -18,8 +18,6 @@ def fetch():
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] FETCH")
-    log.debug(mipsDefs.instructions)
-
 
 def issue():
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
@@ -62,9 +60,6 @@ def start():
         write()
 
         clockCount += 1
-        if clockCount == 5:
-            done = True
-
         log.debug("\n")
 
     return res
