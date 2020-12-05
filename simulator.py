@@ -1,9 +1,14 @@
 from mipsParser import *
 from mipsHelper import *
-from pipeline import *
+from pipeline_basic import *
 from mipsDefs import *
 
 log = logging.getLogger("MIPS Simulator")
+
+def triggerPipeline():
+    global resultMatrix
+    resultMatrix = start()
+    log.debug(resultMatrix)
 
 def initMIPS(argv):
     global ansFile, data, instructions, labelMap, numUnits, unitCycles, registers, numOperands
