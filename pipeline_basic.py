@@ -15,9 +15,16 @@ isStalled = False
 done = False
 
 def fetch():
-    global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
+    global fetchQueue, issueQueue
     global clockCount, isStalled, done
     log.debug("[ " + str(clockCount) + " ] FETCH")
+
+    if len(fetchQueue) != 0:
+        issueQueue.append(fetchQueue.pop(0))
+
+    fetchQueue.append(mipsDefs.instructions[programCounter])
+    fetchQueue[0].pipeStage = PipeStage.FETCH
+
 
 def issue():
     global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
@@ -45,8 +52,7 @@ def write():
     programCounter += 1
 
 def start():
-    global fetchQueue, issueQueue, readQueue, execQueue, writeQueue
-    global clockCount, isStalled, done
+    global clockCount, done
     res = []
 
     log.debug("\n")
