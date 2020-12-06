@@ -41,6 +41,7 @@ def updateInstructionDependencyDAG(instructionDependencyDAG, key, valList):
     if key in instructionDependencyDAG.keys():
         prev = instructionDependencyDAG[key]
     instructionDependencyDAG[key] = list(set(prev + valList))
+    log.debug("Instruction dependency DAG is: ")
     log.debug(instructionDependencyDAG)
     return
 
