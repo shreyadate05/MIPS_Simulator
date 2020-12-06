@@ -10,7 +10,9 @@ log = logging.getLogger("MIPS Helper   ")
 # PIPELINE HELPERS
 # ----------------------------------------------------------------------------
 def freeUnit(currInst):
-    mipsDefs.units[currInst.unit].availableCount += 1
+    mipsDefs.units[currInst.unit].availableUnits = mipsDefs.units[currInst.unit].totalUnits
+    mipsDefs.units[currInst.unit].availableCycleCounts = mipsDefs.units[currInst.unit].totalCycleCounts
+    mipsDefs.units[currInst.unit].instructionsOccupying = []
 
 def isStallResolved(instructionId, instructionDependencyDAG):
     keysToRemove = []

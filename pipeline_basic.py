@@ -123,7 +123,7 @@ def write():
     freeUnit(currInst)
 
     programCounter += 1
-    log.debug("Write Back completed for instruction " + str(execQueue[0].id) + " at clock cycle " + str(clockCount))
+    log.debug("Write Back completed for instruction " + str(writeQueue[0].id) + " at clock cycle " + str(clockCount))
 
 def start():
     global clockCount, done, programCounter, allQueue, isStalled, structDependencyDAG, rawDependencyDAG
