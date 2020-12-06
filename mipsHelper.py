@@ -32,6 +32,7 @@ def isStallResolved(instructionId, instructionDependencyDAG):
     return True
 
 def continueExecution(isStalled, instructionId, structDependencyDAG, rawDependencyDAG):
+    logIsStalled(isStalled)
     if isStalled:
         if instructionId in structDependencyDAG.keys() or instructionId in rawDependencyDAG.keys() :
             return False
