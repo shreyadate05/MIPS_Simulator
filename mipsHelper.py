@@ -12,7 +12,6 @@ log = logging.getLogger("MIPS Helper   ")
 def continueExecution(isStalled, instructionId, instructionDependencyDAG):
     if isStalled:
         if instructionId in instructionDependencyDAG.keys():
-            log.debug("Instruction " + str(instructionId) + " cannot be executed. Pipeline is stalled.")
             return False
         return True
 
@@ -31,6 +30,16 @@ def isWAW(currInst, instructionDependencyDAG):
     for i in range(1, currInst.id):
         if not mipsDefs.instructions[i].isComplete:
             if mipsDefs.instructions[i].operand1 == mipsDefs.instructions[currInst.id].operand1:
+                ans = True
+                updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, [mipsDefs.instructions[i].id])
+                break
+    return ans
+
+def isRAW(currInst, instructionDependencyDAG):
+    ans = False
+    for i in range(1, currInst.id):
+        if not mipsDefs.instructions[i].isComplete:
+            if mipsDefs.instructions[i].operand1 == mipsDefs.instructions[currInst.id].operand2 or mipsDefs.instructions[i].operand1 == mipsDefs.instructions[currInst.id].operand3:
                 ans = True
                 updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, [mipsDefs.instructions[i].id])
                 break

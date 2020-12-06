@@ -48,10 +48,12 @@ def issue():
 
     if not isUnitAvailable(currInst, instructionDependencyDAG):
         isStalled = True
+        log.debug("Structural Hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
         return
 
     if isWAW(currInst, instructionDependencyDAG):
         isStalled = True
+        log.debug("WAW hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
         return
 
     occupyUnit(mipsDefs.units[currInst.unit], currInst.id)
@@ -69,6 +71,13 @@ def read():
 
     if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
         return
+
+    if isRAW(currInst, instructionDependencyDAG):
+        isStalled = True
+        log.debug("RAW hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
+        return
+
+    log.debug("Read instruction " + str(readQueue[0].id) + " at clock cycle " + str(clockCount))
 
 
 def execute():
