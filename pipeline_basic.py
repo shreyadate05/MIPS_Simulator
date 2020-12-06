@@ -32,7 +32,7 @@ def fetch():
         return
 
     fetchQueue.append(mipsDefs.instructions[allQueue.pop(0)])
-    log.debug("Fetched instruction " + str(fetchQueue[0].id) + " at clock cycle " + str(clockCount))
+    log.debug("Fetched instruction " + str(fetchQueue[0].id) + ": " + fetchQueue[0].inst+ " at clock cycle " + str(clockCount))
 
     scoreboard = createScoreboard(fetchQueue[0], clockCount)
     mipsDefs.resultMatrix.append(scoreboard)
@@ -68,7 +68,7 @@ def issue():
     isStalled = False
     occupyUnit(currInst)
     issueQueue.append(fetchQueue.pop(0))
-    log.debug("Issued instruction " + str(issueQueue[0].id) + " at clock cycle " + str(clockCount))
+    log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
     log.debug("Issue Queue After: ")
     logQueue(issueQueue)
 
@@ -83,19 +83,18 @@ def read():
     if len(issueQueue) == 0:
         return
 
-    currInst = issueQueue[0]
-
-    if not continueExecution(isStalled, currInst.id, structDependencyDAG, rawDependencyDAG):
-        return
-
-    if isRAW(currInst, rawDependencyDAG):
-        isStalled = True
-        log.debug("RAW hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
-        return
-
-    isStalled = False
     readQueue.append(issueQueue.pop(0))
-    log.debug("Read instruction " + str(readQueue[0].id) + " at clock cycle " + str(clockCount))
+    for inst in readQueue:
+        if not continueExecution(isStalled, inst.id, structDependencyDAG, rawDependencyDAG):
+            continue
+        if isRAW(inst, rawDependencyDAG):
+            isStalled = True
+            log.debug("RAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
+            continue
+        isStalled = False
+        inst.isReadDone = True
+        log.debug("Read instruction " + str(readQueue[0].id) + ": " + readQueue[0].inst+ " at clock cycle " + str(clockCount))
+
     log.debug("Read Queue After: ")
     logQueue(readQueue)
 
@@ -107,19 +106,27 @@ def execute():
     log.debug("Exec Queue Before: ")
     logQueue(execQueue)
 
-    if len(readQueue) == 0:
+    if len(readQueue) == 0 and len(execQueue) == 0:
         return
 
-    currInst = readQueue[0]
+    if len(readQueue) != 0:
+        currInst = readQueue[0]
+    else:
+        currInst = execQueue[0]
+
     if not continueExecution(isStalled, currInst.id, structDependencyDAG, rawDependencyDAG):
         return
 
     if mipsDefs.units[currInst.unit].availableCycleCounts == 1:
         currInst.isExecutionDone = True
-    mipsDefs.units[currInst.unit].availableCycleCounts = mipsDefs.units[currInst.unit].availableCycleCounts - 1
 
-    execQueue.append(readQueue.pop(0))
-    log.debug("Executed instruction " + str(execQueue[0].id) + " at clock cycle " + str(clockCount))
+    mipsDefs.units[currInst.unit].availableCycleCounts -= 1
+
+    if len(readQueue) != 0:
+        execQueue.append(readQueue.pop(0))
+
+    if currInst.isExecutionDone:
+        log.debug("Executed instruction " + str(execQueue[0].id) + ": " + execQueue[0].inst+ " at clock cycle " + str(clockCount))
 
     log.debug("Exec Queue After: ")
     logQueue(execQueue)
@@ -143,28 +150,20 @@ def write():
     if not currInst.isExecutionDone:
         return
 
+    writeQueue.append(execQueue.pop(0))
     currInst.isComplete = True
     structStall = isStallResolved(currInst.id, structDependencyDAG)
     rawStall = isStallResolved(currInst.id, rawDependencyDAG)
-    isStalled = structStall or rawStall
+    isStalled = not(structStall or rawStall)
     currStallVal = isStalled
     freeUnit(currInst)
 
-    writeQueue.append(execQueue.pop(0))
-    log.debug("Write Back completed for instruction " + str(writeQueue[0].id) + " at clock cycle " + str(clockCount))
+    log.debug("Write Back completed for instruction " + str(writeQueue[0].id) + ": " + writeQueue[0].inst + " at clock cycle " + str(clockCount))
 
-    if prevStallVal:
-        log.debug("Previous Stall: True")
-    else:
-        log.debug("Previous Stall: False")
-
-    if currStallVal:
-        log.debug("Current Stall: True")
-    else:
-        log.debug("Curren Stall: False")
-
+    #logPrevAndCurrStall(prevStallVal, currStallVal)
     if prevStallVal == True and currStallVal == False:
         clockCount += 1
+    #clockCount += 1
 
     writeQueue.pop(0)
     log.debug("Write Queue After")

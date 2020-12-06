@@ -31,6 +31,7 @@ class Instruction:
         self.unit     = ""
         self.isComplete = False
         self.isExecutionDone = False
+        self.isReadDone = False
         self.pipeStage = PipeStage.INIT
 
     def __str__(self):
