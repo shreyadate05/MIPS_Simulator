@@ -24,7 +24,7 @@ def fetch():
     global allQueue, fetchQueue, issueQueue, instructionDependencyDAG
     global clockCount, isStalled, done, programCounter
 
-    if not continueExecution(isStalled, programCounter, instructionDependencyDAG):
+    if isStalled:
         return
 
     fetchQueue.append(mipsDefs.instructions[allQueue.pop(0)])
@@ -61,10 +61,12 @@ def read():
     global readQueue, execQueue, writeQueue, instructionDependencyDAG
     global clockCount, isStalled, done
 
-    if len(readQueue) == 0:
+    if len(issueQueue) == 0:
         return
 
+    readQueue.append(issueQueue.pop(0))
     currInst = readQueue[0]
+
     if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
         return
 
@@ -73,9 +75,10 @@ def execute():
     global execQueue, writeQueue, instructionDependencyDAG
     global clockCount, isStalled, done
 
-    if len(execQueue) == 0:
+    if len(readQueue) == 0:
         return
 
+    execQueue.append(readQueue.pop(0))
     currInst = execQueue[0]
     if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
         return
@@ -85,9 +88,10 @@ def write():
     global writeQueue, instructionDependencyDAG
     global clockCount, isStalled, done, programCounter
 
-    if len(writeQueue) == 0:
+    if len(execQueue) == 0:
         return
 
+    writeQueue.append(execQueue.pop(0))
     currInst = writeQueue[0]
     if not continueExecution(isStalled, currInst.id, instructionDependencyDAG):
         return
@@ -95,14 +99,14 @@ def write():
     programCounter += 1
 
 def start():
-    global clockCount, done, programCounter, allQueue
+    global clockCount, done, programCounter, allQueue, isStalled
     res = []
 
-    log.debug("\n")
     log.debug("Starting Pipeline...\n\n")
 
     allQueue = [i for i in range(1,len(mipsDefs.instructions)+1)]
     while not done:
+        log.debug("Clock Cycle: " + str(clockCount))
         write()
         execute()
         read()
