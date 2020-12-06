@@ -1,5 +1,4 @@
 import logging
-from instruction import *
 
 log = logging.getLogger("MIPS Simulator")
 

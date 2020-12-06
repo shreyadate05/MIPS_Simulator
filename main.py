@@ -1,4 +1,3 @@
-import sys
 import logging
 from simulator import startSimulator
 
@@ -15,6 +14,8 @@ if __name__ == '__main__':
     #if len(sys.argv) != 5:
     #    log.error("Invalid number of command line arguments")
     #else:
+    #    startSimulator(argv)
+
     argv = [0 for i in range(5)]
     argv[0] = "main.py"
     argv[1] = "inst.txt"

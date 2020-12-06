@@ -1,9 +1,11 @@
 from mipsHelper import *
+from instruction import *
 import logging
 import mipsDefs
 
 log = logging.getLogger("MIPS Pipeline ")
 
+allQueue   = []
 fetchQueue = []
 issueQueue = []
 readQueue = []
@@ -18,7 +20,7 @@ done = False
 instructionDependencyDAG = {}
 
 def fetch():
-    global fetchQueue, issueQueue, instructionDependencyDAG
+    global allQueue, fetchQueue, issueQueue, instructionDependencyDAG
     global clockCount, isStalled, done, programCounter
     log.debug("[ " + str(clockCount) + " ] FETCH")
 
@@ -28,9 +30,9 @@ def fetch():
     if len(fetchQueue) != 0:
         issueQueue.append(fetchQueue.pop(0))
 
-    fetchQueue.append(mipsDefs.instructions[programCounter])
+    fetchQueue.append(mipsDefs.instructions[allQueue.pop(0)])
     fetchQueue[0].pipeStage = PipeStage.FETCH
-    log.debug("[Instruction " + str(fetchQueue[0].id) + "] fetched at clock  " + str(clockCount))
+    log.debug("[Instruction " + str(fetchQueue[0].id) + "] fetched at clock cycle" + str(clockCount))
 
 
 def issue():
@@ -49,6 +51,7 @@ def issue():
     if not isUnitAvailable(currInst):
         updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, mipsDefs.units[currInst.unit].instructionsOccupying)
         return
+
 
 
     occupyUnit(mipsDefs.units[currInst.unit], currInst.id)

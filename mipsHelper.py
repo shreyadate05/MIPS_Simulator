@@ -1,5 +1,6 @@
 import mipsDefs
 import re
+from instruction import *
 from unit import *
 from logHelper import *
 
