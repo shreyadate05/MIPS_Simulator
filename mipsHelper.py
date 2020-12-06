@@ -12,32 +12,43 @@ log = logging.getLogger("MIPS Helper   ")
 def continueExecution(isStalled, instructionId, instructionDependencyDAG):
     if isStalled:
         if instructionId in instructionDependencyDAG.keys():
-            log.debug("[Instruction " + str(instructionId) + "] Pipeline is stalled & instruction is waiting. Cannot continue execution")
+            log.debug("Instruction " + str(instructionId) + " cannot be executed. Pipeline is stalled.")
             return False
-        log.debug("[Instruction " + str(instructionId) + "] Pipeline is stalled because of instruction. Can continue execution")
         return True
 
-    log.debug("[Instruction " + str(instructionId) + "] Pipeline is not stalled. Can continue execution")
     return True
 
-def isUnitAvailable(currInst):
+def isUnitAvailable(currInst, instructionDependencyDAG):
     requiredUnit = currInst.unit
     ans = mipsDefs.units[requiredUnit].availableUnits != 0
+    if not ans:
+        updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, mipsDefs.units[requiredUnit].instructionsOccupying)
     logUnitAvailability(currInst, ans)
+    return ans
+
+def isWAW(currInst, instructionDependencyDAG):
+    ans = False
+    for i in range(1, currInst.id):
+        if not mipsDefs.instructions[i].isComplete:
+            if mipsDefs.instructions[i].operand1 == mipsDefs.instructions[currInst.id].operand1:
+                ans = True
+                updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, [mipsDefs.instructions[i].id])
+                break
     return ans
 
 def updateInstructionDependencyDAG(instructionDependencyDAG, key, valList):
     prev = []
     if key in instructionDependencyDAG.keys():
         prev = instructionDependencyDAG[key]
-    instructionDependencyDAG[key] = prev + valList
+    instructionDependencyDAG[key] = list(set(prev + valList))
     log.debug(instructionDependencyDAG)
     return
 
 def occupyUnit(unit, currInstId):
     unit.availableUnits = unit.availableUnits - 1
-    unit.instructionsOccupying.append(currInstId)
-    log.debug("[Instruction " + str(currInstId) + "] occupying unit " + unit.name)
+    if currInstId not in unit.instructionsOccupying:
+        unit.instructionsOccupying.append(currInstId)
+    log.debug("Instruction " + str(currInstId) + " is occupying unit " + unit.name)
 
 # ----------------------------------------------------------------------------
 # INITIALIZE DATA HELPERS

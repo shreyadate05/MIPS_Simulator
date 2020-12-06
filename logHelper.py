@@ -4,6 +4,6 @@ log = logging.getLogger("MIPS Simulator")
 
 def logUnitAvailability(instruction, ans):
     if ans:
-        log.debug("[Instruction " + str(instruction.id) + "] Unit " + instruction.unit + " is available." )
+        log.debug("Unit " + instruction.unit + " is available for instruction " + str(instruction.id))
     else:
-        log.debug("[Instruction " + str(instruction.id) + "] Unit " + instruction.unit + " is not available.")
+        log.debug("Unit " + instruction.unit + " is not available for instruction " + str(instruction.id))
