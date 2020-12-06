@@ -30,6 +30,7 @@ class Instruction:
         self.type     = InstructionType.INV
         self.unit     = ""
         self.isComplete = False
+        self.isExecutionDone = False
         self.pipeStage = PipeStage.INIT
 
     def __str__(self):

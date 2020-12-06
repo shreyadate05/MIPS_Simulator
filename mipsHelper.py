@@ -9,9 +9,29 @@ log = logging.getLogger("MIPS Helper   ")
 # ----------------------------------------------------------------------------
 # PIPELINE HELPERS
 # ----------------------------------------------------------------------------
-def continueExecution(isStalled, instructionId, instructionDependencyDAG):
+def freeUnit(currInst):
+    mipsDefs.units[currInst.unit].availableCount += 1
+
+def isStallResolved(instructionId, instructionDependencyDAG):
+    keysToRemove = []
+
+    for key in instructionDependencyDAG:
+        if instructionId in instructionDependencyDAG[key]:
+            instructionDependencyDAG[key].remove(instructionId)
+            if len(instructionDependencyDAG[key]) == 0:
+                keysToRemove.append(key)
+
+    if len(keysToRemove) == 0:
+        return False
+
+    for key in keysToRemove:
+        instructionDependencyDAG.pop(key)
+
+    return True
+
+def continueExecution(isStalled, instructionId, structDependencyDAG, rawDependencyDAG):
     if isStalled:
-        if instructionId in instructionDependencyDAG.keys():
+        if instructionId in structDependencyDAG.keys() or instructionId in rawDependencyDAG.keys() :
             return False
         return True
 
@@ -50,15 +70,14 @@ def updateInstructionDependencyDAG(instructionDependencyDAG, key, valList):
     if key in instructionDependencyDAG.keys():
         prev = instructionDependencyDAG[key]
     instructionDependencyDAG[key] = list(set(prev + valList))
-    log.debug("Instruction dependency DAG is: ")
     log.debug(instructionDependencyDAG)
     return
 
-def occupyUnit(unit, currInstId):
-    unit.availableUnits = unit.availableUnits - 1
-    if currInstId not in unit.instructionsOccupying:
-        unit.instructionsOccupying.append(currInstId)
-    log.debug("Instruction " + str(currInstId) + " is occupying unit " + unit.name)
+def occupyUnit(currInst):
+    mipsDefs.units[currInst.unit].availableUnits -= 1
+    if currInst.id not in mipsDefs.units[currInst.unit].instructionsOccupying:
+        mipsDefs.units[currInst.unit].instructionsOccupying.append(currInst.id)
+    log.debug("Instruction " + str(currInst.id) + " is occupying unit " + mipsDefs.units[currInst.unit].name)
 
 # ----------------------------------------------------------------------------
 # INITIALIZE DATA HELPERS
