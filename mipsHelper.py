@@ -3,7 +3,7 @@ import re
 from unit import *
 from logHelper import *
 
-log = logging.getLogger("MIPS Helper")
+log = logging.getLogger("MIPS Helper   ")
 
 # ----------------------------------------------------------------------------
 # PIPELINE HELPERS
@@ -11,22 +11,32 @@ log = logging.getLogger("MIPS Helper")
 def continueExecution(isStalled, instructionId, instructionDependencyDAG):
     if isStalled:
         if instructionId in instructionDependencyDAG.keys():
+            log.debug("[Instruction " + str(instructionId) + "] Pipeline is stalled & instruction is waiting. Cannot continue execution")
             return False
+        log.debug("[Instruction " + str(instructionId) + "] Pipeline is stalled because of instruction. Can continue execution")
         return True
+
+    log.debug("[Instruction " + str(instructionId) + "] Pipeline is not stalled. Can continue execution")
     return True
 
 def isUnitAvailable(currInst):
     requiredUnit = currInst.unit
-    return mipsDefs.units[requiredUnit].availableUnits != 0
+    ans = mipsDefs.units[requiredUnit].availableUnits != 0
+    logUnitAvailability(currInst, ans)
+    return ans
 
 def updateInstructionDependencyDAG(instructionDependencyDAG, key, valList):
-    prev = instructionDependencyDAG[key]
+    prev = []
+    if key in instructionDependencyDAG.keys():
+        prev = instructionDependencyDAG[key]
     instructionDependencyDAG[key] = prev + valList
+    log.debug(instructionDependencyDAG)
     return
 
 def occupyUnit(unit, currInstId):
     unit.availableUnits = unit.availableUnits - 1
     unit.instructionsOccupying.append(currInstId)
+    log.debug("[Instruction " + str(currInstId) + "] occupying unit " + unit.name)
 
 # ----------------------------------------------------------------------------
 # INITIALIZE DATA HELPERS
@@ -72,7 +82,10 @@ def getUnits(numUnits, unitCycles):
         units[key].availableUnits = units[key].totalUnits
         units[key].totalCycleCounts = unitCycles[key]
         units[key].availableCycleCounts = units[key].totalCycleCounts
-    printUnit(units)
+
+    for key in units:
+        log.debug(units[key])
+
     return units
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction

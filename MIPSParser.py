@@ -3,7 +3,7 @@ from mipsHelper import *
 from logHelper import *
 from utils import *
 
-log = logging.getLogger("MIPS Parser")
+log = logging.getLogger("MIPS Parser   ")
 
 # INPUT:  file containing all input data
 # OUTPUT: List of words in data
@@ -41,10 +41,7 @@ def parseInstFile(instFile):
 
     for inst in instFileList:
         strInst = inst
-        log.debug("Parsing instruction " + strInst)
         inst = parseInstruction(inst)
-        printInstruction(inst)
-        log.debug("\n")
         instructions[inst.id] = inst
         if inst.hasLabel:
             labelMap[inst.label] = inst.id
@@ -53,9 +50,12 @@ def parseInstFile(instFile):
             log.error("Invalid label in instruction " + strInst)
             raise Exception("Invalid label in instruction " + strInst)
 
+    log.debug("\n")
+    for key in instructions:
+        log.debug(instructions[key])
     log.debug("Total Number of instructions: " + str(len(instructions)) + "\n")
 
-    logLabelMap(labelMap)
+    log.debug(labelMap)
     log.debug("Total Number of labels: " + str(len(labelMap)) + "\n")
 
     return instructions,labelMap

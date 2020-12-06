@@ -2,7 +2,7 @@ from mipsHelper import *
 import logging
 import mipsDefs
 
-log = logging.getLogger("MIPS Pipeline")
+log = logging.getLogger("MIPS Pipeline ")
 
 fetchQueue = []
 issueQueue = []
@@ -11,7 +11,7 @@ execQueue = []
 writeQueue = []
 
 clockCount = 1
-programCounter = 0
+programCounter = 1
 isStalled = False
 done = False
 
@@ -19,7 +19,7 @@ instructionDependencyDAG = {}
 
 def fetch():
     global fetchQueue, issueQueue, instructionDependencyDAG
-    global clockCount, isStalled, done
+    global clockCount, isStalled, done, programCounter
     log.debug("[ " + str(clockCount) + " ] FETCH")
 
     if not continueExecution(isStalled, programCounter, instructionDependencyDAG):
@@ -30,6 +30,7 @@ def fetch():
 
     fetchQueue.append(mipsDefs.instructions[programCounter])
     fetchQueue[0].pipeStage = PipeStage.FETCH
+    log.debug("[Instruction " + str(fetchQueue[0].id) + "] fetched at clock  " + str(clockCount))
 
 
 def issue():
@@ -48,6 +49,7 @@ def issue():
     if not isUnitAvailable(currInst):
         updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, mipsDefs.units[currInst.unit].instructionsOccupying)
         return
+
 
     occupyUnit(mipsDefs.units[currInst.unit], currInst.id)
 
@@ -94,20 +96,26 @@ def write():
     programCounter += 1
 
 def start():
-    global clockCount, done
+    global clockCount, done, programCounter, allQueue
     res = []
 
     log.debug("\n")
     log.debug("Starting Pipeline...\n\n")
 
+    allQueue = [i for i in range(1,len(mipsDefs.instructions))]
     while not done:
-        fetch()
-        issue()
-        read()
-        execute()
         write()
+        execute()
+        read()
+        issue()
+        fetch()
 
         clockCount += 1
+        if clockCount == 4:
+            done = True
         log.debug("\n")
+
+        if len(allQueue) == 0:
+            done = True
 
     return res

@@ -1,355 +1,71 @@
-12-05 15:53 MAIN         INFO     STARTING MIPS SIMULATOR
-12-05 15:53 MIPS Simulator INFO     Starting simulator...
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     LI R4, 260
-12-05 15:53 MIPS Simulator DEBUG    id: 1
-12-05 15:53 MIPS Simulator DEBUG    Opcode: LI
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R4
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 260
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: MEM
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
+12-05 19:41 MAIN           INFO     STARTING MIPS SIMULATOR
+12-05 19:41 MIPS Simulator INFO     Starting simulator...
+12-05 19:41 MIPS Parser    DEBUG    
 
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     LI R5, 272
-12-05 15:53 MIPS Simulator DEBUG    id: 2
-12-05 15:53 MIPS Simulator DEBUG    Opcode: LI
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R5
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 272
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: MEM
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 1, 'inst': 'LI R4 260', 'opcode': 'LI', 'operand1': 'R4', 'operand2': '260', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.MEM: 1>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 2, 'inst': 'LI R5 272', 'opcode': 'LI', 'operand1': 'R5', 'operand2': '272', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.MEM: 1>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 3, 'inst': 'LI R1 8', 'opcode': 'LI', 'operand1': 'R1', 'operand2': '8', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.MEM: 1>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 4, 'inst': 'LI R2 4', 'opcode': 'LI', 'operand1': 'R2', 'operand2': '4', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.MEM: 1>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 5, 'inst': 'LI R3 0', 'opcode': 'LI', 'operand1': 'R3', 'operand2': '0', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.MEM: 1>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 6, 'inst': 'GG: L.D F1 4(R4)', 'opcode': 'L.D', 'operand1': 'F1', 'operand2': '4(R4)', 'operand3': '', 'hasLabel': True, 'label': 'GG', 'type': <InstructionType.INV: 0>, 'unit': 'MEMORY', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 7, 'inst': 'L.D F2 8(R5)', 'opcode': 'L.D', 'operand1': 'F2', 'operand2': '8(R5)', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.INV: 0>, 'unit': 'MEMORY', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 8, 'inst': 'ADD.D F4 F6 F2', 'opcode': 'ADD.D', 'operand1': 'F4', 'operand2': 'F6', 'operand3': 'F2', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'ADDER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 9, 'inst': 'SUB.D F5 F7 F1', 'opcode': 'SUB.D', 'operand1': 'F5', 'operand2': 'F7', 'operand3': 'F1', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'ADDER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 10, 'inst': 'MUL.D F6 F1 F5', 'opcode': 'MUL.D', 'operand1': 'F6', 'operand2': 'F1', 'operand3': 'F5', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'MULTIPLIER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 11, 'inst': 'ADD.D F7 F2 F6', 'opcode': 'ADD.D', 'operand1': 'F7', 'operand2': 'F2', 'operand3': 'F6', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'ADDER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 12, 'inst': 'ADD.D F6 F1 F7', 'opcode': 'ADD.D', 'operand1': 'F6', 'operand2': 'F1', 'operand3': 'F7', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'ADDER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 13, 'inst': 'DADDI R4 R4 20', 'opcode': 'DADDI', 'operand1': 'R4', 'operand2': 'R4', 'operand3': '20', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 14, 'inst': 'DADDI R5 R5 8', 'opcode': 'DADDI', 'operand1': 'R5', 'operand2': 'R5', 'operand3': '8', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 15, 'inst': 'DSUB R1 R1 R2', 'opcode': 'DSUB', 'operand1': 'R1', 'operand2': 'R1', 'operand3': 'R2', 'hasLabel': False, 'label': '', 'type': <InstructionType.ALU: 2>, 'unit': 'INTEGER', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 16, 'inst': 'BNE R1 R3 GG', 'opcode': 'BNE', 'operand1': 'R1', 'operand2': 'R3', 'operand3': 'GG', 'hasLabel': False, 'label': '', 'type': <InstructionType.CTRL: 3>, 'unit': 'BRANCH', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 17, 'inst': 'HLT', 'opcode': 'HLT', 'operand1': '', 'operand2': '', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.SPCL: 4>, 'unit': 'BRANCH', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    <class 'instruction.Instruction'>: {'id': 18, 'inst': 'HLT', 'opcode': 'HLT', 'operand1': '', 'operand2': '', 'operand3': '', 'hasLabel': False, 'label': '', 'type': <InstructionType.SPCL: 4>, 'unit': 'BRANCH', 'isComplete': False, 'pipeStage': <PipeStage.INIT: 0>}
+12-05 19:41 MIPS Parser    DEBUG    Total Number of instructions: 18
 
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     LI R1, 8
-12-05 15:53 MIPS Simulator DEBUG    id: 3
-12-05 15:53 MIPS Simulator DEBUG    Opcode: LI
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R1
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 8
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: MEM
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
+12-05 19:41 MIPS Parser    DEBUG    {'GG': 6}
+12-05 19:41 MIPS Parser    DEBUG    Total Number of labels: 1
 
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     LI R2, 4
-12-05 15:53 MIPS Simulator DEBUG    id: 4
-12-05 15:53 MIPS Simulator DEBUG    Opcode: LI
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R2
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 4
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: MEM
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
+12-05 19:41 MIPS Helper    DEBUG    <class 'unit.Unit'>: {'name': 'ADDER', 'totalUnits': 2, 'availableUnits': 2, 'totalCycleCounts': 2, 'availableCycleCounts': 2, 'instructionsOccupying': []}
+12-05 19:41 MIPS Helper    DEBUG    <class 'unit.Unit'>: {'name': 'MULTIPLIER', 'totalUnits': 2, 'availableUnits': 2, 'totalCycleCounts': 30, 'availableCycleCounts': 30, 'instructionsOccupying': []}
+12-05 19:41 MIPS Helper    DEBUG    <class 'unit.Unit'>: {'name': 'DIVIDER', 'totalUnits': 1, 'availableUnits': 1, 'totalCycleCounts': 50, 'availableCycleCounts': 50, 'instructionsOccupying': []}
+12-05 19:41 MIPS Helper    DEBUG    <class 'unit.Unit'>: {'name': 'INTEGER', 'totalUnits': 1, 'availableUnits': 1, 'totalCycleCounts': 1, 'availableCycleCounts': 1, 'instructionsOccupying': []}
+12-05 19:41 MIPS Helper    DEBUG    <class 'unit.Unit'>: {'name': 'MEMORY', 'totalUnits': 1, 'availableUnits': 1, 'totalCycleCounts': 2, 'availableCycleCounts': 2, 'instructionsOccupying': []}
+12-05 19:41 MIPS Helper    DEBUG    <class 'unit.Unit'>: {'name': 'BRANCH', 'totalUnits': 1, 'availableUnits': 1, 'totalCycleCounts': 0, 'availableCycleCounts': 0, 'instructionsOccupying': []}
+12-05 19:41 MIPS Helper    DEBUG    I-Cache number of blocks:  4
+12-05 19:41 MIPS Helper    DEBUG    I-Cache block size      :  4
+12-05 19:41 MIPS Pipeline  DEBUG    
 
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     LI R3, 0
-12-05 15:53 MIPS Simulator DEBUG    id: 5
-12-05 15:53 MIPS Simulator DEBUG    Opcode: LI
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R3
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 0
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: MEM
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction GG: L.D F1, 4(R4)
-12-05 15:53 MIPS Simulator DEBUG    id: 6
-12-05 15:53 MIPS Simulator DEBUG    Opcode: L.D
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: F1
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 4(R4)
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: GG
-12-05 15:53 MIPS Simulator DEBUG    unit: MEMORY
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: True
-12-05 15:53 MIPS Simulator DEBUG    type: INV
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     L.D F2, 8(R5)
-12-05 15:53 MIPS Simulator DEBUG    id: 7
-12-05 15:53 MIPS Simulator DEBUG    Opcode: L.D
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: F2
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 8(R5)
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: MEMORY
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: INV
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     ADD.D F4, F6, F2
-12-05 15:53 MIPS Simulator DEBUG    id: 8
-12-05 15:53 MIPS Simulator DEBUG    Opcode: ADD.D
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: F4
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: F6
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: F2
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: ADDER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     SUB.D F5, F7, F1
-12-05 15:53 MIPS Simulator DEBUG    id: 9
-12-05 15:53 MIPS Simulator DEBUG    Opcode: SUB.D
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: F5
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: F7
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: F1
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: ADDER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     MUL.D F6, F1, F5
-12-05 15:53 MIPS Simulator DEBUG    id: 10
-12-05 15:53 MIPS Simulator DEBUG    Opcode: MUL.D
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: F6
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: F1
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: F5
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: MULTIPLIER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     ADD.D F7, F2, F6
-12-05 15:53 MIPS Simulator DEBUG    id: 11
-12-05 15:53 MIPS Simulator DEBUG    Opcode: ADD.D
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: F7
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: F2
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: F6
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: ADDER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     ADD.D F6, F1, F7
-12-05 15:53 MIPS Simulator DEBUG    id: 12
-12-05 15:53 MIPS Simulator DEBUG    Opcode: ADD.D
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: F6
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: F1
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: F7
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: ADDER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     DADDI R4, R4, 20
-12-05 15:53 MIPS Simulator DEBUG    id: 13
-12-05 15:53 MIPS Simulator DEBUG    Opcode: DADDI
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R4
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: R4
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 20
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     DADDI R5, R5, 8
-12-05 15:53 MIPS Simulator DEBUG    id: 14
-12-05 15:53 MIPS Simulator DEBUG    Opcode: DADDI
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R5
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: R5
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 8
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     DSUB R1, R1, R2
-12-05 15:53 MIPS Simulator DEBUG    id: 15
-12-05 15:53 MIPS Simulator DEBUG    Opcode: DSUB
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R1
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: R1
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: R2
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: ALU
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     BNE R1, R3, GG
-12-05 15:53 MIPS Simulator DEBUG    id: 16
-12-05 15:53 MIPS Simulator DEBUG    Opcode: BNE
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: R1
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: R3
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: GG
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: BRANCH
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: CTRL
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     HLT
-12-05 15:53 MIPS Simulator DEBUG    id: 17
-12-05 15:53 MIPS Simulator DEBUG    Opcode: HLT
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: 
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: BRANCH
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: SPCL
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    Parsing instruction     HLT
-12-05 15:53 MIPS Simulator DEBUG    id: 18
-12-05 15:53 MIPS Simulator DEBUG    Opcode: HLT
-12-05 15:53 MIPS Simulator DEBUG    Operand 1: 
-12-05 15:53 MIPS Simulator DEBUG    Operand 2: 
-12-05 15:53 MIPS Simulator DEBUG    Operand 3: 
-12-05 15:53 MIPS Simulator DEBUG    label: 
-12-05 15:53 MIPS Simulator DEBUG    unit: BRANCH
-12-05 15:53 MIPS Simulator DEBUG    isComplete: False
-12-05 15:53 MIPS Simulator DEBUG    hasLabel: False
-12-05 15:53 MIPS Simulator DEBUG    type: SPCL
-12-05 15:53 MIPS Simulator DEBUG    pipeStage: INIT
-12-05 15:53 MIPS Parser  DEBUG    
-
-12-05 15:53 MIPS Parser  DEBUG    
-Total Number of instructions: 18
-
-12-05 15:53 MIPS Simulator DEBUG    Label map <label: instruction id> is: 
-12-05 15:53 MIPS Simulator DEBUG    {'GG': 6}
-12-05 15:53 MIPS Parser  DEBUG    
-Total Number of labels: 1
-
-12-05 15:53 MIPS Simulator DEBUG    
-Map of <unit_name: unit_object> is: 
-
-12-05 15:53 MIPS Simulator DEBUG    ADDER:
-12-05 15:53 MIPS Simulator DEBUG    name: ADDER
-12-05 15:53 MIPS Simulator DEBUG    totalUnits: 2
-12-05 15:53 MIPS Simulator DEBUG    availableUnits: 2
-12-05 15:53 MIPS Simulator DEBUG    totalCycleCounts: 2
-12-05 15:53 MIPS Simulator DEBUG    availableCycleCounts: 2
-12-05 15:53 MIPS Simulator DEBUG    instructionsOccupying: 
-12-05 15:53 MIPS Simulator DEBUG    
-
-12-05 15:53 MIPS Simulator DEBUG    MULTIPLIER:
-12-05 15:53 MIPS Simulator DEBUG    name: MULTIPLIER
-12-05 15:53 MIPS Simulator DEBUG    totalUnits: 2
-12-05 15:53 MIPS Simulator DEBUG    availableUnits: 2
-12-05 15:53 MIPS Simulator DEBUG    totalCycleCounts: 30
-12-05 15:53 MIPS Simulator DEBUG    availableCycleCounts: 30
-12-05 15:53 MIPS Simulator DEBUG    instructionsOccupying: 
-12-05 15:53 MIPS Simulator DEBUG    
-
-12-05 15:53 MIPS Simulator DEBUG    DIVIDER:
-12-05 15:53 MIPS Simulator DEBUG    name: DIVIDER
-12-05 15:53 MIPS Simulator DEBUG    totalUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    availableUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    totalCycleCounts: 50
-12-05 15:53 MIPS Simulator DEBUG    availableCycleCounts: 50
-12-05 15:53 MIPS Simulator DEBUG    instructionsOccupying: 
-12-05 15:53 MIPS Simulator DEBUG    
-
-12-05 15:53 MIPS Simulator DEBUG    INTEGER:
-12-05 15:53 MIPS Simulator DEBUG    name: INTEGER
-12-05 15:53 MIPS Simulator DEBUG    totalUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    availableUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    totalCycleCounts: 1
-12-05 15:53 MIPS Simulator DEBUG    availableCycleCounts: 1
-12-05 15:53 MIPS Simulator DEBUG    instructionsOccupying: 
-12-05 15:53 MIPS Simulator DEBUG    
-
-12-05 15:53 MIPS Simulator DEBUG    MEMORY:
-12-05 15:53 MIPS Simulator DEBUG    name: MEMORY
-12-05 15:53 MIPS Simulator DEBUG    totalUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    availableUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    totalCycleCounts: 2
-12-05 15:53 MIPS Simulator DEBUG    availableCycleCounts: 2
-12-05 15:53 MIPS Simulator DEBUG    instructionsOccupying: 
-12-05 15:53 MIPS Simulator DEBUG    
-
-12-05 15:53 MIPS Simulator DEBUG    BRANCH:
-12-05 15:53 MIPS Simulator DEBUG    name: BRANCH
-12-05 15:53 MIPS Simulator DEBUG    totalUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    availableUnits: 1
-12-05 15:53 MIPS Simulator DEBUG    totalCycleCounts: 0
-12-05 15:53 MIPS Simulator DEBUG    availableCycleCounts: 0
-12-05 15:53 MIPS Simulator DEBUG    instructionsOccupying: 
-12-05 15:53 MIPS Simulator DEBUG    
-
-12-05 15:53 MIPS Helper  DEBUG    I-Cache number of blocks:  4
-12-05 15:53 MIPS Helper  DEBUG    I-Cache block size      :  4
-12-05 15:53 MIPS Pipeline DEBUG    
-
-12-05 15:53 MIPS Pipeline DEBUG    Starting Pipeline...
+12-05 19:41 MIPS Pipeline  DEBUG    Starting Pipeline...
 
 
-12-05 15:53 MIPS Pipeline DEBUG    [ 1 ] FETCH
-12-05 15:53 MIPS Pipeline DEBUG    [ 1 ] ISSUE
-12-05 15:53 MIPS Pipeline DEBUG    [ 1 ] READ
-12-05 15:53 MIPS Pipeline DEBUG    [ 1 ] EXECUTE
-12-05 15:53 MIPS Pipeline DEBUG    [ 1 ] WRITE
-12-05 15:53 MIPS Pipeline DEBUG    
+12-05 19:41 MIPS Pipeline  DEBUG    [ 1 ] WRITE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 1 ] EXECUTE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 1 ] READ
+12-05 19:41 MIPS Pipeline  DEBUG    [ 1 ] ISSUE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 1 ] FETCH
+12-05 19:41 MIPS Helper    DEBUG    [Instruction 1] Pipeline is not stalled. Can continue execution
+12-05 19:41 MIPS Pipeline  DEBUG    [Instruction 1] fetched at clock  1
+12-05 19:41 MIPS Pipeline  DEBUG    
 
-12-05 15:53 MIPS Pipeline DEBUG    [ 2 ] FETCH
-12-05 15:53 MIPS Pipeline DEBUG    [ 2 ] ISSUE
-12-05 15:53 MIPS Pipeline DEBUG    [ 2 ] READ
-12-05 15:53 MIPS Pipeline DEBUG    [ 2 ] EXECUTE
-12-05 15:53 MIPS Pipeline DEBUG    [ 2 ] WRITE
-12-05 15:53 MIPS Pipeline DEBUG    
+12-05 19:41 MIPS Pipeline  DEBUG    [ 2 ] WRITE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 2 ] EXECUTE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 2 ] READ
+12-05 19:41 MIPS Pipeline  DEBUG    [ 2 ] ISSUE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 2 ] FETCH
+12-05 19:41 MIPS Helper    DEBUG    [Instruction 1] Pipeline is not stalled. Can continue execution
+12-05 19:41 MIPS Pipeline  DEBUG    [Instruction 1] fetched at clock  2
+12-05 19:41 MIPS Pipeline  DEBUG    
 
-12-05 15:53 MIPS Pipeline DEBUG    [ 3 ] FETCH
-12-05 15:53 MIPS Pipeline DEBUG    [ 3 ] ISSUE
-12-05 15:53 MIPS Pipeline DEBUG    [ 3 ] READ
-12-05 15:53 MIPS Pipeline DEBUG    [ 3 ] EXECUTE
-12-05 15:53 MIPS Pipeline DEBUG    [ 3 ] WRITE
-12-05 15:53 MIPS Pipeline DEBUG    
+12-05 19:41 MIPS Pipeline  DEBUG    [ 3 ] WRITE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 3 ] EXECUTE
+12-05 19:41 MIPS Pipeline  DEBUG    [ 3 ] READ
+12-05 19:41 MIPS Pipeline  DEBUG    [ 3 ] ISSUE
+12-05 19:41 MIPS Helper    DEBUG    [Instruction 1] Pipeline is not stalled. Can continue execution
+12-05 19:41 MIPS Simulator DEBUG    [Instruction 1] Unit INTEGER is available.
+12-05 19:41 MIPS Helper    DEBUG    [Instruction 1] occupying unit INTEGER
+12-05 19:41 MIPS Pipeline  DEBUG    [ 3 ] FETCH
+12-05 19:41 MIPS Helper    DEBUG    [Instruction 1] Pipeline is not stalled. Can continue execution
+12-05 19:41 MIPS Pipeline  DEBUG    [Instruction 1] fetched at clock  3
+12-05 19:41 MIPS Pipeline  DEBUG    
 
-12-05 15:53 MIPS Pipeline DEBUG    [ 4 ] FETCH
-12-05 15:53 MIPS Pipeline DEBUG    [ 4 ] ISSUE
-12-05 15:53 MIPS Pipeline DEBUG    [ 4 ] READ
-12-05 15:53 MIPS Pipeline DEBUG    [ 4 ] EXECUTE
-12-05 15:53 MIPS Pipeline DEBUG    [ 4 ] WRITE
-12-05 15:53 MIPS Pipeline DEBUG    
-
-12-05 15:53 MIPS Simulator DEBUG    []
+12-05 19:41 MIPS Simulator DEBUG    []

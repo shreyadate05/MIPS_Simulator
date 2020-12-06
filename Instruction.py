@@ -20,6 +20,7 @@ class PipeStage(enum.Enum):
 class Instruction:
     def __init__(self):
         self.id       = 0
+        self.inst     = ""
         self.opcode   = ""
         self.operand1 = ""
         self.operand2 = ""
@@ -30,6 +31,9 @@ class Instruction:
         self.unit     = ""
         self.isComplete = False
         self.pipeStage = PipeStage.INIT
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
 
     def assignInstType(self):
         mem = ['LW','SW','LI','LUI']
@@ -70,6 +74,7 @@ class Instruction:
         global id
         id += 1
         self.id = id
+        self.inst = " ".join(instList)
         if instList[0].endswith(":"):
             self.hasLabel = True
             self.label = instList[0][:-1]

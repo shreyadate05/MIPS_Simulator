@@ -7,6 +7,9 @@ class Unit:
         self.availableCycleCounts = 0
         self.instructionsOccupying = []
 
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
 def createAdderUnit():
     adder = Unit()
     adder.name = "ADDER"
