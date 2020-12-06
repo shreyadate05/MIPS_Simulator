@@ -1,5 +1,6 @@
 from mipsHelper import *
 from instruction import *
+from scoreboard import *
 import logging
 import mipsDefs
 
@@ -33,7 +34,8 @@ def fetch():
     fetchQueue.append(mipsDefs.instructions[allQueue.pop(0)])
     fetchQueue[0].pipeStage = PipeStage.FETCH
     log.debug("[Instruction " + str(fetchQueue[0].id) + "] fetched at clock cycle" + str(clockCount))
-
+    scoreboard = createScoreboard(fetchQueue[0], clockCount)
+    mipsDefs.resultMatrix.append(scoreboard)
 
 def issue():
     global fetchQueue, issueQueue, readQueue, instructionDependencyDAG
