@@ -19,13 +19,12 @@ done = False
 
 occupiedRegisters = { }
 mipsDefs.programCounter = 1
+programCounter = 1
 res = []
 
 def fetch():
     global allQueue, fetchQueue, issueQueue
-    global clockCount
-
-    print("PC: ", mipsDefs.programCounter)
+    global clockCount, programCounter
 
     if len(issueQueue) != 0:
         return
@@ -33,43 +32,43 @@ def fetch():
     if len(allQueue) == 0:
         return
 
-    if mipsDefs.programCounter >= len(mipsDefs.instructions):
+    if programCounter >= len(mipsDefs.instructions):
         return
 
-    issueQueue.append(mipsDefs.instructions[mipsDefs.programCounter])
+    issueQueue.append(mipsDefs.instructions[programCounter])
     log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
     issueQueue[0].IF = str(clockCount)
-    mipsDefs.programCounter += 1
+    programCounter += 1
 
 def issue():
-    global fetchQueue, issueQueue, readQueue, occupiedRegisters
+    global fetchQueue, issueQueue, readQueue, occupiedRegisters, programCounter
     global clockCount, finalOutputString, res, unitsToFree, allQueue
 
     log.debug("Issue Queue Before: ")
     logQueue(issueQueue)
+    ret = -1
 
     if len(issueQueue) == 0:
-        return
-
+        return ret
 
     currInst = issueQueue[0]
 
-    if currInst.opcode == "HLT":
-        return
+    # if currInst.opcode == "HLT":
+    #     return ret
 
     if not isUnitAvailable(currInst):
         log.debug("Structural Hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
         currInst.Struct = 'Y'
-        return
+        return ret
 
     if isWAW(currInst, occupiedRegisters):
         log.debug("WAW hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
         currInst.WAW = 'Y'
-        return
+        return ret
 
     if currInst.type == InstructionType.CTRL and currInst.opcode == 'J':
         deLim = "-"
-        resolveBranch(currInst, currInst.operand1)
+        ret = resolveBranch(currInst, currInst.operand1)
         currInst.ID = str(clockCount)
         unitsToFree.append(currInst)
         finalOutputString = str(currInst.id) + deLim + currInst.inst + deLim + currInst.IF + deLim + currInst.ID + deLim + currInst.IR + deLim + currInst.EX + deLim + currInst.WB + deLim + currInst.RAW + deLim + currInst.WAW + deLim + currInst.Struct + "\n"
@@ -84,23 +83,22 @@ def issue():
     readQueue.append(issueQueue.pop(0))
     log.debug("Issue Queue After: ")
     logQueue(issueQueue)
-
-
+    return ret
 
 def read():
     global readQueue, execQueue, writeQueue, occupiedRegisters
-    global clockCount, unitsToFree
+    global clockCount, unitsToFree, programCounter
 
-    branchResolved = False
-
+    ret = -1
     log.debug("Read Queue Before: ")
     logQueue(readQueue)
 
     if len(readQueue) == 0:
-        return
+        return ret
 
     instToExec = []
     branchInstToRemove = []
+    ret = -1
     for i in range(len(readQueue)):
         inst = readQueue[i]
         if isWAW(inst, occupiedRegisters):
@@ -115,8 +113,8 @@ def read():
 
         if inst.type == InstructionType.CTRL:
             deLim = "-"
-            branchResolved = True
-            resolveBranch(inst, inst.operand3)
+            ret = resolveBranch(inst, inst.operand3)
+            print(ret)
             inst.IR = str(clockCount)
             unitsToFree.append(inst)
             finalOutputString = str(inst.id) + deLim + inst.inst + deLim + inst.IF + deLim + inst.ID + deLim + inst.IR + deLim + inst.EX + deLim + inst.WB + deLim + inst.RAW + deLim + inst.WAW + deLim + inst.Struct + "\n"
@@ -140,12 +138,9 @@ def read():
         execQueue.append(inst)
         readQueue.remove(inst)
 
-    if branchResolved:
-        issueQueue.clear()
-        readQueue.clear()
-
     log.debug("Read Queue After: ")
     logQueue(readQueue)
+    return ret
 
 
 def execute():
@@ -208,7 +203,7 @@ def write():
 
 def startMIPS():
     global clockCount, done, allQueue, doneQueue, unitsToFree, occupiedRegisters, regsToFree, finalOutputString, res
-    global issueQueue, writeQueue, execQueue, readQueue, allQueue
+    global issueQueue, writeQueue, execQueue, readQueue, allQueue, programCounter
     log.debug("Starting Pipeline...\n\n")
 
     allQueue = [i for i in range(1,len(mipsDefs.instructions)+1)]
@@ -223,16 +218,24 @@ def startMIPS():
         log.debug("Registers Map: ")
         log.debug(mipsDefs.registers)
         log.debug("Program Counter: ")
-        log.debug(mipsDefs.programCounter)
+        log.debug(programCounter)
+
 
         write()
         execute()
-        read()
-        issue()
+        ret1 = read()
+        ret2 = issue()
         fetch()
 
         if len(issueQueue) == 0 and len(readQueue) == 0 and len(execQueue) == 0 and len(writeQueue) == 0:
             done = True
+
+        print("ret1: ", ret1)
+        if ret1 != None and ret1 != -1 :
+            issueQueue.clear()
+            readQueue.clear()
+            programCounter = ret1
+            ret = -1
 
         clockCount += 1
         log.debug("\n")

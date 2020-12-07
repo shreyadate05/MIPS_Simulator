@@ -89,12 +89,13 @@ def runInstruction(currInst):
         log.debug("(" + str(base) + ", " + str(offset) + ")")
 
 def resolveBranch(currInst, label):
-    if label not in mipsDefs.labelMap:
+    if label not in mipsDefs.labelMap.keys():
         return
     if currInst.opcode == 'BEQ' and mipsDefs.registers[currInst.operand1] == mipsDefs.registers[currInst.operand2]:
-        mipsDefs.programCounter =  mipsDefs.labelMap[label]
+        return mipsDefs.labelMap[label]
     if currInst.opcode == 'BNE' and mipsDefs.registers[currInst.operand1] != mipsDefs.registers[currInst.operand2]:
-        mipsDefs.programCounter =  mipsDefs.labelMap[label]
+        return mipsDefs.labelMap[label]
+
 
 def freeUnits(unitsToFree):
     for inst in unitsToFree:
