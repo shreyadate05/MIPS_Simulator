@@ -65,7 +65,7 @@ def createBranchUnit():
     branch.name = "BRANCH"
     branch.totalUnits = 1
     branch.availableUnits = branch.totalUnits
-    branch.totalCycleCounts = 0
+    branch.totalCycleCounts = 1
     branch.availableCycleCounts = branch.totalCycleCounts
     branch.instructionsOccupying = []
     return branch

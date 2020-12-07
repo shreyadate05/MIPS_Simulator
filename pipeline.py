@@ -77,7 +77,8 @@ def read():
             inst.RAW = 'Y'
             log.debug("RAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
             continue
-        occupiedRegisters[inst.operand1] = 1
+        if inst.type != InstructionType.INV and inst.type != InstructionType.SPCL and inst.type != InstructionType.CTRL:
+            occupiedRegisters[inst.operand1] = 1
         inst.IR = str(clockCount)
         log.debug("Read instruction " + str(inst.id) + ": " + inst.inst+ " at clock cycle " + str(clockCount))
         execQueue.append(inst)
@@ -98,8 +99,7 @@ def execute():
         return
 
     for inst in execQueue:
-        mipsDefs.units[inst.unit].availableCycleCounts -= 1
-        if mipsDefs.units[inst.unit].availableCycleCounts <= 0:
+        if mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount:
             inst.isExecutionDone = True
             inst.EX = str(clockCount)
             log.debug("Executed instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
@@ -128,9 +128,11 @@ def write():
     finalOutputString = str(currInst.id) + deLim + currInst.inst + deLim + currInst.IF + deLim + currInst.ID + deLim + currInst.IR + deLim + currInst.EX + deLim + currInst.WB + deLim + currInst.RAW + deLim + currInst.WAW + deLim + currInst.Struct + "\n"
     res.append(finalOutputString)
     log.debug("Write Back completed for instruction " + str(currInst.id) + ": " + currInst.inst + " at clock cycle " + str(clockCount))
-
+    log.debug("Completed instruction: ")
+    log.debug(currInst)
     unitsToFree.append(currInst)
-    regsToFree.append(currInst.operand1)
+    if currInst.type != InstructionType.INV and currInst.type != InstructionType.SPCL and currInst.type != InstructionType.CTRL:
+        regsToFree.append(currInst.operand1)
     doneQueue.append(writeQueue.pop(0))
 
     log.debug("Write Queue After")

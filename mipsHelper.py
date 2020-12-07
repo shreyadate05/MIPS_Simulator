@@ -31,6 +31,9 @@ def isUnitAvailable(currInst):
     return ans
 
 def isWAW(currInst, occupiedRegisters):
+    if currInst.type == InstructionType.INV or currInst.type == InstructionType.SPCL or currInst.type == InstructionType.CTRL:
+        return False
+
     ans = False
     destinationReg = currInst.operand1
     if destinationReg in occupiedRegisters.keys():
@@ -41,6 +44,9 @@ def isRAW(currInst, occupiedRegisters):
     ans = False
     src1 = currInst.operand2
     src2 = currInst.operand3
+    if currInst.type == InstructionType.CTRL:
+        src1 = currInst.operand1
+        src2 = currInst.operand2
     if src1 in occupiedRegisters.keys() or src2 in occupiedRegisters.keys():
         ans = True
     return ans
