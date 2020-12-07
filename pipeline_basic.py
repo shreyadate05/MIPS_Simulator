@@ -80,18 +80,17 @@ def read():
     log.debug("Read Queue Before: ")
     logQueue(readQueue)
 
-    if len(issueQueue) == 0:
+    if isStalled:
         return
 
-    readQueue.append(issueQueue.pop(0))
+    if len(issueQueue) != 0:
+       readQueue.append(issueQueue.pop(0))
+
     for inst in readQueue:
-        if not continueExecution(isStalled, inst.id, structDependencyDAG, rawDependencyDAG):
-            continue
         if isRAW(inst, rawDependencyDAG):
             isStalled = True
             log.debug("RAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
             continue
-        isStalled = False
         inst.isReadDone = True
         log.debug("Read instruction " + str(readQueue[0].id) + ": " + readQueue[0].inst+ " at clock cycle " + str(clockCount))
 
@@ -106,27 +105,24 @@ def execute():
     log.debug("Exec Queue Before: ")
     logQueue(execQueue)
 
-    if len(readQueue) == 0 and len(execQueue) == 0:
-        return
+    for inst in readQueue:
+        if inst.isReadDone:
+            execQueue.append(inst)
 
-    if len(readQueue) != 0:
-        currInst = readQueue[0]
-    else:
-        currInst = execQueue[0]
+    for inst in execQueue:
+        if not continueExecution(isStalled, inst.id, structDependencyDAG, rawDependencyDAG):
+            continue
 
-    if not continueExecution(isStalled, currInst.id, structDependencyDAG, rawDependencyDAG):
-        return
+        mipsDefs.units[inst.unit].availableCycleCounts -= 1
+        if mipsDefs.units[inst.unit].availableCycleCounts <= 0:
+            inst.isExecutionDone = True
+            log.debug("Executed instruction " + str(execQueue[0].id) + ": " + execQueue[0].inst + " at clock cycle " + str(clockCount))
+        else:
+            log.debug("Currently executing instruction " + str(execQueue[0].id) + ": " + execQueue[0].inst + " at clock cycle " + str(clockCount))
 
-    if mipsDefs.units[currInst.unit].availableCycleCounts == 1:
-        currInst.isExecutionDone = True
-
-    mipsDefs.units[currInst.unit].availableCycleCounts -= 1
-
-    if len(readQueue) != 0:
-        execQueue.append(readQueue.pop(0))
-
-    if currInst.isExecutionDone:
-        log.debug("Executed instruction " + str(execQueue[0].id) + ": " + execQueue[0].inst+ " at clock cycle " + str(clockCount))
+    for inst in execQueue:
+        if inst in readQueue and inst.isReadDone:
+            readQueue.remove(inst)
 
     log.debug("Exec Queue After: ")
     logQueue(execQueue)
@@ -160,7 +156,7 @@ def write():
 
     log.debug("Write Back completed for instruction " + str(writeQueue[0].id) + ": " + writeQueue[0].inst + " at clock cycle " + str(clockCount))
 
-    #logPrevAndCurrStall(prevStallVal, currStallVal)
+    logPrevAndCurrStall(prevStallVal, currStallVal)
     if prevStallVal == True and currStallVal == False:
         clockCount += 1
     #clockCount += 1

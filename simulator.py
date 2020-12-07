@@ -1,5 +1,6 @@
 from mipsParser import *
 from pipeline_basic import *
+from pipeline import *
 from mipsHelper import *
 import mipsDefs
 
@@ -22,5 +23,6 @@ def startSimulator(argv):
         log.info("Starting simulator...")
         initMIPS(argv)
         triggerPipeline()
+        #startMIPS()
     except Exception as e:
         log.error("Something went wrong. \n", e)
