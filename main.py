@@ -47,11 +47,11 @@ def test_case_3():
 
 def example():
     argv = [0 for i in range(5)]
-    argv[0] = "main.py"
-    argv[1] = "inst.txt"
-    argv[2] = "data.txt"
-    argv[3] = "conf.txt"
-    argv[4] = "ans.txt"
+    argv[0] = ".\\test_cases\\example\\main.py"
+    argv[1] = ".\\test_cases\\example\\inst.txt"
+    argv[2] = ".\\test_cases\\example\\data.txt"
+    argv[3] = ".\\test_cases\\example\\conf.txt"
+    argv[4] = ".\\test_cases\\example\\ans.txt"
     return argv
 
 
