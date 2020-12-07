@@ -10,29 +10,36 @@ log = logging.getLogger("MIPS Helper   ")
 # PIPELINE HELPERS
 # ----------------------------------------------------------------------------
 def getBaseOffset(operand):
-    base, offset = 0, 0
+    base = 0
+    offset = 0
     if '(' in operand:
         reg = re.search('\(([^)]+)', operand).group(1)
+        print(reg)
         base = mipsDefs.registers[reg]
-    opList = [char for char in operand]
+    opList = [c for c in operand]
     index = opList.index('(')
     offsetList = "".join(opList[:index])
     offset = int(offsetList)
     return base, offset
 
 def runInstruction(currInst):
-    int = ['LI', 'LUI', 'AND', 'OR', 'ANDI', 'ORI', 'DADD', 'DADDI', 'DSUB', 'DSUBI']
-    mem = ['L.D', 'S.D', 'LD', 'SD', 'LW', 'SW']
-    add = ['ADD.D', 'SUB.D']
-    mul = ['MUL.D']
-    div = ['DIV.D']
 
-    if currInst.opcode == "ADD.D" or currInst.opcode == "DADD" or currInst.opcode == "DADDI":
-        src1 = mipsDefs.registers[currInst.operand2]
-        src2 = mipsDefs.registers[currInst.operand3]
+    if currInst.opcode == "ADD.D" or currInst.opcode == "DADD":
+        src1 = int(mipsDefs.registers[currInst.operand2])
+        src2 = int(mipsDefs.registers[currInst.operand3])
         mipsDefs.registers[currInst.operand1] = src1 + src2
 
-    if currInst.opcode == "SUB.D" or currInst.opcode == "DSUB" or currInst.opcode == "DSUBI":
+    if currInst.opcode == "DADDI":
+        src1 = int(mipsDefs.registers[currInst.operand2])
+        src2 = int(currInst.operand3)
+        mipsDefs.registers[currInst.operand1] = src1 + src2
+
+    if currInst.opcode == "DSUBI":
+        src1 = int(mipsDefs.registers[currInst.operand2])
+        src2 = int(currInst.operand3)
+        mipsDefs.registers[currInst.operand1] = src1 - src2
+
+    if currInst.opcode == "SUB.D" or currInst.opcode == "DSUB":
         src1 = mipsDefs.registers[currInst.operand2]
         src2 = mipsDefs.registers[currInst.operand3]
         mipsDefs.registers[currInst.operand1] = src1 - src2
@@ -47,27 +54,37 @@ def runInstruction(currInst):
         src2 = mipsDefs.registers[currInst.operand3]
         mipsDefs.registers[currInst.operand1] = src1 // src2
 
-    if currInst.opcode == "AND" or currInst.opcode == "ANDI":
+    if currInst.opcode == "AND":
         src1 = mipsDefs.registers[currInst.operand2]
         src2 = mipsDefs.registers[currInst.operand3]
         mipsDefs.registers[currInst.operand1] = src1 and src2
 
-    if currInst.opcode == "OR" or currInst.opcode == "ORI":
+    if currInst.opcode == "OR":
         src1 = mipsDefs.registers[currInst.operand2]
         src2 = mipsDefs.registers[currInst.operand3]
+        mipsDefs.registers[currInst.operand1] = src1 and src2
+
+    if currInst.opcode == "ANDI":
+        src1 = int(mipsDefs.registers[currInst.operand2])
+        src2 = int(currInst.operand3)
+        mipsDefs.registers[currInst.operand1] = src1 and src2
+
+    if currInst.opcode == "ORI":
+        src1 = int(mipsDefs.registers[currInst.operand2])
+        src2 = int(currInst.operand3)
         mipsDefs.registers[currInst.operand1] = src1 and src2
 
     if currInst.opcode == "LI" or currInst.opcode == "LUI":
         mipsDefs.registers[currInst.operand1] = int(currInst.operand2)
 
     if currInst.opcode == "LD" or currInst.opcode == "L.D" or currInst.opcode == "LW":
-        base, offset = getBaseOffset(mipsDefs.registers[currInst.operand2])
+        base, offset = getBaseOffset(currInst.operand2)
         mipsDefs.registers[currInst.operand1] = base + offset
         log.debug("(Base, Offset): ")
         log.debug("(" + str(base) + ", " + str(offset) + ")")
 
     if currInst.opcode == "SD" or currInst.opcode == "S.D" or currInst.opcode == "SW":
-        base, offset = getBaseOffset(mipsDefs.registers[currInst.operand2])
+        base, offset = getBaseOffset(currInst.operand2)
         val = base + offset
         mipsDefs.registers[currInst.operand1] = val
         log.debug("(Base, Offset): ")
