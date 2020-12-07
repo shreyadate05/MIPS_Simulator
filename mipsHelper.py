@@ -9,72 +9,41 @@ log = logging.getLogger("MIPS Helper   ")
 # ----------------------------------------------------------------------------
 # PIPELINE HELPERS
 # ----------------------------------------------------------------------------
+def freeUnits(unitsToFree):
+    for inst in unitsToFree:
+        freeUnit(inst)
+        unitsToFree.remove(inst)
+
 def freeUnit(currInst):
     mipsDefs.units[currInst.unit].availableUnits = mipsDefs.units[currInst.unit].totalUnits
     mipsDefs.units[currInst.unit].availableCycleCounts = mipsDefs.units[currInst.unit].totalCycleCounts
     mipsDefs.units[currInst.unit].instructionsOccupying = []
 
-def isStallResolved(instructionId, instructionDependencyDAG):
-    keysToRemove = []
+def freeRegisters(regsToFree, occupiedRegisters):
+    for reg in regsToFree:
+        occupiedRegisters.pop(reg)
+        regsToFree.remove(reg)
 
-    for key in instructionDependencyDAG:
-        if instructionId in instructionDependencyDAG[key]:
-            instructionDependencyDAG[key].remove(instructionId)
-            if len(instructionDependencyDAG[key]) == 0:
-                keysToRemove.append(key)
-
-    if len(keysToRemove) == 0:
-        return False
-
-    for key in keysToRemove:
-        instructionDependencyDAG.pop(key)
-
-    return True
-
-def continueExecution(isStalled, instructionId, structDependencyDAG, rawDependencyDAG):
-    logIsStalled(isStalled)
-    if isStalled:
-        if instructionId in structDependencyDAG.keys() or instructionId in rawDependencyDAG.keys() :
-            return False
-        return True
-
-    return True
-
-def isUnitAvailable(currInst, instructionDependencyDAG):
+def isUnitAvailable(currInst):
     requiredUnit = currInst.unit
     ans = mipsDefs.units[requiredUnit].availableUnits != 0
-    if not ans:
-        updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, mipsDefs.units[requiredUnit].instructionsOccupying)
     logUnitAvailability(currInst, ans)
     return ans
 
-def isWAW(currInst, instructionDependencyDAG):
+def isWAW(currInst, occupiedRegisters):
     ans = False
-    for i in range(1, currInst.id):
-        if not mipsDefs.instructions[i].isComplete:
-            if mipsDefs.instructions[i].operand1 == mipsDefs.instructions[currInst.id].operand1:
-                ans = True
-                updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, [mipsDefs.instructions[i].id])
-                break
+    destinationReg = currInst.operand1
+    if destinationReg in occupiedRegisters.keys():
+        ans = True
     return ans
 
-def isRAW(currInst, instructionDependencyDAG):
+def isRAW(currInst, occupiedRegisters):
     ans = False
-    for i in range(1, currInst.id):
-        if not mipsDefs.instructions[i].isComplete:
-            if mipsDefs.instructions[i].operand1 == mipsDefs.instructions[currInst.id].operand2 or mipsDefs.instructions[i].operand1 == mipsDefs.instructions[currInst.id].operand3:
-                ans = True
-                updateInstructionDependencyDAG(instructionDependencyDAG, currInst.id, [mipsDefs.instructions[i].id])
-                break
+    src1 = currInst.operand2
+    src2 = currInst.operand3
+    if src1 in occupiedRegisters.keys() or src2 in occupiedRegisters.keys():
+        ans = True
     return ans
-
-def updateInstructionDependencyDAG(instructionDependencyDAG, key, valList):
-    prev = []
-    if key in instructionDependencyDAG.keys():
-        prev = instructionDependencyDAG[key]
-    instructionDependencyDAG[key] = list(set(prev + valList))
-    log.debug(instructionDependencyDAG)
-    return
 
 def occupyUnit(currInst):
     mipsDefs.units[currInst.unit].availableUnits -= 1

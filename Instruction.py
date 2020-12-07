@@ -9,14 +9,6 @@ class InstructionType(enum.Enum):
     CTRL  = 3
     SPCL  = 4
 
-class PipeStage(enum.Enum):
-    INIT  = 0
-    FETCH  = 1
-    ISSUE  = 2
-    READ  = 3
-    EXEC  = 4
-    WRITE = 5
-
 class Instruction:
     def __init__(self):
         self.id       = 0
@@ -29,10 +21,16 @@ class Instruction:
         self.label    = ""
         self.type     = InstructionType.INV
         self.unit     = ""
-        self.isComplete = False
         self.isExecutionDone = False
-        self.isReadDone = False
-        self.pipeStage = PipeStage.INIT
+
+        self.IF = '0'
+        self.ID = '0'
+        self.IR = '0'
+        self.EX = '0'
+        self.WB = '0'
+        self.Struct = 'N'
+        self.WAW = 'Y'
+        self.RAW = 'Y'
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)

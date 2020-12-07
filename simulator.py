@@ -22,7 +22,7 @@ def startSimulator(argv):
     try:
         log.info("Starting simulator...")
         initMIPS(argv)
-        triggerPipeline()
-        #startMIPS()
+        #triggerPipeline()
+        startMIPS()
     except Exception as e:
         log.error("Something went wrong. \n", e)
