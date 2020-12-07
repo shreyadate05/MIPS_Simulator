@@ -1,14 +1,9 @@
 from mipsParser import *
-from pipeline_basic import *
 from pipeline import *
 from mipsHelper import *
 import mipsDefs
 
 log = logging.getLogger("MIPS Simulator")
-
-def triggerPipeline():
-    mipsDefs.resultMatrix = start()
-    log.debug(mipsDefs.resultMatrix)
 
 def initMIPS(argv):
     mipsDefs.ansFile = argv[4]
@@ -22,7 +17,6 @@ def startSimulator(argv):
     try:
         log.info("Starting simulator...")
         initMIPS(argv)
-        #triggerPipeline()
         startMIPS()
     except Exception as e:
         log.error("Something went wrong. \n", e)

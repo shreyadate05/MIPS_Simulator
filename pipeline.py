@@ -27,6 +27,9 @@ def fetch():
     if len(issueQueue) != 0:
         return
 
+    if len(allQueue) == 0:
+        return
+
     issueQueue.append(mipsDefs.instructions[allQueue.pop(0)])
     log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
     issueQueue[0].IF = str(clockCount)
@@ -73,6 +76,11 @@ def read():
         return
 
     for inst in readQueue:
+        if isWAW(inst, occupiedRegisters):
+            log.debug("WAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
+            inst.WAW = 'Y'
+            continue
+
         if isRAW(inst, occupiedRegisters):
             inst.RAW = 'Y'
             log.debug("RAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
@@ -143,7 +151,7 @@ def startMIPS():
     global clockCount, done, allQueue, doneQueue, unitsToFree, occupiedRegisters, regsToFree, finalOutputString, res
     log.debug("Starting Pipeline...\n\n")
 
-    allQueue = [i for i in range(1,len(mipsDefs.instructions)+1)]
+    allQueue = [i for i in range(1,len(mipsDefs.instructions)+1-2)]
     while not done:
         log.debug("Clock Cycle: " + str(clockCount))
         freeUnits(unitsToFree)
@@ -157,7 +165,7 @@ def startMIPS():
         issue()
         fetch()
 
-        if len(allQueue) == 0:
+        if len(doneQueue) == len(mipsDefs.instructions) - 2:
             done = True
 
         clockCount += 1
