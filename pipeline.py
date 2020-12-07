@@ -36,7 +36,7 @@ def fetch():
 
 def issue():
     global fetchQueue, issueQueue, readQueue, occupiedRegisters
-    global clockCount, finalOutputString, res, unitsToFree
+    global clockCount, finalOutputString, res, unitsToFree, allQueue
 
     log.debug("Issue Queue Before: ")
     logQueue(issueQueue)
@@ -58,7 +58,7 @@ def issue():
 
     if currInst.type == InstructionType.CTRL and currInst.opcode == 'J':
         deLim = "-"
-        resolveBranch(currInst)
+        resolveBranch(currInst, allQueue)
         currInst.ID = str(clockCount)
         unitsToFree.append(currInst)
         finalOutputString = str(currInst.id) + deLim + currInst.inst + deLim + currInst.IF + deLim + currInst.ID + deLim + currInst.IR + deLim + currInst.EX + deLim + currInst.WB + deLim + currInst.RAW + deLim + currInst.WAW + deLim + currInst.Struct + "\n"
@@ -78,7 +78,7 @@ def issue():
 
 def read():
     global readQueue, execQueue, writeQueue, occupiedRegisters
-    global clockCount, unitsToFree
+    global clockCount, unitsToFree, allQueue
 
     log.debug("Read Queue Before: ")
     logQueue(readQueue)
@@ -148,6 +148,7 @@ def execute():
         if mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount:
             inst.isExecutionDone = True
             inst.EX = str(clockCount)
+            runInstruction(inst)
             log.debug("Executed instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
             instToWrite.append(inst)
         else:
@@ -204,6 +205,8 @@ def startMIPS():
         freeRegisters(regsToFree, occupiedRegisters)
         log.debug("Occupied Registers Map: ")
         log.debug(occupiedRegisters)
+        log.debug("Registers Map: ")
+        log.debug(mipsDefs.registers)
 
         write()
         execute()
