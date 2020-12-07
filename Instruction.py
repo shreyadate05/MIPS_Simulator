@@ -55,7 +55,8 @@ class Instruction:
         add = ['ADD.D','SUB.D']
         mul = ['MUL.D']
         div = ['DIV.D']
-        branch = ['HLT','J', 'BEQ', 'BNE']
+        branch = ['J', 'BEQ', 'BNE']
+        halt = ['HLT']
 
         if self.opcode in int:
             self.unit = "INTEGER"
@@ -69,6 +70,9 @@ class Instruction:
             self.unit = "DIVIDER"
         if self.opcode in branch:
             self.unit = "BRANCH"
+        if self.opcode in halt:
+            self.unit = "HALT"
+
 
     def createInstruction(self, instList):
         global id

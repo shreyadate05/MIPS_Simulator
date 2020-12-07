@@ -69,3 +69,13 @@ def createBranchUnit():
     branch.availableCycleCounts = branch.totalCycleCounts
     branch.instructionsOccupying = []
     return branch
+
+def createHaltUnit():
+    branch = Unit()
+    branch.name = "HALT"
+    branch.totalUnits = 5
+    branch.availableUnits = branch.totalUnits
+    branch.totalCycleCounts = 1
+    branch.availableCycleCounts = branch.totalCycleCounts
+    branch.instructionsOccupying = []
+    return branch

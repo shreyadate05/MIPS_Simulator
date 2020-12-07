@@ -16,6 +16,6 @@ GG: 	L.D F1, 4(R4)
 	DADDI  R5,   R5,  32
 	DADDI  R8,   R8,  24
     	DSUB  R1,   R1,  R2
-    	BNE  R1,   R3,  GG 
+    	BNE  R1,   R3,  GG
     	HLT
 	HLT

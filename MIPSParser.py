@@ -46,7 +46,7 @@ def parseInstFile(instFile):
         if inst.hasLabel:
             labelMap[inst.label] = inst.id
 
-        if inst.type == InstructionType.CTRL and inst.operand3 not in labelMap.keys():
+        if inst.type == InstructionType.CTRL and inst.opcode != 'J' and inst.operand3 not in labelMap.keys():
             log.error("Invalid label in instruction " + strInst)
             raise Exception("Invalid label in instruction " + strInst)
 

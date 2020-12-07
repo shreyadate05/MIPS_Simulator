@@ -9,6 +9,9 @@ log = logging.getLogger("MIPS Helper   ")
 # ----------------------------------------------------------------------------
 # PIPELINE HELPERS
 # ----------------------------------------------------------------------------
+def resolveBranch(currInst):
+    pass
+
 def freeUnits(unitsToFree):
     for inst in unitsToFree:
         freeUnit(inst)
@@ -95,6 +98,7 @@ def getUnits(numUnits, unitCycles):
     units["INTEGER"] = createIntegerUnit()
     units["MEMORY"] = createMemoryUnit()
     units["BRANCH"] = createBranchUnit()
+    units["HALT"] = createHaltUnit()
 
     for key in numUnits:
         units[key].totalUnits = numUnits[key]
