@@ -56,5 +56,5 @@ def example():
 
 
 if __name__ == '__main__':
-    argv = test_case_1()
+    argv = example()
     startSimulator(argv)

@@ -75,7 +75,9 @@ def read():
     if len(readQueue) == 0:
         return
 
-    for inst in readQueue:
+    instToExec = []
+    for i in range(len(readQueue)):
+        inst = readQueue[i]
         if isWAW(inst, occupiedRegisters):
             log.debug("WAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
             inst.WAW = 'Y'
@@ -89,8 +91,13 @@ def read():
             occupiedRegisters[inst.operand1] = 1
         inst.IR = str(clockCount)
         log.debug("Read instruction " + str(inst.id) + ": " + inst.inst+ " at clock cycle " + str(clockCount))
+        instToExec.append(inst)
+
+    for i in range(len(instToExec)):
+        inst = instToExec[i]
         execQueue.append(inst)
         readQueue.remove(inst)
+
 
     log.debug("Read Queue After: ")
     logQueue(readQueue)
@@ -106,15 +113,21 @@ def execute():
     if len(execQueue) == 0:
         return
 
-    for inst in execQueue:
+    instToWrite = []
+    for i in range(len(execQueue)):
+        inst = execQueue[i]
         if mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount:
             inst.isExecutionDone = True
             inst.EX = str(clockCount)
             log.debug("Executed instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
-            writeQueue.append(inst)
-            execQueue.remove(inst)
+            instToWrite.append(inst)
         else:
             log.debug("Currently executing instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
+
+    for i in range(len(instToWrite)):
+        inst = instToWrite[i]
+        writeQueue.append(inst)
+        execQueue.remove(inst)
 
     log.debug("Exec Queue After: ")
     logQueue(execQueue)
