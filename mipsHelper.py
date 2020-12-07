@@ -14,7 +14,6 @@ def getBaseOffset(operand):
     offset = 0
     if '(' in operand:
         reg = re.search('\(([^)]+)', operand).group(1)
-        print(reg)
         base = mipsDefs.registers[reg]
     opList = [c for c in operand]
     index = opList.index('(')
@@ -23,7 +22,6 @@ def getBaseOffset(operand):
     return base, offset
 
 def runInstruction(currInst):
-
     if currInst.opcode == "ADD.D" or currInst.opcode == "DADD":
         src1 = int(mipsDefs.registers[currInst.operand2])
         src2 = int(mipsDefs.registers[currInst.operand3])
@@ -90,8 +88,13 @@ def runInstruction(currInst):
         log.debug("(Base, Offset): ")
         log.debug("(" + str(base) + ", " + str(offset) + ")")
 
-def resolveBranch(currInst):
-    pass
+def resolveBranch(currInst, label):
+    if label not in mipsDefs.labelMap:
+        return
+    if currInst.opcode == 'BEQ' and mipsDefs.registers[currInst.operand1] == mipsDefs.registers[currInst.operand2]:
+        mipsDefs.programCounter =  mipsDefs.labelMap[label]
+    if currInst.opcode == 'BNE' and mipsDefs.registers[currInst.operand1] != mipsDefs.registers[currInst.operand2]:
+        mipsDefs.programCounter =  mipsDefs.labelMap[label]
 
 def freeUnits(unitsToFree):
     for inst in unitsToFree:

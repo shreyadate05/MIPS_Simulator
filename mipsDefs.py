@@ -9,3 +9,4 @@ resultMatrix = []
 iBlockSize = 0
 iBlocks = 0
 
+programCounter = 1

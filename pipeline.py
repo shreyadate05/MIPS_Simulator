@@ -18,11 +18,14 @@ clockCount = 1
 done = False
 
 occupiedRegisters = { }
+mipsDefs.programCounter = 1
 res = []
 
 def fetch():
     global allQueue, fetchQueue, issueQueue
     global clockCount
+
+    print("PC: ", mipsDefs.programCounter)
 
     if len(issueQueue) != 0:
         return
@@ -30,9 +33,13 @@ def fetch():
     if len(allQueue) == 0:
         return
 
-    issueQueue.append(mipsDefs.instructions[allQueue.pop(0)])
+    if mipsDefs.programCounter >= len(mipsDefs.instructions):
+        return
+
+    issueQueue.append(mipsDefs.instructions[mipsDefs.programCounter])
     log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
     issueQueue[0].IF = str(clockCount)
+    mipsDefs.programCounter += 1
 
 def issue():
     global fetchQueue, issueQueue, readQueue, occupiedRegisters
@@ -44,7 +51,11 @@ def issue():
     if len(issueQueue) == 0:
         return
 
+
     currInst = issueQueue[0]
+
+    if currInst.opcode == "HLT":
+        return
 
     if not isUnitAvailable(currInst):
         log.debug("Structural Hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
@@ -58,14 +69,13 @@ def issue():
 
     if currInst.type == InstructionType.CTRL and currInst.opcode == 'J':
         deLim = "-"
-        resolveBranch(currInst, allQueue)
+        resolveBranch(currInst, currInst.operand1)
         currInst.ID = str(clockCount)
         unitsToFree.append(currInst)
         finalOutputString = str(currInst.id) + deLim + currInst.inst + deLim + currInst.IF + deLim + currInst.ID + deLim + currInst.IR + deLim + currInst.EX + deLim + currInst.WB + deLim + currInst.RAW + deLim + currInst.WAW + deLim + currInst.Struct + "\n"
         res.append(finalOutputString)
         log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
         issueQueue.pop(0)
-        return
 
     occupyUnit(currInst)
     log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
@@ -76,9 +86,12 @@ def issue():
     logQueue(issueQueue)
 
 
+
 def read():
     global readQueue, execQueue, writeQueue, occupiedRegisters
-    global clockCount, unitsToFree, allQueue
+    global clockCount, unitsToFree
+
+    branchResolved = False
 
     log.debug("Read Queue Before: ")
     logQueue(readQueue)
@@ -102,7 +115,8 @@ def read():
 
         if inst.type == InstructionType.CTRL:
             deLim = "-"
-            resolveBranch(inst)
+            branchResolved = True
+            resolveBranch(inst, inst.operand3)
             inst.IR = str(clockCount)
             unitsToFree.append(inst)
             finalOutputString = str(inst.id) + deLim + inst.inst + deLim + inst.IF + deLim + inst.ID + deLim + inst.IR + deLim + inst.EX + deLim + inst.WB + deLim + inst.RAW + deLim + inst.WAW + deLim + inst.Struct + "\n"
@@ -117,7 +131,6 @@ def read():
         log.debug("Read instruction " + str(inst.id) + ": " + inst.inst+ " at clock cycle " + str(clockCount))
         instToExec.append(inst)
 
-
     for i in range(len(branchInstToRemove)):
         inst = branchInstToRemove[i]
         readQueue.remove(inst)
@@ -127,6 +140,9 @@ def read():
         execQueue.append(inst)
         readQueue.remove(inst)
 
+    if branchResolved:
+        issueQueue.clear()
+        readQueue.clear()
 
     log.debug("Read Queue After: ")
     logQueue(readQueue)
@@ -196,7 +212,6 @@ def startMIPS():
     log.debug("Starting Pipeline...\n\n")
 
     allQueue = [i for i in range(1,len(mipsDefs.instructions)+1)]
-    print(allQueue)
     while not done:
         log.debug("Clock Cycle: " + str(clockCount))
         log.debug("allQueue is: ")
@@ -207,6 +222,8 @@ def startMIPS():
         log.debug(occupiedRegisters)
         log.debug("Registers Map: ")
         log.debug(mipsDefs.registers)
+        log.debug("Program Counter: ")
+        log.debug(mipsDefs.programCounter)
 
         write()
         execute()
