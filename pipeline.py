@@ -4,7 +4,6 @@ import mipsDefs
 
 log = logging.getLogger("MIPS Pipeline ")
 
-allQueue   = []
 fetchQueue = []
 issueQueue = []
 readQueue = []
@@ -23,7 +22,7 @@ programCounter = 1
 res = []
 
 def fetch():
-    global allQueue, fetchQueue, issueQueue
+    global fetchQueue, issueQueue
     global clockCount, programCounter
 
     if len(issueQueue) != 0:
@@ -42,7 +41,7 @@ def fetch():
 
 def issue():
     global fetchQueue, issueQueue, readQueue, occupiedRegisters, programCounter
-    global clockCount, finalOutputString, res, unitsToFree, allQueue
+    global clockCount, finalOutputString, res, unitsToFree
 
     log.debug("Issue Queue Before: ")
     logQueue(issueQueue)
@@ -209,8 +208,6 @@ def startMIPS():
     allQueue = [i for i in range(1,len(mipsDefs.instructions)+1)]
     while not done:
         log.debug("Clock Cycle: " + str(clockCount))
-        log.debug("allQueue is: ")
-        log.debug(allQueue)
         freeUnits(unitsToFree)
         freeRegisters(regsToFree, occupiedRegisters)
         log.debug("Occupied Registers Map: ")
@@ -219,7 +216,6 @@ def startMIPS():
         log.debug(mipsDefs.registers)
         log.debug("Program Counter: ")
         log.debug(programCounter)
-
 
         write()
         execute()
@@ -230,12 +226,16 @@ def startMIPS():
         if len(issueQueue) == 0 and len(readQueue) == 0 and len(execQueue) == 0 and len(writeQueue) == 0:
             done = True
 
-        print("ret1: ", ret1)
         if ret1 != None and ret1 != -1 :
             issueQueue.clear()
             readQueue.clear()
             programCounter = ret1
-            ret = -1
+
+        if ret2 != None and ret2 != -1 :
+            issueQueue.clear()
+            readQueue.clear()
+            programCounter = ret2
+
 
         clockCount += 1
         log.debug("\n")
