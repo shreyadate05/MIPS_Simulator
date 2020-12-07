@@ -1,6 +1,6 @@
 import enum
 
-id = 0
+id = -1
 
 class InstructionType(enum.Enum):
     INV  = 0

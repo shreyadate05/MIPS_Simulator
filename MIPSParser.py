@@ -19,7 +19,7 @@ def parseConfFile(confFile):
     numUnits, unitCycles = getNumUnitsCycles(configs)
     units  = getUnits(numUnits, unitCycles)
     iBlocks, iBlockSize = getICacheConfigs(configs[len(configs)-1])
-    return units, iBlocks, iBlockSize
+    return units, int(iBlocks), int(iBlockSize)
 
 # INPUT:  List of strings comprising of opcodes and operands in an instruction
 # OUTPUT: Instruction object formed from given input Instruction List

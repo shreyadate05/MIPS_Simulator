@@ -18,7 +18,7 @@ done = False
 
 occupiedRegisters = { }
 mipsDefs.programCounter = 1
-programCounter = 1
+programCounter = 0
 res = []
 
 def fetch():
@@ -33,6 +33,9 @@ def fetch():
 
     if programCounter >= len(mipsDefs.instructions):
         return
+
+    if isInstInICache(programCounter):
+        print()
 
     issueQueue.append(mipsDefs.instructions[programCounter])
     log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
@@ -113,7 +116,6 @@ def read():
         if inst.type == InstructionType.CTRL:
             deLim = "-"
             ret = resolveBranch(inst, inst.operand3)
-            print(ret)
             inst.IR = str(clockCount)
             unitsToFree.append(inst)
             finalOutputString = str(inst.id) + deLim + inst.inst + deLim + inst.IF + deLim + inst.ID + deLim + inst.IR + deLim + inst.EX + deLim + inst.WB + deLim + inst.RAW + deLim + inst.WAW + deLim + inst.Struct + "\n"

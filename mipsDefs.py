@@ -6,7 +6,11 @@ instructions = {} # id: <Instruction Object>
 units = {}        # unit_name: <Unit Object>
 labelMap = {}     # label: id of instruction at which label exists
 resultMatrix = []
-iBlockSize = 0
-iBlocks = 0
-
 programCounter = 1
+
+mainMemoryAccessTime = 12
+
+iCache_Block_Size = 0
+iCache_Block_Count = 0
+iCache = {}
+iCachePenalty = mainMemoryAccessTime
