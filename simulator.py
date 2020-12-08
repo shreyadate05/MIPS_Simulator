@@ -7,7 +7,6 @@ log = logging.getLogger("MIPS Simulator")
 
 def initMemory():
     createICache()
-    print(mipsDefs.iCache)
 
 def initMIPS(argv):
     mipsDefs.ansFile = argv[4]

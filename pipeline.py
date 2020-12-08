@@ -31,20 +31,13 @@ def fetch():
     if programCounter >= len(mipsDefs.instructions):
         return
 
-    log.debug(("IN FETCH"))
-
     isCahceHit = isInstInICache(programCounter)
-    log.debug(("ICache hit: "))
-
     if not isCahceHit:
         iCachePenalty = mipsDefs.iCachePenalty
         iCacheMissClockCount = clockCount
-        print("In clockcount ", clockCount, " cache penalty: ", iCachePenalty)
         return
 
-    if len(issueQueue) != 0 and isCahceHit:
-        iCachePenalty = mipsDefs.iCachePenalty
-        iCacheMissClockCount = clockCount
+    if len(issueQueue) != 0:
         return
 
     if isCahceHit:
