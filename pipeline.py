@@ -50,6 +50,10 @@ def fetch():
         iCacheMissClockCount = clockCount
         return
 
+    if len(issueQueue) != 0 and iCacheMissClockCount + iCachePenalty == clockCount:
+        iCacheMissClockCount = 0
+        iCachePenalty = 0
+
     if len(issueQueue) != 0:
         return
 
