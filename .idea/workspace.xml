@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="eb99a1f1-edce-470e-aa24-be11493a13b7" name="Default Changelist" comment="mips parser added">
+      <change afterPath="$PROJECT_DIR$/../Lecture10.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MIPS_Simulator.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mipsHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/mipsHelper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/master" />
+  </component>
+  <component name="Git.Pull.Settings">
+    <option name="BRANCH" value="master" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1kzoMTYeUyYn3FAdpFGWkZROXHz" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/reradunakopliss/dataCache.py" />
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MIPS_Simulator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="mipsHelper" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MIPS_Simulator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mipsHelper.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.mipsHelper" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="eb99a1f1-edce-470e-aa24-be11493a13b7" name="Default Changelist" comment="" />
+      <created>1606712732683</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606712732683</updated>
+    </task>
+    <task id="LOCAL-00001" summary="basic design of instructions in MIPS">
+      <created>1606712789466</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1606712789466</updated>
+    </task>
+    <task id="LOCAL-00002" summary="mips parser added">
+      <created>1606728540363</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606728540363</updated>
+    </task>
+    <task id="LOCAL-00003" summary="mips parser added">
+      <created>1606728825175</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606728825175</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.log" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="basic design of instructions in MIPS" />
+    <MESSAGE value="mips parser added" />
+    <option name="LAST_COMMIT_MESSAGE" value="mips parser added" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="518" y="239" width="499" height="553" key="#Notifications" timestamp="1606728890421">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="518" y="239" width="499" height="553" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1606728890421" />
+    <state x="223" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606712742541">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1606712742541" />
+    <state width="918" height="466" key="DebuggerActiveHint" timestamp="1607239183214">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="918" height="466" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1607239183214" />
+    <state x="549" y="170" key="FileChooserDialogImpl" timestamp="1607451452728">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="170" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1607451452728" />
+    <state width="1515" height="317" key="GridCell.Tab.0.bottom" timestamp="1607453072784">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="317" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607453072784" />
+    <state width="1515" height="317" key="GridCell.Tab.0.center" timestamp="1607453072784">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="317" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607453072784" />
+    <state width="1515" height="317" key="GridCell.Tab.0.left" timestamp="1607453072784">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="317" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607453072784" />
+    <state width="1515" height="317" key="GridCell.Tab.0.right" timestamp="1607453072784">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="317" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607453072784" />
+    <state width="1515" height="493" key="GridCell.Tab.1.bottom" timestamp="1607385935526">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="493" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607385935526" />
+    <state width="1515" height="493" key="GridCell.Tab.1.center" timestamp="1607385935525">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="493" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1607385935525" />
+    <state width="1515" height="493" key="GridCell.Tab.1.left" timestamp="1607385935524">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="493" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1607385935524" />
+    <state width="1515" height="493" key="GridCell.Tab.1.right" timestamp="1607385935526">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="493" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1607385935526" />
+    <state x="516" y="119" key="RollbackChangesDialog" timestamp="1606727519153">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="516" y="119" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1606727519153" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1606726729698">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.0.1536.824@0.0.1536.824" timestamp="1606726729698" />
+    <state x="361" y="148" width="1032" height="528" key="Vcs.Push.Dialog.v2" timestamp="1606728770776">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="148" width="1032" height="528" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1606728770776" />
+    <state x="590" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606728800365">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="590" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1606728800365" />
+    <state x="336" y="144" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1607286866172">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="336" y="144" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1536.824@0.0.1536.824" timestamp="1607286866172" />
+    <state x="0" y="0" width="1164" height="811" key="dock-window-1" timestamp="1606958249633">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="0" y="0" width="1164" height="811" key="dock-window-1/0.0.1536.824@0.0.1536.824" timestamp="1606958249633" />
+    <state x="0" y="0" width="1164" height="811" key="dock-window-2" timestamp="1607059504788">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="0" y="0" width="1164" height="811" key="dock-window-2/0.0.1536.824@0.0.1536.824" timestamp="1607059504788" />
+    <state x="555" y="316" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1606728654021">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="555" y="316" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1536.824@0.0.1536.824" timestamp="1606728654021" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1607401543648">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1607401543648" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="issueQueue" />
+        <watch expression="clockCount" />
+        <watch expression="fetchQueue" />
+        <watch expression="ans" />
+        <watch expression="    readQueue.append(issueQueue.pop(0))&#10;" />
+        <watch expression="unit.availableUnits" />
+        <watch expression="isStalled" />
+        <watch expression="execQueue = []&#10;" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>

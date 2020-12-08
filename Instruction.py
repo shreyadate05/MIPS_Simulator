@@ -32,7 +32,11 @@ class Instruction:
         self.WAW = 'N'
         self.RAW = 'N'
         self.iCache = 'X'
-        self.dCache = 'X'
+        self.dCache = ['X', 'X']
+
+        self.dCachePenalty = 0
+        self.dCacheStartClock = 0
+        self.checkedDCache = False
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)

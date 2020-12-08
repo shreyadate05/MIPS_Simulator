@@ -9,21 +9,92 @@ log = logging.getLogger("MIPS Helper   ")
 # ----------------------------------------------------------------------------
 # D-CACHE HELPERS
 # ----------------------------------------------------------------------------
+def updateDCacheHM(inst, w1, w2):
+    if w1:
+        inst.dCache[0] = 'H'
+    else:
+        inst.dCache[0] = 'M'
+
+    if w2:
+        inst.dCache[1] = 'H'
+    else:
+        inst.dCache[1] = 'M'
+        log.debug("Data cache miss for instruction " + str(inst.id) + inst.inst)
 
 def createDCache():
-    mipsDefs.dCache[0] = [-1, -1]
-    mipsDefs.dCache[1] = [-1, -1]
+    mipsDefs.dCache[0] = [[-1,-1], [-2,-2]]
+    mipsDefs.dCache[1] = [[-1,-1], [-2,-2]]
 
-def getSourceOperands(currInst):
+def getBlockAndSetNum(addr):
+    blockNum = addr//16
+    setNum = addr % 2
+    log.debug("(Set Num, Block Num) for address: " + str(addr))
+    log.debug("( " + str(setNum) + ", " + str(blockNum) + ")")
+    return blockNum, setNum
+
+def isBlockPresentInSet(set, block):
+    if mipsDefs.dCache[set][0][0] == block:
+        return True
+    if mipsDefs.dCache[set][1][0] == block:
+        return True
+    return False
+
+def updateCache(s, b, w, clock, inst):
+    cc1 = mipsDefs.dCache[s][0][1]
+    cc2 = mipsDefs.dCache[s][1][1]
+    if cc1 <= cc2:
+        mipsDefs.dCache[s][0][1] = clock
+    else:
+        mipsDefs.dCache[s][1][1] = clock
+
+    if not w and cc1 <= cc2:
+        mipsDefs.dCache[s][0][0] = b
+        inst.dCachePenalty += 12
+
+    if not w and cc1 > cc2:
+        mipsDefs.dCache[s][1][0] = b
+        inst.dCachePenalty += 12
+
+def isInDataCache(inst, addresses, clockCycle):
+    log.debug("D-Cache Before: ")
+    log.debug(mipsDefs.dCache)
+
+    inst.checkedDCache = True
+    inst.dCacheStartClock = clockCycle
+    log.debug(str(inst.dCacheStartClock))
+
+    b1, s1 = getBlockAndSetNum(addresses[0])
+    b2, s2 = getBlockAndSetNum(addresses[1])
+    w1 = isBlockPresentInSet(s1, b1)
+    w2 = isBlockPresentInSet(s2, b2)
+
+    updateDCacheHM(inst, w1, w2)
+
+    if s1 == s2 and b1 == b2:
+        updateCache(s1, b1, w1, clockCycle, inst)
+    else:
+        updateCache(s1, b1, w1, clockCycle, inst)
+        updateCache(s2, b2, w2, clockCycle, inst)
+
+    log.debug("Instruction D-Cache Penalty: ")
+    log.debug(str(inst.dCachePenalty))
+
+    log.debug("D-Cache After: ")
+    log.debug(mipsDefs.dCache)
+
+
+def getAddresses(currInst):
     src = []
     if currInst.opcode == "LD" or currInst.opcode == "L.D" or currInst.opcode == "LW":
         base, offset = getBaseOffset(currInst.operand2)
-        src.append(base + offset)
+        src.append(offset+base)
+        src.append(offset+base+4)
 
     if currInst.opcode == "SD" or currInst.opcode == "S.D" or currInst.opcode == "SW":
         base, offset = getBaseOffset(currInst.operand2)
-        val = base + offset
-        src.append(base + offset)
+        src.append(base)
+        src.append(offset+base)
+
     return src
 
 # ----------------------------------------------------------------------------
@@ -48,7 +119,7 @@ def addResult(currInst, res):
     row.append(currInst.WAW)
     row.append(currInst.Struct)
     row.append(currInst.iCache)
-    row.append(currInst.dCache)
+    row.append("-".join(currInst.dCache))
     res.append(row)
 
 def createICache():

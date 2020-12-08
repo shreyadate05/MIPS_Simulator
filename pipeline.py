@@ -25,9 +25,11 @@ iCachePenalty = 0
 iCacheMissClockCount = 0
 res = []
 
+busAccess = False
+
 def fetch():
     global fetchQueue, issueQueue, iCacheMissClockCount
-    global clockCount, programCounter, iCachePenalty
+    global clockCount, programCounter, iCachePenalty, busAccess
 
     if programCounter >= len(mipsDefs.instructions):
         return
@@ -52,6 +54,7 @@ def fetch():
     if isCahceHit:
         if (iCacheMissClockCount + iCachePenalty == clockCount) or (iCacheMissClockCount == 0 and iCachePenalty == 0):
             issueQueue.append(mipsDefs.instructions[programCounter])
+            busAccess = True
             log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
             issueQueue[0].IF = str(clockCount)
             programCounter += 1
@@ -164,7 +167,7 @@ def read():
 
 def execute():
     global execQueue, writeQueue, structDependencyDAG, rawDependencyDAG
-    global clockCount, isStalled, done
+    global clockCount, isStalled, done, busAccess
 
     log.debug("Exec Queue Before: ")
     logQueue(execQueue)
@@ -175,16 +178,36 @@ def execute():
     instToWrite = []
     for i in range(len(execQueue)):
         inst = execQueue[i]
-        sourceOperands = getSourceOperands(inst)
-        #print(sourceOperands)
-        if mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount:
-            inst.isExecutionDone = True
-            inst.EX = str(clockCount)
-            runInstruction(inst)
-            log.debug("Executed instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
-            instToWrite.append(inst)
+        canExec = False
+
+        addresses = getAddresses(inst)
+        cacheResolved = False
+        if addresses == []:
+            canExec = True
         else:
-            log.debug("Currently executing instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
+            if not inst.checkedDCache:
+                dCacheHit = isInDataCache(inst, addresses, clockCount)
+                if dCacheHit:
+                    canExec = True
+                else:
+                    cacheResolved = False
+                    canExec = False
+                    log.debug("Cache Miss. Wait till clock cycle: ")
+                    log.debug(str(inst.dCachePenalty + clockCount))
+            else:
+                if inst.dCacheStartClock + inst.dCachePenalty + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
+                    log.debug("Latency handled. Now can start executing instruction")
+                    cacheResolved = True
+                    canExec = True
+        if canExec:
+            if cacheResolved or (mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount):
+                inst.isExecutionDone = True
+                inst.EX = str(clockCount)
+                runInstruction(inst)
+                log.debug("Executed instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
+                instToWrite.append(inst)
+            else:
+                log.debug("Currently executing instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
 
     for i in range(len(instToWrite)):
         inst = instToWrite[i]

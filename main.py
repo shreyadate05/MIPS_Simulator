@@ -61,5 +61,5 @@ if __name__ == '__main__':
     #argv = test_case_1()
     #argv = test_case_2()
     #argv = test_case_3()
-    #startSimulator(argv)
-    startSimulator(sys.argv)
+    startSimulator(argv)
+    #startSimulator(sys.argv)
