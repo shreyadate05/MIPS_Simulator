@@ -14,3 +14,5 @@ iCache_Block_Size = 0
 iCache_Block_Count = 0
 iCache = {}
 iCachePenalty = mainMemoryAccessTime
+
+dCache = {}

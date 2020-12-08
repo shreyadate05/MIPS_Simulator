@@ -12,6 +12,7 @@ def writeFile(res):
 
 def initMemory():
     createICache()
+    createDCache()
 
 def initMIPS(argv):
     mipsDefs.ansFile = argv[4]

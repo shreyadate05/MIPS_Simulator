@@ -7,6 +7,15 @@ from logHelper import *
 log = logging.getLogger("MIPS Helper   ")
 
 # ----------------------------------------------------------------------------
+# D-CACHE HELPERS
+# ----------------------------------------------------------------------------
+
+def createDCache():
+    for i in range(2):
+        mipsDefs.dCache[0] = [-1 for j in range(2)]
+    print(mipsDefs.dCache)
+
+# ----------------------------------------------------------------------------
 # I-CACHE HELPERS
 # ----------------------------------------------------------------------------
 def printResult(res):
