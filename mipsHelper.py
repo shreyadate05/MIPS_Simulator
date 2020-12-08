@@ -9,6 +9,25 @@ log = logging.getLogger("MIPS Helper   ")
 # ----------------------------------------------------------------------------
 # I-CACHE HELPERS
 # ----------------------------------------------------------------------------
+def printResult(res):
+    s = ""
+    for a, b, c, d, e, f, g, h, i, j in zip(res[::10], res[1::10], res[2::10], res[3::10], res[4::10], res[5::10], res[6::10], res[7::10], res[8::10], res[9::10]):
+        s = '{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<}'.format(a,b,c,d,e,f,g,h,i,j)
+    return s
+
+def addResult(currInst, res):
+    row = []
+    row.append(str(currInst.id))
+    row.append(currInst.inst)
+    row.append(currInst.IF)
+    row.append(currInst.ID)
+    row.append(currInst.IR)
+    row.append(currInst.EX)
+    row.append(currInst.WB)
+    row.append(currInst.RAW)
+    row.append(currInst.WAW)
+    row.append(currInst.Struct)
+    res.append(row)
 
 def createICache():
     size = mipsDefs.iCache_Block_Count

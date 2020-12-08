@@ -5,6 +5,11 @@ import mipsDefs
 
 log = logging.getLogger("MIPS Simulator")
 
+def writeFile(res):
+    text_file = open(mipsDefs.ansFile, "w")
+    text_file.write(res)
+    text_file.close()
+
 def initMemory():
     createICache()
 
@@ -21,6 +26,8 @@ def startSimulator(argv):
         log.info("Starting simulator...")
         initMIPS(argv)
         initMemory()
-        startMIPS()
+        resultString = startMIPS()
+        writeFile(resultString)
+        print(resultString)
     except Exception as e:
         log.error("Something went wrong. \n", e)

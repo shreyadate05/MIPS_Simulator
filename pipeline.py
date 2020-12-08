@@ -86,8 +86,8 @@ def issue():
         ret = resolveBranch(currInst, currInst.operand1)
         currInst.ID = str(clockCount)
         unitsToFree.append(currInst)
-        finalOutputString = str(currInst.id) + deLim + currInst.inst + deLim + currInst.IF + deLim + currInst.ID + deLim + currInst.IR + deLim + currInst.EX + deLim + currInst.WB + deLim + currInst.RAW + deLim + currInst.WAW + deLim + currInst.Struct + "\n"
-        res.append(finalOutputString)
+        addResult(currInst, res)
+        log.debug(row)
         log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
         issueQueue.pop(0)
 
@@ -128,12 +128,11 @@ def read():
             continue
 
         if inst.type == InstructionType.CTRL:
-            deLim = "-"
             ret = resolveBranch(inst, inst.operand3)
             inst.IR = str(clockCount)
             unitsToFree.append(inst)
-            finalOutputString = str(inst.id) + deLim + inst.inst + deLim + inst.IF + deLim + inst.ID + deLim + inst.IR + deLim + inst.EX + deLim + inst.WB + deLim + inst.RAW + deLim + inst.WAW + deLim + inst.Struct + "\n"
-            res.append(finalOutputString)
+            addResult(inst, res)
+            log.debug(res)
             log.debug("Read instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
             branchInstToRemove.append(inst)
             continue
@@ -202,9 +201,8 @@ def write():
 
     currInst = writeQueue[0]
     currInst.WB = str(clockCount)
-    finalOutputString = str(currInst.id) + deLim + currInst.inst + deLim + currInst.IF + deLim + currInst.ID + deLim + currInst.IR + deLim + currInst.EX + deLim + currInst.WB + deLim + currInst.RAW + deLim + currInst.WAW + deLim + currInst.Struct + "\n"
-    log.debug(finalOutputString)
-    res.append(finalOutputString)
+    addResult(currInst, res)
+    log.debug(res)
     log.debug("Write Back completed for instruction " + str(currInst.id) + ": " + currInst.inst + " at clock cycle " + str(clockCount))
     log.debug("Completed instruction: ")
     log.debug(currInst)
@@ -260,8 +258,9 @@ def startMIPS():
         log.debug("\n")
 
     log.debug(res)
+    resultString = ""
     for row in res:
-        print(row)
+        resultString += printResult(row) + "\n"
         print()
 
-    return res
+    return resultString
