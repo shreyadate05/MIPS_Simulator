@@ -13,7 +13,6 @@ log = logging.getLogger("MIPS Helper   ")
 def createDCache():
     mipsDefs.dCache[0] = [-1, -1]
     mipsDefs.dCache[1] = [-1, -1]
-    print(mipsDefs.dCache)
 
 def getSourceOperands(currInst):
     src = []

@@ -176,7 +176,7 @@ def execute():
     for i in range(len(execQueue)):
         inst = execQueue[i]
         sourceOperands = getSourceOperands(inst)
-        print(sourceOperands)
+        #print(sourceOperands)
         if mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount:
             inst.isExecutionDone = True
             inst.EX = str(clockCount)
