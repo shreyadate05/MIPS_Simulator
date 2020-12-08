@@ -249,6 +249,7 @@ def resolveBranch(currInst, label):
 def freeUnits(unitsToFree):
     for inst in unitsToFree:
         freeUnit(inst)
+        inst.isComplete = True
         unitsToFree.remove(inst)
 
 def freeUnit(currInst):
@@ -285,11 +286,16 @@ def isRAW(currInst, occupiedRegisters):
     ans = False
     src1 = currInst.operand2
     src2 = currInst.operand3
+
     if currInst.type == InstructionType.CTRL:
         src1 = currInst.operand1
         src2 = currInst.operand2
-    if src1 in occupiedRegisters.keys() or src2 in occupiedRegisters.keys():
-        ans = True
+
+    for i in range(0, currInst.id):
+        if not mipsDefs.instructions[i].isComplete:
+            if src1 == mipsDefs.instructions[i].operand1 or src2 == mipsDefs.instructions[i].operand1:
+                ans = True
+
     return ans
 
 def occupyUnit(currInst):

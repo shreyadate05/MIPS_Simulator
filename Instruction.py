@@ -22,6 +22,7 @@ class Instruction:
         self.type     = InstructionType.INV
         self.unit     = ""
         self.isExecutionDone = False
+        self.isComplete = False
 
         self.IF = '0'
         self.ID = '0'
