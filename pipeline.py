@@ -15,6 +15,7 @@ regsToFree = []
 
 clockCount = 1
 iCachePenalty = 0
+dCachePenalty = 0
 done = False
 
 occupiedRegisters = { }
@@ -32,6 +33,14 @@ def fetch():
         return
 
     isCahceHit = isInstInICache(programCounter)
+    if not isCahceHit:
+        mipsDefs.instructions[programCounter].iCache = 'M'
+        mipsDefs.iCacheMisses += 1
+    else:
+        if mipsDefs.instructions[programCounter].iCache == 'X':
+            mipsDefs.instructions[programCounter].iCache = 'H'
+            mipsDefs.iCacheHits += 1
+
     if not isCahceHit:
         iCachePenalty = mipsDefs.iCachePenalty
         iCacheMissClockCount = clockCount
@@ -166,6 +175,8 @@ def execute():
     instToWrite = []
     for i in range(len(execQueue)):
         inst = execQueue[i]
+        sourceOperands = getSourceOperands(inst)
+        print(sourceOperands)
         if mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount:
             inst.isExecutionDone = True
             inst.EX = str(clockCount)
@@ -216,7 +227,7 @@ def startMIPS():
     global issueQueue, writeQueue, execQueue, readQueue, allQueue, programCounter
     log.debug("Starting Pipeline...\n\n")
 
-    allQueue = [i for i in range(1,len(mipsDefs.instructions)+1)]
+    res.append(['ID', 'Instruction', 'FETCH', 'ISSUE', 'READ', 'EXECUTE', 'WRITE', 'RAW', 'WAW', 'STRUCT', 'I-Cache', 'D-Cache'])
     while not done:
         log.debug("Clock Cycle: " + str(clockCount))
         freeUnits(unitsToFree)

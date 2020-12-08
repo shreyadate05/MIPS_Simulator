@@ -11,17 +11,29 @@ log = logging.getLogger("MIPS Helper   ")
 # ----------------------------------------------------------------------------
 
 def createDCache():
-    for i in range(2):
-        mipsDefs.dCache[0] = [-1 for j in range(2)]
+    mipsDefs.dCache[0] = [-1, -1]
+    mipsDefs.dCache[1] = [-1, -1]
     print(mipsDefs.dCache)
+
+def getSourceOperands(currInst):
+    src = []
+    if currInst.opcode == "LD" or currInst.opcode == "L.D" or currInst.opcode == "LW":
+        base, offset = getBaseOffset(currInst.operand2)
+        src.append(base + offset)
+
+    if currInst.opcode == "SD" or currInst.opcode == "S.D" or currInst.opcode == "SW":
+        base, offset = getBaseOffset(currInst.operand2)
+        val = base + offset
+        src.append(base + offset)
+    return src
 
 # ----------------------------------------------------------------------------
 # I-CACHE HELPERS
 # ----------------------------------------------------------------------------
 def printResult(res):
     s = ""
-    for a, b, c, d, e, f, g, h, i, j in zip(res[::10], res[1::10], res[2::10], res[3::10], res[4::10], res[5::10], res[6::10], res[7::10], res[8::10], res[9::10]):
-        s = '{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<}'.format(a,b,c,d,e,f,g,h,i,j)
+    for a, b, c, d, e, f, g, h, i, j, k, l in zip(res[::12], res[1::12], res[2::12], res[3::12], res[4::12], res[5::12], res[6::12], res[7::12], res[8::12], res[9::12],res[10::12], res[11::12]):
+        s = '{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<}'.format(a,b,c,d,e,f,g,h,i,j,k,l)
     return s
 
 def addResult(currInst, res):
@@ -36,6 +48,8 @@ def addResult(currInst, res):
     row.append(currInst.RAW)
     row.append(currInst.WAW)
     row.append(currInst.Struct)
+    row.append(currInst.iCache)
+    row.append(currInst.dCache)
     res.append(row)
 
 def createICache():

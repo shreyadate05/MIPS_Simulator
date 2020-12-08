@@ -8,6 +8,8 @@ log = logging.getLogger("MIPS Simulator")
 def writeFile(res):
     text_file = open(mipsDefs.ansFile, "w")
     text_file.write(res)
+    text_file.write("\nTotal number of I-Cache hits: " + str(mipsDefs.iCacheHits))
+    text_file.write("\nTotal number of I-Cache misses: " + str(mipsDefs.iCacheMisses))
     text_file.close()
 
 def initMemory():

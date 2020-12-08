@@ -31,6 +31,8 @@ class Instruction:
         self.Struct = 'N'
         self.WAW = 'N'
         self.RAW = 'N'
+        self.iCache = 'X'
+        self.dCache = 'X'
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
