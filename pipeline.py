@@ -68,9 +68,6 @@ def issue():
 
     currInst = issueQueue[0]
 
-    # if currInst.opcode == "HLT":
-    #     return ret
-
     if not isUnitAvailable(currInst):
         log.debug("Structural Hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
         currInst.Struct = 'Y'
@@ -87,7 +84,6 @@ def issue():
         currInst.ID = str(clockCount)
         unitsToFree.append(currInst)
         addResult(currInst, res)
-        log.debug(row)
         log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
         issueQueue.pop(0)
 

@@ -29,8 +29,8 @@ class Instruction:
         self.EX = '0'
         self.WB = '0'
         self.Struct = 'N'
-        self.WAW = 'Y'
-        self.RAW = 'Y'
+        self.WAW = 'N'
+        self.RAW = 'N'
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
