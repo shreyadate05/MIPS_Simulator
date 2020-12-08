@@ -56,8 +56,8 @@ def fetch():
 
 
 def issue():
-    global fetchQueue, issueQueue, readQueue, occupiedRegisters, programCounter
-    global clockCount, finalOutputString, res, unitsToFree
+    global fetchQueue, issueQueue, readQueue, occupiedRegisters, programCounter, iCachePenalty
+    global clockCount, finalOutputString, res, unitsToFree, iCacheMissClockCount
 
     log.debug("Issue Queue Before: ")
     logQueue(issueQueue)
@@ -94,7 +94,8 @@ def issue():
     occupyUnit(currInst)
     log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
     currInst.ID = str(clockCount)
-
+    if iCacheMissClockCount + iCachePenalty < clockCount:
+        iCacheMissClockCount = clockCount
     readQueue.append(issueQueue.pop(0))
     log.debug("Issue Queue After: ")
     logQueue(issueQueue)
