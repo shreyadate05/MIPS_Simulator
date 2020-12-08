@@ -14,33 +14,53 @@ unitsToFree = []
 regsToFree = []
 
 clockCount = 1
+iCachePenalty = 0
 done = False
 
 occupiedRegisters = { }
 mipsDefs.programCounter = 1
 programCounter = 0
+iCachePenalty = 0
+iCacheMissClockCount = 0
 res = []
 
 def fetch():
-    global fetchQueue, issueQueue
-    global clockCount, programCounter
-
-    if len(issueQueue) != 0:
-        return
-
-    if len(allQueue) == 0:
-        return
+    global fetchQueue, issueQueue, iCacheMissClockCount
+    global clockCount, programCounter, iCachePenalty
 
     if programCounter >= len(mipsDefs.instructions):
         return
 
-    if isInstInICache(programCounter):
-        print()
+    log.debug(("IN FETCH"))
 
-    issueQueue.append(mipsDefs.instructions[programCounter])
-    log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
-    issueQueue[0].IF = str(clockCount)
-    programCounter += 1
+    isCahceHit = isInstInICache(programCounter)
+    log.debug(("ICache hit: "))
+
+    if not isCahceHit:
+        iCachePenalty = mipsDefs.iCachePenalty
+        iCacheMissClockCount = clockCount
+        print("In clockcount ", clockCount, " cache penalty: ", iCachePenalty)
+        return
+
+    if len(issueQueue) != 0 and isCahceHit:
+        iCachePenalty = mipsDefs.iCachePenalty
+        iCacheMissClockCount = clockCount
+        return
+
+    if isCahceHit:
+        if (iCacheMissClockCount + iCachePenalty == clockCount) or (iCacheMissClockCount == 0 and iCachePenalty == 0):
+            issueQueue.append(mipsDefs.instructions[programCounter])
+            log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
+            issueQueue[0].IF = str(clockCount)
+            programCounter += 1
+            iCachePenalty = 0
+            iCacheMissClockCount = 0
+
+    log.debug("iCachePenalty: ")
+    log.debug(iCachePenalty)
+    log.debug("iCacheMissClockCount: ")
+    log.debug(iCacheMissClockCount)
+
 
 def issue():
     global fetchQueue, issueQueue, readQueue, occupiedRegisters, programCounter
@@ -189,6 +209,7 @@ def write():
     currInst = writeQueue[0]
     currInst.WB = str(clockCount)
     finalOutputString = str(currInst.id) + deLim + currInst.inst + deLim + currInst.IF + deLim + currInst.ID + deLim + currInst.IR + deLim + currInst.EX + deLim + currInst.WB + deLim + currInst.RAW + deLim + currInst.WAW + deLim + currInst.Struct + "\n"
+    log.debug(finalOutputString)
     res.append(finalOutputString)
     log.debug("Write Back completed for instruction " + str(currInst.id) + ": " + currInst.inst + " at clock cycle " + str(clockCount))
     log.debug("Completed instruction: ")
@@ -218,6 +239,8 @@ def startMIPS():
         log.debug(mipsDefs.registers)
         log.debug("Program Counter: ")
         log.debug(programCounter)
+        log.debug("I-Cache: ")
+        log.debug(mipsDefs.iCache)
 
         write()
         execute()
@@ -225,7 +248,7 @@ def startMIPS():
         ret2 = issue()
         fetch()
 
-        if len(issueQueue) == 0 and len(readQueue) == 0 and len(execQueue) == 0 and len(writeQueue) == 0:
+        if programCounter == len(mipsDefs.instructions):
             done = True
 
         if ret1 != None and ret1 != -1 :

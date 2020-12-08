@@ -18,22 +18,20 @@ def createICache():
         mipsDefs.iCache[key] = [-1 for i in range(size)]
 
 def isInstInICache(pc):
-    blockNumber = pc % mipsDefs.iCache_Block_Size
-    if pc in mipsDefs.iCache[blockNumber]:
-        log.debug("I-Cache hit for instruction: " + str(pc))
-        return True
-    else:
+    blockNumber = pc // mipsDefs.iCache_Block_Size
+
+    if blockNumber >= mipsDefs.iCache_Block_Size:
+        blockNumber = pc % mipsDefs.iCache_Block_Size
+
+    if pc not in mipsDefs.iCache[blockNumber]:
         log.debug("I-Cache miss for instruction: " + str(pc))
-        addToInstCache(pc)
+        addToInstCache(pc, blockNumber)
         return False
 
-def addToInstCache(pc):
-    blockNumber = pc % mipsDefs.iCache_Block_Size
+    return True
+
+def addToInstCache(pc, blockNumber):
     mipsDefs.iCache[blockNumber] = [i for i in range(pc, pc+mipsDefs.iCache_Block_Size)]
-
-
-
-
 
 
 # ----------------------------------------------------------------------------
