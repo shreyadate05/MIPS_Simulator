@@ -38,12 +38,13 @@ class Instruction:
         self.dCacheStartClock = 0
         self.dCacheEndClock = 0
         self.checkedDCache = False
+        self.checkICache = False
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
 
     def assignInstType(self):
-        mem = ['LW','SW','LI','LUI']
+        mem = ['LW','SW','LI','LUI', 'L.D', 'LD', 'S.D', 'SD']
         alu = ['ADD.D','SUB.D','AND','OR', 'ANDI','ORI', 'DADD', 'DSUB', 'DADDI','DSUBI', 'MUL.D', 'DIV.D']
         ctrl = ['J', 'BEQ', 'BNE']
         spcl = ['HLT']

@@ -26,7 +26,7 @@ iCacheMissClockCount = 0
 res = []
 dcacheEndCycle = 0
 
-busAccess = False
+busAccess = True
 
 def fetch():
     global fetchQueue, issueQueue, iCacheMissClockCount
@@ -39,8 +39,7 @@ def fetch():
     if not isCahceHit:
         mipsDefs.instructions[programCounter].iCache = 'M'
         mipsDefs.iCacheMisses += 1
-        if dcacheEndCycle == clockCount:
-            busAccess = False
+        log.debug(dcacheEndCycle)
     else:
         if mipsDefs.instructions[programCounter].iCache == 'X':
             mipsDefs.instructions[programCounter].iCache = 'H'
@@ -56,8 +55,10 @@ def fetch():
 
     if isCahceHit:
         if (iCacheMissClockCount + iCachePenalty == clockCount) or (iCacheMissClockCount == 0 and iCachePenalty == 0):
-            busAccess = True
             issueQueue.append(mipsDefs.instructions[programCounter])
+            if dcacheEndCycle == clockCount:
+                busAccess = False
+                log.debug("Setting bus access to false")
             log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
             issueQueue[0].IF = str(clockCount)
             programCounter += 1
@@ -199,12 +200,13 @@ def execute():
                     log.debug(str(inst.dCachePenalty + clockCount))
                     dcacheEndCycle = inst.dCacheEndClock
             else:
-                if inst.dCacheStartClock + inst.dCachePenalty + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
+                if inst.dCacheEndClock + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
                     if not busAccess:
                         inst.dCacheEndClock += 12
                         log.debug("Bus unavailable. Data cache end clock updated to ")
                         log.debug(inst.dCacheEndClock)
                         dcacheEndCycle = inst.dCacheEndClock
+                        busAccess = True
                     else:
                         busAccess = True
                         log.debug("Latency handled. Now can start executing instruction")
@@ -266,6 +268,7 @@ def startMIPS():
         log.debug("Clock Cycle: " + str(clockCount))
         freeUnits(unitsToFree)
         freeRegisters(regsToFree, occupiedRegisters)
+
         log.debug("Occupied Registers Map: ")
         log.debug(occupiedRegisters)
         log.debug("Registers Map: ")

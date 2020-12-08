@@ -137,6 +137,7 @@ def createICache():
         mipsDefs.iCache[key] = [-1 for i in range(size)]
 
 def isInstInICache(pc):
+    mipsDefs.instructions[pc].checkICache = True
     blockNumber = pc // mipsDefs.iCache_Block_Size
 
     if blockNumber >= mipsDefs.iCache_Block_Size:
@@ -256,9 +257,13 @@ def freeUnit(currInst):
     mipsDefs.units[currInst.unit].instructionsOccupying = []
 
 def freeRegisters(regsToFree, occupiedRegisters):
+    log.debug("Occupied Registers Before: ")
+    log.debug(occupiedRegisters)
     for reg in regsToFree:
         occupiedRegisters.pop(reg)
         regsToFree.remove(reg)
+    log.debug("Occupied Registers After: ")
+    log.debug(occupiedRegisters)
 
 def isUnitAvailable(currInst):
     requiredUnit = currInst.unit
