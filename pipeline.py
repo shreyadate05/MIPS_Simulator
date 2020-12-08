@@ -149,9 +149,9 @@ def read():
             branchInstToRemove.append(inst)
             continue
 
+        inst.IR = str(clockCount)
         if inst.type != InstructionType.INV and inst.type != InstructionType.SPCL and inst.type != InstructionType.CTRL:
             occupiedRegisters[inst.operand1] = 1
-        inst.IR = str(clockCount)
         log.debug("Read instruction " + str(inst.id) + ": " + inst.inst+ " at clock cycle " + str(clockCount))
         instToExec.append(inst)
 
@@ -203,6 +203,7 @@ def execute():
                 if inst.dCacheEndClock + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
                     if not busAccess:
                         inst.dCacheEndClock += 12
+                        inst.dCacheEndClock -= 1
                         log.debug("Bus unavailable. Data cache end clock updated to ")
                         log.debug(inst.dCacheEndClock)
                         dcacheEndCycle = inst.dCacheEndClock
@@ -279,6 +280,10 @@ def startMIPS():
         log.debug(mipsDefs.iCache)
 
         write()
+        print("\n-------------------------------------------------")
+        for r in res:
+            print(r)
+
         execute()
         ret1 = read()
         ret2 = issue()
