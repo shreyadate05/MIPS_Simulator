@@ -24,12 +24,13 @@ programCounter = 0
 iCachePenalty = 0
 iCacheMissClockCount = 0
 res = []
+dcacheEndCycle = 0
 
 busAccess = False
 
 def fetch():
     global fetchQueue, issueQueue, iCacheMissClockCount
-    global clockCount, programCounter, iCachePenalty, busAccess
+    global clockCount, programCounter, iCachePenalty, busAccess, dcacheEndCycle
 
     if programCounter >= len(mipsDefs.instructions):
         return
@@ -38,6 +39,8 @@ def fetch():
     if not isCahceHit:
         mipsDefs.instructions[programCounter].iCache = 'M'
         mipsDefs.iCacheMisses += 1
+        if dcacheEndCycle == clockCount:
+            busAccess = False
     else:
         if mipsDefs.instructions[programCounter].iCache == 'X':
             mipsDefs.instructions[programCounter].iCache = 'H'
@@ -53,8 +56,8 @@ def fetch():
 
     if isCahceHit:
         if (iCacheMissClockCount + iCachePenalty == clockCount) or (iCacheMissClockCount == 0 and iCachePenalty == 0):
-            issueQueue.append(mipsDefs.instructions[programCounter])
             busAccess = True
+            issueQueue.append(mipsDefs.instructions[programCounter])
             log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
             issueQueue[0].IF = str(clockCount)
             programCounter += 1
@@ -167,7 +170,7 @@ def read():
 
 def execute():
     global execQueue, writeQueue, structDependencyDAG, rawDependencyDAG
-    global clockCount, isStalled, done, busAccess
+    global clockCount, isStalled, done, busAccess, dcacheEndCycle
 
     log.debug("Exec Queue Before: ")
     logQueue(execQueue)
@@ -194,11 +197,19 @@ def execute():
                     canExec = False
                     log.debug("Cache Miss. Wait till clock cycle: ")
                     log.debug(str(inst.dCachePenalty + clockCount))
+                    dcacheEndCycle = inst.dCacheEndClock
             else:
                 if inst.dCacheStartClock + inst.dCachePenalty + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
-                    log.debug("Latency handled. Now can start executing instruction")
-                    cacheResolved = True
-                    canExec = True
+                    if not busAccess:
+                        inst.dCacheEndClock += 12
+                        log.debug("Bus unavailable. Data cache end clock updated to ")
+                        log.debug(inst.dCacheEndClock)
+                        dcacheEndCycle = inst.dCacheEndClock
+                    else:
+                        busAccess = True
+                        log.debug("Latency handled. Now can start executing instruction")
+                        cacheResolved = True
+                        canExec = True
         if canExec:
             if cacheResolved or (mipsDefs.units[inst.unit].totalCycleCounts + int(mipsDefs.instructions[inst.id].IR) == clockCount):
                 inst.isExecutionDone = True

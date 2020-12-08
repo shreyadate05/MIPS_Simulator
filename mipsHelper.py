@@ -79,6 +79,13 @@ def isInDataCache(inst, addresses, clockCycle):
     log.debug("Instruction D-Cache Penalty: ")
     log.debug(str(inst.dCachePenalty))
 
+    log.debug("Instruction D-Cache Start Clock: ")
+    log.debug(str(inst.dCacheStartClock))
+
+    inst.dCacheEndClock = inst.dCachePenalty + inst.dCacheStartClock
+    log.debug("Instruction D-Cache End Clock: ")
+    log.debug(str(inst.dCacheEndClock))
+
     log.debug("D-Cache After: ")
     log.debug(mipsDefs.dCache)
 

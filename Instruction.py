@@ -36,6 +36,7 @@ class Instruction:
 
         self.dCachePenalty = 0
         self.dCacheStartClock = 0
+        self.dCacheEndClock = 0
         self.checkedDCache = False
 
     def __str__(self):
