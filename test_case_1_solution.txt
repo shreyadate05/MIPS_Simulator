@@ -32,5 +32,4 @@ ID                       Instruction              FETCH                    ISSUE
 Total number of I-Cache accesses: 30
 Total number of I-Cache hits    : 14
 Total number of D-Cache accesses: 8
-Total number of D-Cache hits    : 3
-Total number of D-Cache misses  : 5
+Total number of D-Cache hits    : 4

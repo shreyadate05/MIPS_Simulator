@@ -94,6 +94,11 @@ def isInDataCache(inst, addresses, clockCycle):
     log.debug("D-Cache After: ")
     log.debug(mipsDefs.dCache)
 
+    if w1 and w2:
+        return True
+    else:
+        return False
+
 
 def getAddresses(currInst):
     src = []

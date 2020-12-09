@@ -27,10 +27,13 @@ iCacheMissClockCount = 0
 res = []
 dcacheEndCycle = 0
 
+icache_bus_cc = 0
+dcache_bus_cc = 0
+
 busAccess = True
 
 def fetch():
-    global fetchQueue, issueQueue, iCacheMissClockCount, iCacheMissQueue
+    global fetchQueue, issueQueue, iCacheMissClockCount, iCacheMissQueue, icache_bus_cc
     global clockCount, programCounter, iCachePenalty, busAccess, dcacheEndCycle
 
     if programCounter >= len(mipsDefs.instructions):
@@ -41,9 +44,8 @@ def fetch():
         if not isCahceHit:
             mipsDefs.instructions[programCounter].iCache = 'M'
             mipsDefs.iCacheMisses += 1
+            icache_bus_cc = clockCount
             log.debug(dcacheEndCycle)
-            #if dcacheEndCycle == 0 and mipsDefs.instructions[programCounter].opcode != "HLT":
-            #    dcacheEndCycle = 12
         else:
             if mipsDefs.instructions[programCounter].iCache == 'X':
                 mipsDefs.instructions[programCounter].iCache = 'H'
@@ -67,6 +69,9 @@ def fetch():
             if dcacheEndCycle == clockCount:
                 busAccess = False
                 log.debug("Setting bus access to false")
+            if dcacheEndCycle > clockCount:
+                busAccess = True
+                log.debug("Setting bus access to true again.")
             log.debug("Fetched instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
             issueQueue[0].IF = str(clockCount)
             programCounter += 1
@@ -184,7 +189,7 @@ def read():
 
 def execute():
     global execQueue, writeQueue, structDependencyDAG, rawDependencyDAG
-    global clockCount, isStalled, done, busAccess, dcacheEndCycle
+    global clockCount, isStalled, done, busAccess, dcacheEndCycle, icache_bus_cc
 
     log.debug("Exec Queue Before: ")
     logQueue(execQueue)
@@ -204,8 +209,6 @@ def execute():
         if addresses == []:
             canExec = True
         else:
-            hi = int(inst.checkedDCache)
-            log.debug("hi is: " + str(hi))
             if not inst.checkedDCache:
                 dCacheHit = isInDataCache(inst, addresses, clockCount)
                 if dCacheHit:
@@ -217,16 +220,18 @@ def execute():
                     log.debug("Cache Miss. Wait till clock cycle: ")
                     log.debug(str(inst.dCachePenalty + clockCount))
                     log.debug("dcacheEndCycle before: " + str(dcacheEndCycle))
-                    dcacheEndCycle = inst.dCacheEndClock
-                    # if dcacheEndCycle != 0:
-                    #     inst.dCacheEndClock +=  dcacheEndCycle - 2
-                    #     dcacheEndCycle = inst.dCacheEndClock
+                    log.debug("dCacheEndClock before: " + str(inst.dCacheEndClock))
+                    if clockCount - icache_bus_cc < 12:
+                        log.debug("Bus unavailable. Data cache end clock updated to ")
+                        inst.dCacheEndClock += 10
+                        dcacheEndCycle = inst.dCacheEndClock
+                    else:
+                        dcacheEndCycle = inst.dCacheEndClock
                     log.debug("dcacheEndCycle after: " + str(dcacheEndCycle))
             else:
                 if inst.dCacheEndClock + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
                     if not busAccess:
-                        inst.dCacheEndClock += 12
-                        inst.dCacheEndClock -= 1
+                        inst.dCacheEndClock += 10
                         log.debug("Bus unavailable. Data cache end clock updated to ")
                         log.debug(inst.dCacheEndClock)
                         dcacheEndCycle = inst.dCacheEndClock
