@@ -202,9 +202,12 @@ def execute():
         if addresses == []:
             canExec = True
         else:
+            hi = int(inst.checkedDCache)
+            log.debug("hi is: " + str(hi))
             if not inst.checkedDCache:
                 dCacheHit = isInDataCache(inst, addresses, clockCount)
                 if dCacheHit:
+                    log.debug("data cache hit for inst " + str(inst.id) )
                     canExec = True
                 else:
                     cacheResolved = False
@@ -327,13 +330,13 @@ def startMIPS():
             oldPC = programCounter
             programCounter = iCacheMissQueue.pop(0)
             for i in range(programCounter, oldPC+1):
-                mipsDefs.instructions[programCounter].isExecutionDone = False
-                mipsDefs.instructions[programCounter].isComplete = False
-                mipsDefs.instructions[programCounter].dCachePenalty = 0
-                mipsDefs.instructions[programCounter].dCacheStartClock = 0
-                mipsDefs.instructions[programCounter].dCacheEndClock = 0
-                mipsDefs.instructions[programCounter].checkedDCache = False
-                mipsDefs.instructions[programCounter].checkedICache = False
+                mipsDefs.instructions[i].isExecutionDone = False
+                mipsDefs.instructions[i].isComplete = False
+                mipsDefs.instructions[i].dCachePenalty = 0
+                mipsDefs.instructions[i].dCacheStartClock = 0
+                mipsDefs.instructions[i].dCacheEndClock = 0
+                mipsDefs.instructions[i].checkedDCache = False
+                mipsDefs.instructions[i].checkedICache = False
 
         clockCount += 1
         log.debug("\n")

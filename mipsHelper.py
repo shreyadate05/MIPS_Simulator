@@ -21,6 +21,8 @@ def updateDCacheHM(inst, w1, w2):
         inst.dCache[1] = 'M'
         log.debug("Data cache miss for instruction " + str(inst.id) + inst.inst)
 
+    log.debug("Data cache status: " + inst.dCache[0] + inst.dCache[1])
+
 def createDCache():
     mipsDefs.dCache[0] = [[-1,-1], [-2,-2]]
     mipsDefs.dCache[1] = [[-1,-1], [-2,-2]]
