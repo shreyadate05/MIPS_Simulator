@@ -275,23 +275,41 @@ def write():
     if len(writeQueue) == 0:
         return
 
-    currInst = writeQueue[0]
-    currInst.WB = str(clockCount)
-    addResult(currInst, res)
-    log.debug(res)
-    log.debug("Write Back completed for instruction " + str(currInst.id) + ": " + currInst.inst + " at clock cycle " + str(clockCount))
-    log.debug("Completed instruction: ")
-    log.debug(currInst)
-    unitsToFree.append(currInst)
-    if currInst.type != InstructionType.INV and currInst.type != InstructionType.SPCL and currInst.type != InstructionType.CTRL:
-        if currInst.opcode in ["SD", "S.D"]:
-            destinationOperand = currInst.operand2
-            if '(' in destinationOperand:
-                destinationReg = re.search('\(([^)]+)', destinationOperand).group(1)
-                regsToFree.append(destinationReg)
+    instToPop = []
+    aluDone = False
+    memDone = False
+    for i in range(len(writeQueue)):
+        currInst = writeQueue[i]
+        if currInst.type == InstructionType.MEM and memDone:
+            break
+        if currInst.type == InstructionType.ALU and aluDone:
+            break
+
+        if currInst.type == InstructionType.MEM:
+            memDone = True
         else:
-            regsToFree.append(currInst.operand1)
-    doneQueue.append(writeQueue.pop(0))
+            aluDone = True
+        currInst.WB = str(clockCount)
+        addResult(currInst, res)
+        log.debug(res)
+        log.debug("Write Back completed for instruction " + str(currInst.id) + ": " + currInst.inst + " at clock cycle " + str(clockCount))
+        log.debug("Completed instruction: ")
+        log.debug(currInst)
+        unitsToFree.append(currInst)
+        if currInst.type != InstructionType.INV and currInst.type != InstructionType.SPCL and currInst.type != InstructionType.CTRL:
+            if currInst.opcode in ["SD", "S.D"]:
+                destinationOperand = currInst.operand2
+                if '(' in destinationOperand:
+                    destinationReg = re.search('\(([^)]+)', destinationOperand).group(1)
+                    regsToFree.append(destinationReg)
+            else:
+                regsToFree.append(currInst.operand1)
+        instToPop.append(writeQueue[i])
+
+    for i in range(len(instToPop)):
+        inst = instToPop[i]
+        doneQueue.append(inst)
+        writeQueue.remove(inst)
 
     log.debug("Write Queue After")
     logQueue(writeQueue)
