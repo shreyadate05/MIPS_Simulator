@@ -23,7 +23,7 @@ def test_case_1():
     argv[1] = ".\\test_cases\\test_case_1\\inst.txt"
     argv[2] = ".\\test_cases\\test_case_1\\data.txt"
     argv[3] = ".\\test_cases\\test_case_1\\config.txt"
-    argv[4] = "ans.txt"
+    argv[4] = "test_case_1_solution.txt"
     return argv
 
 def test_case_2():
@@ -32,7 +32,7 @@ def test_case_2():
     argv[1] = ".\\test_cases\\test_case_2\\inst.txt"
     argv[2] = ".\\test_cases\\test_case_2\\data.txt"
     argv[3] = ".\\test_cases\\test_case_2\\config.txt"
-    argv[4] = "ans.txt"
+    argv[4] = "test_case_2_solution.txt"
     return argv
 
 
@@ -42,7 +42,7 @@ def test_case_3():
     argv[1] = ".\\test_cases\\test_case_3\\inst.txt"
     argv[2] = ".\\test_cases\\test_case_3\\data.txt"
     argv[3] = ".\\test_cases\\test_case_3\\config.txt"
-    argv[4] = "ans.txt"
+    argv[4] = "test_case_3_solution.txt"
     return argv
 
 
@@ -52,14 +52,14 @@ def example():
     argv[1] = ".\\test_cases\\example\\inst.txt"
     argv[2] = ".\\test_cases\\example\\data.txt"
     argv[3] = ".\\test_cases\\example\\conf.txt"
-    argv[4] = ".\\test_cases\\example\\ans.txt"
+    argv[4] = "project_example_solution.txt"
     return argv
 
 
 if __name__ == '__main__':
     #argv = example()
-    #argv = test_case_1()
-    argv = test_case_2()
+    argv = test_case_1()
+    #argv = test_case_2()
     #argv = test_case_3()
     startSimulator(argv)
     #startSimulator(sys.argv)

@@ -36,18 +36,18 @@ def fetch():
     if programCounter >= len(mipsDefs.instructions):
         return
 
-
     isCahceHit = isInstInICache(programCounter)
-    if not isCahceHit:
-        mipsDefs.instructions[programCounter].iCache = 'M'
-        mipsDefs.iCacheMisses += 1
-        log.debug(dcacheEndCycle)
-        if dcacheEndCycle == 0 and mipsDefs.instructions[programCounter].opcode != "HLT":
-            dcacheEndCycle = 12
-    else:
-        if mipsDefs.instructions[programCounter].iCache == 'X':
-            mipsDefs.instructions[programCounter].iCache = 'H'
-            mipsDefs.iCacheHits += 1
+    if mipsDefs.instructions[programCounter].opcode != 'HLT':
+        if not isCahceHit:
+            mipsDefs.instructions[programCounter].iCache = 'M'
+            mipsDefs.iCacheMisses += 1
+            log.debug(dcacheEndCycle)
+            #if dcacheEndCycle == 0 and mipsDefs.instructions[programCounter].opcode != "HLT":
+            #    dcacheEndCycle = 12
+        else:
+            if mipsDefs.instructions[programCounter].iCache == 'X':
+                mipsDefs.instructions[programCounter].iCache = 'H'
+                mipsDefs.iCacheHits += 1
 
     if not isCahceHit:
         iCachePenalty = mipsDefs.iCachePenalty
@@ -217,9 +217,10 @@ def execute():
                     log.debug("Cache Miss. Wait till clock cycle: ")
                     log.debug(str(inst.dCachePenalty + clockCount))
                     log.debug("dcacheEndCycle before: " + str(dcacheEndCycle))
-                    if dcacheEndCycle != 0:
-                        inst.dCacheEndClock +=  dcacheEndCycle - 2
-                        dcacheEndCycle = inst.dCacheEndClock
+                    dcacheEndCycle = inst.dCacheEndClock
+                    # if dcacheEndCycle != 0:
+                    #     inst.dCacheEndClock +=  dcacheEndCycle - 2
+                    #     dcacheEndCycle = inst.dCacheEndClock
                     log.debug("dcacheEndCycle after: " + str(dcacheEndCycle))
             else:
                 if inst.dCacheEndClock + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
@@ -307,18 +308,12 @@ def startMIPS():
         log.debug("D-Cache: ")
         log.debug(mipsDefs.dCache)
 
-
         write()
-        print("\n-------------------------------------------------")
-        for r in res:
-            print(r)
-
         execute()
         ret1 = read()
         ret2 = issue()
         fetch()
 
-        print("program counter is: ", programCounter)
         if programCounter >= len(mipsDefs.instructions):
             done = True
 
@@ -337,6 +332,7 @@ def startMIPS():
         if len(iCacheMissQueue) != 0 and iCachePenalty == 0 and iCacheMissClockCount == 0:
             oldPC = programCounter
             programCounter = iCacheMissQueue.pop(0)
+            mipsDefs.iCacheAccesses = len(mipsDefs.iCacheCheckQueue)
             for i in range(programCounter, oldPC+1):
                 mipsDefs.instructions[i].isExecutionDone = False
                 mipsDefs.instructions[i].isComplete = False
@@ -345,9 +341,14 @@ def startMIPS():
                 mipsDefs.instructions[i].dCacheEndClock = 0
                 mipsDefs.instructions[i].checkedDCache = False
                 mipsDefs.instructions[i].checkedICache = False
+                mipsDefs.iCacheCheckQueue = []
 
         clockCount += 1
         log.debug("\n")
+
+    # for maintaining count in result file
+    if len(mipsDefs.iCacheCheckQueue) != 0:
+        mipsDefs.iCacheAccesses += len(mipsDefs.iCacheCheckQueue)
 
     log.debug(res)
     resultString = ""
@@ -355,5 +356,5 @@ def startMIPS():
     for row in res:
         resultString += printResult(row) + "\n"
         print()
-
+    mipsDefs.resultMatrix = res
     return resultString

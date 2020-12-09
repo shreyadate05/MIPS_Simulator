@@ -12,15 +12,17 @@ log = logging.getLogger("MIPS Helper   ")
 def updateDCacheHM(inst, w1, w2):
     if w1:
         inst.dCache[0] = 'H'
+        mipsDefs.dCacheHits += 1
     else:
         inst.dCache[0] = 'M'
+        log.debug("Data cache miss for instruction " + str(inst.id) + inst.inst)
 
     if w2:
         inst.dCache[1] = 'H'
+        mipsDefs.dCacheHits += 1
     else:
         inst.dCache[1] = 'M'
         log.debug("Data cache miss for instruction " + str(inst.id) + inst.inst)
-
     log.debug("Data cache status: " + inst.dCache[0] + inst.dCache[1])
 
 def createDCache():
@@ -60,6 +62,7 @@ def updateCache(s, b, w, clock, inst):
 def isInDataCache(inst, addresses, clockCycle):
     log.debug("D-Cache Before: ")
     log.debug(mipsDefs.dCache)
+    mipsDefs.dCacheAccesses += 1
 
     inst.checkedDCache = True
     inst.dCacheStartClock = clockCycle
@@ -107,8 +110,9 @@ def getAddresses(currInst):
     return src
 
 # ----------------------------------------------------------------------------
-# I-CACHE HELPERS
+# PRINT HELPERS
 # ----------------------------------------------------------------------------
+
 def printResult(res):
     s = ""
     for a, b, c, d, e, f, g, h, i, j, k, l in zip(res[::12], res[1::12], res[2::12], res[3::12], res[4::12], res[5::12], res[6::12], res[7::12], res[8::12], res[9::12],res[10::12], res[11::12]):
@@ -131,6 +135,10 @@ def addResult(currInst, res):
     row.append("-".join(currInst.dCache))
     res.append(row)
 
+# ----------------------------------------------------------------------------
+# I-CACHE HELPERS
+# ----------------------------------------------------------------------------
+
 def createICache():
     size = mipsDefs.iCache_Block_Count
     for i in range(size):
@@ -139,6 +147,10 @@ def createICache():
         mipsDefs.iCache[key] = [-1 for i in range(size)]
 
 def isInstInICache(pc):
+
+    if pc not in mipsDefs.iCacheCheckQueue:
+        mipsDefs.iCacheCheckQueue.append(pc) # for maintaining accesses count in result file
+
     mipsDefs.instructions[pc].checkICache = True
     blockNumber = pc // mipsDefs.iCache_Block_Size
 
@@ -148,11 +160,13 @@ def isInstInICache(pc):
     if pc not in mipsDefs.iCache[blockNumber]:
         log.debug("I-Cache miss for instruction: " + str(pc))
         addToInstCache(pc, blockNumber)
+        mipsDefs.iCacheMisses += 1
         return False
 
     return True
 
 def addToInstCache(pc, blockNumber):
+    mipsDefs.iCacheMisses += 1
     mipsDefs.iCache[blockNumber] = [i for i in range(pc, pc+mipsDefs.iCache_Block_Size)]
 
 
