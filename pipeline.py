@@ -169,7 +169,13 @@ def read():
 
         inst.IR = str(clockCount)
         if inst.type != InstructionType.INV and inst.type != InstructionType.SPCL and inst.type != InstructionType.CTRL:
-            occupiedRegisters[inst.operand1] = 1
+            if inst.opcode in ["SD", "S.D"]:
+                destinationOperand = inst.operand2
+                if '(' in destinationOperand:
+                    destinationReg = re.search('\(([^)]+)', destinationOperand).group(1)
+                    occupiedRegisters[destinationReg] = 1
+            else:
+                occupiedRegisters[inst.operand1] = 1
         log.debug("Read instruction " + str(inst.id) + ": " + inst.inst+ " at clock cycle " + str(clockCount))
         instToExec.append(inst)
 
@@ -278,7 +284,13 @@ def write():
     log.debug(currInst)
     unitsToFree.append(currInst)
     if currInst.type != InstructionType.INV and currInst.type != InstructionType.SPCL and currInst.type != InstructionType.CTRL:
-        regsToFree.append(currInst.operand1)
+        if currInst.opcode in ["SD", "S.D"]:
+            destinationOperand = currInst.operand2
+            if '(' in destinationOperand:
+                destinationReg = re.search('\(([^)]+)', destinationOperand).group(1)
+                regsToFree.append(destinationReg)
+        else:
+            regsToFree.append(currInst.operand1)
     doneQueue.append(writeQueue.pop(0))
 
     log.debug("Write Queue After")

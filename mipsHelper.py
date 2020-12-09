@@ -305,7 +305,14 @@ def isWAW(currInst, occupiedRegisters):
         return False
 
     ans = False
-    destinationReg = currInst.operand1
+    destinationReg = ""
+    if currInst.opcode in ["S.D", "SD"]:
+        destinationOperand = currInst.operand2
+        if '(' in destinationOperand:
+            destinationReg = re.search('\(([^)]+)', destinationOperand).group(1)
+    else:
+        destinationReg = currInst.operand1
+
     for i in range(0, currInst.id):
         if not mipsDefs.instructions[i].isComplete:
             if destinationReg == mipsDefs.instructions[i].operand1:
@@ -316,6 +323,9 @@ def isRAW(currInst, occupiedRegisters):
     ans = False
     src1 = currInst.operand2
     src2 = currInst.operand3
+
+    if currInst.opcode in ["S.D", "SD"]:
+        src1 = currInst.operand1
 
     if currInst.type == InstructionType.CTRL:
         src1 = currInst.operand1
