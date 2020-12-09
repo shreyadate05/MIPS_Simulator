@@ -213,11 +213,13 @@ def runInstruction(currInst):
         mipsDefs.registers[currInst.operand1] = src1 - src2
 
     if currInst.opcode == "MUL.D":
+        return
         src1 = mipsDefs.registers[currInst.operand2]
         src2 = mipsDefs.registers[currInst.operand3]
         mipsDefs.registers[currInst.operand1] = src1 * src2
 
     if currInst.opcode == "DIV.D":
+        return
         src1 = mipsDefs.registers[currInst.operand2]
         src2 = mipsDefs.registers[currInst.operand3]
         mipsDefs.registers[currInst.operand1] = src1 // src2
