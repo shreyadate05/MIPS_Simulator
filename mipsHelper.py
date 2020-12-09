@@ -243,7 +243,12 @@ def resolveBranch(currInst, label):
     if currInst.opcode == 'BEQ' and mipsDefs.registers[currInst.operand1] == mipsDefs.registers[currInst.operand2]:
         return mipsDefs.labelMap[label]
     if currInst.opcode == 'BNE' and mipsDefs.registers[currInst.operand1] != mipsDefs.registers[currInst.operand2]:
+        log.debug("Resolve branch reg 1: ")
+        log.debug(mipsDefs.registers[currInst.operand1])
+        log.debug("Resolve branch reg 2: ")
+        log.debug(mipsDefs.registers[currInst.operand2])
         return mipsDefs.labelMap[label]
+    return -1
 
 
 def freeUnits(unitsToFree):

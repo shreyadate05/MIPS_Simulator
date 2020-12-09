@@ -22,6 +22,7 @@ occupiedRegisters = { }
 mipsDefs.programCounter = 1
 programCounter = 0
 iCachePenalty = 0
+iCacheMissQueue = []
 iCacheMissClockCount = 0
 res = []
 dcacheEndCycle = 0
@@ -29,11 +30,12 @@ dcacheEndCycle = 0
 busAccess = True
 
 def fetch():
-    global fetchQueue, issueQueue, iCacheMissClockCount
+    global fetchQueue, issueQueue, iCacheMissClockCount, iCacheMissQueue
     global clockCount, programCounter, iCachePenalty, busAccess, dcacheEndCycle
 
     if programCounter >= len(mipsDefs.instructions):
         return
+
 
     isCahceHit = isInstInICache(programCounter)
     if not isCahceHit:
@@ -123,14 +125,16 @@ def read():
 
     ret = -1
     log.debug("Read Queue Before: ")
-    logQueue(readQueue)
+    log.debug(readQueue)
+    log.debug("ret: ")
+    log.debug(ret)
 
     if len(readQueue) == 0:
         return ret
 
     instToExec = []
     branchInstToRemove = []
-    ret = -1
+
     for i in range(len(readQueue)):
         inst = readQueue[i]
         if isWAW(inst, occupiedRegisters):
@@ -169,7 +173,10 @@ def read():
         readQueue.remove(inst)
 
     log.debug("Read Queue After: ")
-    logQueue(readQueue)
+    log.debug(readQueue)
+    log.debug("ret: ")
+    log.debug(ret)
+
     return ret
 
 
@@ -189,6 +196,8 @@ def execute():
         canExec = False
 
         addresses = getAddresses(inst)
+        log.debug("Addresses are: ")
+        log.debug(addresses)
         cacheResolved = False
         if addresses == []:
             canExec = True
@@ -264,8 +273,8 @@ def write():
 
 
 def startMIPS():
-    global clockCount, done, allQueue, doneQueue, unitsToFree, occupiedRegisters, regsToFree, finalOutputString, res
-    global issueQueue, writeQueue, execQueue, readQueue, allQueue, programCounter
+    global clockCount, done, allQueue, doneQueue, unitsToFree, occupiedRegisters, regsToFree, finalOutputString, res, iCacheMissQueue
+    global issueQueue, writeQueue, execQueue, readQueue, allQueue, programCounter, iCachePenalty, iCacheMissClockCount
     log.debug("Starting Pipeline...\n\n")
 
     res.append(['ID', 'Instruction', 'FETCH', 'ISSUE', 'READ', 'EXECUTE', 'WRITE', 'RAW', 'WAW', 'STRUCT', 'I-Cache', 'D-Cache'])
@@ -282,6 +291,11 @@ def startMIPS():
         log.debug(programCounter)
         log.debug("I-Cache: ")
         log.debug(mipsDefs.iCache)
+        log.debug("I-Cache Miss Queue: ")
+        log.debug(iCacheMissQueue)
+        log.debug("D-Cache: ")
+        log.debug(mipsDefs.dCache)
+
 
         write()
         print("\n-------------------------------------------------")
@@ -293,19 +307,33 @@ def startMIPS():
         ret2 = issue()
         fetch()
 
-        if programCounter == len(mipsDefs.instructions):
+        print("program counter is: ", programCounter)
+        if programCounter >= len(mipsDefs.instructions):
             done = True
 
-        if ret1 != None and ret1 != -1 :
+        if ret1 != -1 :
             issueQueue.clear()
             readQueue.clear()
-            programCounter = ret1
+            iCacheMissQueue.append(ret1)
+            ret1 = -1
 
-        if ret2 != None and ret2 != -1 :
+        if ret2 != -1 :
             issueQueue.clear()
             readQueue.clear()
-            programCounter = ret2
+            iCacheMissQueue.append(ret1)
+            ret2 = -1
 
+        if len(iCacheMissQueue) != 0 and iCachePenalty == 0 and iCacheMissClockCount == 0:
+            oldPC = programCounter
+            programCounter = iCacheMissQueue.pop(0)
+            for i in range(programCounter, oldPC+1):
+                mipsDefs.instructions[programCounter].isExecutionDone = False
+                mipsDefs.instructions[programCounter].isComplete = False
+                mipsDefs.instructions[programCounter].dCachePenalty = 0
+                mipsDefs.instructions[programCounter].dCacheStartClock = 0
+                mipsDefs.instructions[programCounter].dCacheEndClock = 0
+                mipsDefs.instructions[programCounter].checkedDCache = False
+                mipsDefs.instructions[programCounter].checkedICache = False
 
         clockCount += 1
         log.debug("\n")
