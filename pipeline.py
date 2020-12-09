@@ -42,6 +42,8 @@ def fetch():
         mipsDefs.instructions[programCounter].iCache = 'M'
         mipsDefs.iCacheMisses += 1
         log.debug(dcacheEndCycle)
+        if dcacheEndCycle == 0 and mipsDefs.instructions[programCounter].opcode != "HLT":
+            dcacheEndCycle = 12
     else:
         if mipsDefs.instructions[programCounter].iCache == 'X':
             mipsDefs.instructions[programCounter].iCache = 'H'
@@ -214,7 +216,11 @@ def execute():
                     canExec = False
                     log.debug("Cache Miss. Wait till clock cycle: ")
                     log.debug(str(inst.dCachePenalty + clockCount))
-                    dcacheEndCycle = inst.dCacheEndClock
+                    log.debug("dcacheEndCycle before: " + str(dcacheEndCycle))
+                    if dcacheEndCycle != 0:
+                        inst.dCacheEndClock +=  dcacheEndCycle - 2
+                        dcacheEndCycle = inst.dCacheEndClock
+                    log.debug("dcacheEndCycle after: " + str(dcacheEndCycle))
             else:
                 if inst.dCacheEndClock + mipsDefs.units[inst.unit].totalCycleCounts - 1 == clockCount:
                     if not busAccess:
@@ -226,6 +232,8 @@ def execute():
                         busAccess = True
                     else:
                         busAccess = True
+                        inst.dCacheEndClock = 0
+                        dcacheEndCycle = 0
                         log.debug("Latency handled. Now can start executing instruction")
                         cacheResolved = True
                         canExec = True
