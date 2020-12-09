@@ -343,6 +343,7 @@ def startMIPS():
 
     log.debug(res)
     resultString = ""
+    res[1:].sort(key = lambda x: int(x[2]))
     for row in res:
         resultString += printResult(row) + "\n"
         print()

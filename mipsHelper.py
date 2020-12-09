@@ -285,8 +285,10 @@ def isWAW(currInst, occupiedRegisters):
 
     ans = False
     destinationReg = currInst.operand1
-    if destinationReg in occupiedRegisters.keys():
-        ans = True
+    for i in range(0, currInst.id):
+        if not mipsDefs.instructions[i].isComplete:
+            if destinationReg == mipsDefs.instructions[i].operand1:
+                ans = True
     return ans
 
 def isRAW(currInst, occupiedRegisters):
