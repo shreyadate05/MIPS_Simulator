@@ -152,15 +152,14 @@ def createICache():
         mipsDefs.iCache[key] = [-1 for i in range(size)]
 
 def isInstInICache(pc):
+    if mipsDefs.instructions[pc].opcode == "HLT":
+        return True
 
     if pc not in mipsDefs.iCacheCheckQueue:
         mipsDefs.iCacheCheckQueue.append(pc) # for maintaining accesses count in result file
 
     mipsDefs.instructions[pc].checkICache = True
-    blockNumber = pc // mipsDefs.iCache_Block_Size
-
-    if blockNumber >= mipsDefs.iCache_Block_Size:
-        blockNumber = pc % mipsDefs.iCache_Block_Size
+    blockNumber = pc % mipsDefs.iCache_Block_Size
 
     if pc not in mipsDefs.iCache[blockNumber]:
         log.debug("I-Cache miss for instruction: " + str(pc))
@@ -172,7 +171,19 @@ def isInstInICache(pc):
 
 def addToInstCache(pc, blockNumber):
     mipsDefs.iCacheMisses += 1
-    mipsDefs.iCache[blockNumber] = [i for i in range(pc, pc+mipsDefs.iCache_Block_Size)]
+    index = []
+    index = [i for i in range(blockNumber, mipsDefs.iCache_Block_Size)]
+    rem =   mipsDefs.iCache_Block_Size - len(index)
+    index = index + [i for i in range(0,rem)]
+
+    val = pc
+    for j in range(len(index)):
+        mipsDefs.iCache[j][mipsDefs.iCacheIndex] = val
+        val += 1
+
+    mipsDefs.iCacheIndex += 1
+    if mipsDefs.iCacheIndex == 4:
+        mipsDefs.iCacheIndex = 0
 
 
 # ----------------------------------------------------------------------------
@@ -303,7 +314,6 @@ def isUnitAvailable(currInst):
 def isWAW(currInst, occupiedRegisters):
     if currInst.type == InstructionType.INV or currInst.type == InstructionType.SPCL or currInst.type == InstructionType.CTRL:
         return False
-
     ans = False
     destinationReg = ""
     if currInst.opcode in ["S.D", "SD"]:
@@ -321,6 +331,9 @@ def isWAW(currInst, occupiedRegisters):
 
 def isRAW(currInst, occupiedRegisters):
     ans = False
+    if currInst.opcode == "HLT":
+        return False
+
     src1 = currInst.operand2
     src2 = currInst.operand3
 

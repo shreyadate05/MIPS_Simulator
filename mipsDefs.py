@@ -20,6 +20,7 @@ iCacheHits = 0
 iCacheAccesses = 0
 iCacheCheckQueue = []
 iCacheHitsQueue = []
+iCacheIndex = 0
 
 dCache = {}
 dCacheAccesses = 0

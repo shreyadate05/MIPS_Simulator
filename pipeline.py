@@ -373,9 +373,10 @@ def startMIPS():
                 mipsDefs.instructions[i].checkedDCache = False
                 mipsDefs.instructions[i].checkedICache = False
                 mipsDefs.iCacheCheckQueue = []
-
         clockCount += 1
         log.debug("\n")
+
+
 
     # for maintaining count in result file
     if len(mipsDefs.iCacheCheckQueue) != 0:
