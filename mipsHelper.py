@@ -146,7 +146,10 @@ def createICache():
         mipsDefs.iCache[key] = [-1 for i in range(size)]
 
 def isInstInICache(pc):
-    if mipsDefs.instructions[pc].opcode == "HLT":
+    if mipsDefs.instructions[pc].opcode == 'HLT':
+        mipsDefs.haltCount += 1
+
+    if mipsDefs.haltCount >= 2:
         return True
 
     if pc not in mipsDefs.iCacheCheckQueue:

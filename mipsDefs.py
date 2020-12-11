@@ -28,3 +28,4 @@ dCacheAccesses = 0
 dCacheHits = 0
 
 stop = False
+haltCount = 0

@@ -32,16 +32,16 @@ dcache_bus_cc = 0
 
 busAccess = True
 dcacheWaitQ = []
+haltCount = 0
 
 def fetch():
-    global fetchQueue, issueQueue, iCacheMissClockCount, iCacheMissQueue, icache_bus_cc
+    global fetchQueue, issueQueue, iCacheMissClockCount, iCacheMissQueue, icache_bus_cc, iCacheMissQueue
     global clockCount, programCounter, iCachePenalty, busAccess, dcacheEndCycle, dcacheWaitQ
 
     if programCounter >= len(mipsDefs.instructions):
         return
 
     isCahceHit = isInstInICache(programCounter)
-    #if mipsDefs.instructions[programCounter].opcode != 'HLT':
     if not isCahceHit:
         mipsDefs.instructions[programCounter].iCache = 'M'
         mipsDefs.iCacheMisses += 1
@@ -122,7 +122,7 @@ def issue():
     occupyUnit(currInst)
     log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst+ " at clock cycle " + str(clockCount))
     currInst.ID = str(clockCount)
-    if iCacheMissClockCount + iCachePenalty < clockCount:
+    if iCacheMissClockCount + iCachePenalty < clockCount and currInst.opcode != "HLT":
         iCacheMissClockCount = clockCount
     readQueue.append(issueQueue.pop(0))
     log.debug("Issue Queue After: ")
@@ -340,20 +340,23 @@ def startMIPS():
         if ret1 != -1 or ret2 != -1 :
             issueQueue.clear()
             readQueue.clear()
-            if ret1 != 1:
+            if ret1 != -1:
                 iCacheMissQueue.append(ret1)
                 ret1 = -1
-            if ret2 != 1:
+            if ret2 != -1:
                 iCacheMissQueue.append(ret2)
                 ret2 = -1
 
-        if len(iCacheMissQueue) != 0:
+        log.debug(iCacheMissQueue)
+        log.debug(iCacheMissClockCount)
+
+        if len(iCacheMissQueue) != 0 and iCacheMissClockCount <= 0:
             oldPC = programCounter
             programCounter = iCacheMissQueue.pop(0)
-            iCacheMissQueue = []
+            #iCacheMissQueue = []
             iCacheMissClockCount = 0
             mipsDefs.iCacheAccesses = len(mipsDefs.iCacheCheckQueue)
-            #print(oldPC, programCounter)
+            mipsDefs.haltCount = 0
             for i in range(programCounter, oldPC):
                 mipsDefs.instructions[i].isExecutionDone = False
                 mipsDefs.instructions[i].isComplete = False

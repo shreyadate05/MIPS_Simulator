@@ -34,7 +34,7 @@ ID                       Instruction              FETCH                    ISSUE
 17                       DSUB R1 R1 R2            190                      194                      195                      196                      197                      N                        N                        Y                        H                        X-X
 18                       BNE R1 R3 GG             194                      195                      198                      0                        0                        Y                        N                        N                        H                        X-X
 
-Total number of I-Cache accesses: 32
-Total number of I-Cache hits    : 17
+Total number of I-Cache accesses: 34
+Total number of I-Cache hits    : 19
 Total number of D-Cache accesses: 12
 Total number of D-Cache hits    : 7
