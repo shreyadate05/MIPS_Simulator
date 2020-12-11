@@ -53,11 +53,11 @@ def updateCache(s, b, w, clock, inst):
 
     if not w and cc1 <= cc2:
         mipsDefs.dCache[s][0][0] = b
-        inst.dCachePenalty += 12
+        inst.dCachePenalty += mipsDefs.mainMemoryAccessTime
 
     if not w and cc1 > cc2:
         mipsDefs.dCache[s][1][0] = b
-        inst.dCachePenalty += 12
+        inst.dCachePenalty += mipsDefs.mainMemoryAccessTime
 
 def isInDataCache(inst, addresses, clockCycle):
     log.debug("D-Cache Before: ")

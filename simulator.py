@@ -25,6 +25,8 @@ def initMIPS(argv):
     mipsDefs.instructions, mipsDefs.labelMap = parseInstFile(argv[1])
     mipsDefs.data = parseDataFile(argv[2])
     mipsDefs.units, mipsDefs.iCache_Block_Count, mipsDefs.iCache_Block_Size = parseConfFile(argv[3])
+    mipsDefs.mainMemoryAccessTime = 3*mipsDefs.iCache_Block_Size
+    mipsDefs.iCachePenalty = mipsDefs.mainMemoryAccessTime
 
 def startSimulator(argv):
     try:
