@@ -139,8 +139,10 @@ def addResult(currInst, res):
 # ----------------------------------------------------------------------------
 
 def createICache():
-    size = mipsDefs.iCache_Block_Count
-    for i in range(size):
+    count = mipsDefs.iCache_Block_Count
+    size = mipsDefs.iCache_Block_Size
+
+    for i in range(count):
         mipsDefs.iCache[i] = []
     for key in mipsDefs.iCache:
         mipsDefs.iCache[key] = [-1 for i in range(size)]
@@ -156,7 +158,7 @@ def isInstInICache(pc):
         mipsDefs.iCacheCheckQueue.append(pc) # for maintaining accesses count in result file
 
     mipsDefs.instructions[pc].checkICache = True
-    blockNumber = pc % mipsDefs.iCache_Block_Size
+    blockNumber = pc % mipsDefs.iCache_Block_Count
 
     if pc not in mipsDefs.iCache[blockNumber]:
         log.debug("I-Cache miss for instruction: " + str(pc))
@@ -169,8 +171,8 @@ def isInstInICache(pc):
 def addToInstCache(pc, blockNumber):
     mipsDefs.iCacheMisses += 1
     index = []
-    index = [i for i in range(blockNumber, mipsDefs.iCache_Block_Size)]
-    rem =   mipsDefs.iCache_Block_Size - len(index)
+    index = [i for i in range(blockNumber, mipsDefs.iCache_Block_Count)]
+    rem =   mipsDefs.iCache_Block_Count - len(index)
     index = index + [i for i in range(0,rem)]
 
     val = pc
@@ -179,7 +181,7 @@ def addToInstCache(pc, blockNumber):
         val += 1
 
     mipsDefs.iCacheIndex += 1
-    if mipsDefs.iCacheIndex == 4:
+    if mipsDefs.iCacheIndex == mipsDefs.iCache_Block_Count:
         mipsDefs.iCacheIndex = 0
 
 
