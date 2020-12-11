@@ -17,6 +17,33 @@ def parseCmd(argv):
     else:
         return argv
 
+def test_case_4():
+    argv = [0 for i in range(5)]
+    argv[0] = ".\\test_case_evaluation\\test_case_4\\main.py"
+    argv[1] = ".\\test_case_evaluation\\test_case_4\\inst.txt"
+    argv[2] = ".\\test_case_evaluation\\test_case_4\\data.txt"
+    argv[3] = ".\\test_case_evaluation\\test_case_4\\config.txt"
+    argv[4] = "test_case_4_solution.txt"
+    return argv
+
+def test_case_5():
+    argv = [0 for i in range(5)]
+    argv[0] = ".\\test_case_evaluation\\test_case_5\\main.py"
+    argv[1] = ".\\test_case_evaluation\\test_case_5\\inst.txt"
+    argv[2] = ".\\test_case_evaluation\\test_case_5\\data.txt"
+    argv[3] = ".\\test_case_evaluation\\test_case_5\\config.txt"
+    argv[4] = "test_case_5_solution.txt"
+    return argv
+
+def test_case_6():
+    argv = [0 for i in range(5)]
+    argv[0] = ".\\test_case_evaluation\\test_case_6\\main.py"
+    argv[1] = ".\\test_case_evaluation\\test_case_6\\inst.txt"
+    argv[2] = ".\\test_case_evaluation\\test_case_6\\data.txt"
+    argv[3] = ".\\test_case_evaluation\\test_case_6\\config.txt"
+    argv[4] = "test_case_6_solution.txt"
+    return argv
+
 def test_case_1():
     argv = [0 for i in range(5)]
     argv[0] = ".\\test_cases\\test_case_1\\main.py"
@@ -61,5 +88,8 @@ if __name__ == '__main__':
     #argv = test_case_1()
     #argv = test_case_2()
     #argv = test_case_3()
+    #argv = test_case_4()
+    #argv = test_case_5()
+    argv = test_case_6()
     startSimulator(argv)
     #startSimulator(sys.argv)

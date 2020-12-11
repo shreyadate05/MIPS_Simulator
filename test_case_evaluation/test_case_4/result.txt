@@ -1,0 +1,35 @@
+Instruction 	Fetch 	Issue 	Read 	Exec 	Write 	RAW 	WAW 	Struct
+LI R4, 256 	13 	14 	15 	16 	17 	N 	N 	N
+LI R5, 256 	14 	18 	19 	20 	21 	N 	N 	Y
+LI R1, 3 		18 	22 	23 	24 	25 	N 	N 	Y
+LI R2, 1 		22 	26 	27 	28 	29 	N 	N 	Y
+LI R3, 1 		35 	36 	37 	38 	39 	N 	N 	N
+GG: L.D F1, 4(R4) 	36 	37 	38 	52 	53 	N 	N 	N
+L.D F2, 8(R5) 	37 	54 	55 	57 	58 	N 	N 	Y
+ADD.D F1, F4, F4 	54 	55 	56	58	59	N	N 	N
+ADD.D F6, F3, F7 	67 	68 	69 	71 	72 	N 	N 	N
+SUB.D F2, F7, F4 	68 	69 	70	72 	73	N	N 	N
+MUL.D F6, F4, F5	69 	73	74 	104	105	N 	Y 	N
+ADD.D F7, F2, F6	73 	74	106	108 	109 	Y 	N 	N
+DADDI R4, R4, 4 	86	87	88	89	90	N 	N 	N
+DADDI R5, R5, 4 	87 	91	92	93	94	N 	N 	Y
+DSUB R1, R1, R2 	91	95	96	97	98	N 	N 	Y
+BNE R1, R3, GG 	95	96	99			Y 	N 	N
+HLT 		108					N 	N 	N
+GG: L.D F1, 4(R4) 	109	110	111	113	114	N 	N 	N
+L.D F2, 8(R5) 	110	115	116	130 	131	N 	N 	Y
+ADD.D F1, F4, F4 	115	116	117	119	120	N	N 	N
+ADD.D F6, F3, F7 	116	117	118	120	121	N 	N 	N
+SUB.D F2, F7, F4 	117	132	133	135	136	N	Y 	N
+MUL.D F6, F4, F5	132	133	134	164	165	N 	N 	N
+ADD.D F7, F2, F6	133	134	166	168	169	Y 	N 	N
+DADDI R4, R4, 4 	134	135	136	137	138	N 	N 	N
+DADDI R5, R5, 4 	135	139	140	141	142	N 	N 	Y
+DSUB R1, R1, R2 	139	143	144	145	146	N 	N 	Y
+BNE R1, R3, GG 	143	144	147			Y 	N 	N
+HLT 		144					N 	N 	N
+HLT 		148					N 	N 	N
+Total number of access requests for instruction cache: 30
+Number of instruction cache hits: 25
+Total number of access requests for data cache: 8
+Number of data cache hits: 6
