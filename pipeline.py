@@ -159,6 +159,8 @@ def read():
 
         if inst.type == InstructionType.CTRL:
             ret = resolveBranch(inst, inst.operand3)
+            if ret == -1:
+                mipsDefs.stop = True
             inst.IR = str(clockCount)
             unitsToFree.append(inst)
             addResult(inst, mipsDefs.resultMatrix )
@@ -332,7 +334,7 @@ def startMIPS():
         ret2 = issue()
         fetch()
 
-        if programCounter >= len(mipsDefs.instructions):
+        if programCounter > len(mipsDefs.instructions) or mipsDefs.stop:
             done = True
 
         if ret1 != -1 or ret2 != -1 :
@@ -341,15 +343,18 @@ def startMIPS():
             if ret1 != 1:
                 iCacheMissQueue.append(ret1)
                 ret1 = -1
-            else:
+            if ret2 != 1:
                 iCacheMissQueue.append(ret2)
                 ret2 = -1
 
-        if len(iCacheMissQueue) != 0 and iCachePenalty == 0 and iCacheMissClockCount == 0:
+        if len(iCacheMissQueue) != 0:
             oldPC = programCounter
             programCounter = iCacheMissQueue.pop(0)
+            iCacheMissQueue = []
+            iCacheMissClockCount = 0
             mipsDefs.iCacheAccesses = len(mipsDefs.iCacheCheckQueue)
-            for i in range(programCounter, oldPC+1):
+            #print(oldPC, programCounter)
+            for i in range(programCounter, oldPC):
                 mipsDefs.instructions[i].isExecutionDone = False
                 mipsDefs.instructions[i].isComplete = False
                 mipsDefs.instructions[i].dCachePenalty = 0

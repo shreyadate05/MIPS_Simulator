@@ -26,3 +26,5 @@ iCacheIndex = 0
 dCache = {}
 dCacheAccesses = 0
 dCacheHits = 0
+
+stop = False
