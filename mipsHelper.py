@@ -295,22 +295,13 @@ def freeUnit(currInst):
     mipsDefs.units[currInst.unit].availableCycleCounts = mipsDefs.units[currInst.unit].totalCycleCounts
     mipsDefs.units[currInst.unit].instructionsOccupying = []
 
-def freeRegisters(regsToFree, occupiedRegisters):
-    log.debug("Occupied Registers Before: ")
-    log.debug(occupiedRegisters)
-    for reg in regsToFree:
-        occupiedRegisters.pop(reg)
-        regsToFree.remove(reg)
-    log.debug("Occupied Registers After: ")
-    log.debug(occupiedRegisters)
-
 def isUnitAvailable(currInst):
     requiredUnit = currInst.unit
     ans = mipsDefs.units[requiredUnit].availableUnits != 0
     logUnitAvailability(currInst, ans)
     return ans
 
-def isWAW(currInst, occupiedRegisters):
+def isWAW(currInst):
     if currInst.type == InstructionType.INV or currInst.type == InstructionType.SPCL or currInst.type == InstructionType.CTRL:
         return False
     ans = False
@@ -328,7 +319,7 @@ def isWAW(currInst, occupiedRegisters):
                 ans = True
     return ans
 
-def isRAW(currInst, occupiedRegisters):
+def isRAW(currInst):
     ans = False
     if currInst.opcode == "HLT":
         return False

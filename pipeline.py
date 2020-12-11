@@ -12,14 +12,12 @@ execQueue = []
 writeQueue = []
 doneQueue = []
 unitsToFree = []
-regsToFree = []
 
 clockCount = 1
 iCachePenalty = 0
 dCachePenalty = 0
 done = False
 
-occupiedRegisters = { }
 mipsDefs.programCounter = 1
 programCounter = 0
 iCachePenalty = 0
@@ -88,7 +86,7 @@ def fetch():
 
 
 def issue():
-    global fetchQueue, issueQueue, readQueue, occupiedRegisters, programCounter, iCachePenalty
+    global fetchQueue, issueQueue, readQueue, programCounter, iCachePenalty
     global clockCount, finalOutputString, unitsToFree, iCacheMissClockCount
 
     log.debug("Issue Queue Before: ")
@@ -105,7 +103,7 @@ def issue():
         currInst.Struct = 'Y'
         return ret
 
-    if isWAW(currInst, occupiedRegisters):
+    if isWAW(currInst):
         log.debug("WAW hazard for instruction " + str(currInst.id) + ". Pipeline is stalled.")
         currInst.WAW = 'Y'
         return ret
@@ -130,7 +128,7 @@ def issue():
     return ret
 
 def read():
-    global readQueue, execQueue, writeQueue, occupiedRegisters
+    global readQueue, execQueue, writeQueue
     global clockCount, unitsToFree, programCounter
 
     ret = -1
@@ -147,12 +145,12 @@ def read():
 
     for i in range(len(readQueue)):
         inst = readQueue[i]
-        if isWAW(inst, occupiedRegisters):
+        if isWAW(inst):
             log.debug("WAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
             inst.WAW = 'Y'
             continue
 
-        if isRAW(inst, occupiedRegisters):
+        if isRAW(inst):
             inst.RAW = 'Y'
             log.debug("RAW hazard for instruction " + str(inst.id) + ". Pipeline is stalled.")
             continue
@@ -170,14 +168,6 @@ def read():
             continue
 
         inst.IR = str(clockCount)
-        if inst.type != InstructionType.INV and inst.type != InstructionType.SPCL and inst.type != InstructionType.CTRL:
-            if inst.opcode in ["SD", "S.D"]:
-                destinationOperand = inst.operand2
-                if '(' in destinationOperand:
-                    destinationReg = re.search('\(([^)]+)', destinationOperand).group(1)
-                    occupiedRegisters[destinationReg] = 1
-            else:
-                occupiedRegisters[inst.operand1] = 1
         log.debug("Read instruction " + str(inst.id) + ": " + inst.inst+ " at clock cycle " + str(clockCount))
         instToExec.append(inst)
 
@@ -298,14 +288,6 @@ def write():
         log.debug("Completed instruction: ")
         log.debug(currInst)
         unitsToFree.append(currInst)
-        if currInst.type != InstructionType.INV and currInst.type != InstructionType.SPCL and currInst.type != InstructionType.CTRL:
-            if currInst.opcode in ["SD", "S.D"]:
-                destinationOperand = currInst.operand2
-                if '(' in destinationOperand:
-                    destinationReg = re.search('\(([^)]+)', destinationOperand).group(1)
-                    regsToFree.append(destinationReg)
-            else:
-                regsToFree.append(currInst.operand1)
         instToPop.append(writeQueue[i])
 
     for i in range(len(instToPop)):
@@ -318,15 +300,14 @@ def write():
 
 
 def startMIPS():
-    global clockCount, done, allQueue, doneQueue, unitsToFree, occupiedRegisters, regsToFree, finalOutputString, iCacheMissQueue
+    global clockCount, done, allQueue, doneQueue, unitsToFree, finalOutputString, iCacheMissQueue
     global issueQueue, writeQueue, execQueue, readQueue, allQueue, programCounter, iCachePenalty, iCacheMissClockCount
     log.debug("Starting Pipeline...\n\n")
 
     mipsDefs.resultMatrix .append(['ID', 'Instruction', 'FETCH', 'ISSUE', 'READ', 'EXECUTE', 'WRITE', 'RAW', 'WAW', 'STRUCT', 'I-Cache', 'D-Cache'])
     while not done:
-        logStateAtClockStart(clockCount, occupiedRegisters, mipsDefs.registers, programCounter, mipsDefs.iCache, iCacheMissQueue, mipsDefs.dCache)
+        logStateAtClockStart(clockCount, mipsDefs.registers, programCounter, mipsDefs.iCache, iCacheMissQueue, mipsDefs.dCache)
         freeUnits(unitsToFree)
-        freeRegisters(regsToFree, occupiedRegisters)
 
         write()
         execute()

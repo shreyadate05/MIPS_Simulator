@@ -84,7 +84,7 @@ def example():
 
 
 if __name__ == '__main__':
-    argv = example()
+    #argv = example()
     #argv = test_case_1()
     #argv = test_case_2()
     #argv = test_case_3()

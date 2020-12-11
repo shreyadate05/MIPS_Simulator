@@ -17,10 +17,8 @@ def logResult(res):
     print(resultString)
     return resultString
 
-def logStateAtClockStart(clockCount, occupiedRegisters, registers, programCounter, iCache, iCacheMissQueue, dCache):
+def logStateAtClockStart(clockCount, registers, programCounter, iCache, iCacheMissQueue, dCache):
     log.debug("Clock Cycle: " + str(clockCount))
-    log.debug("Occupied Registers Map: ")
-    log.debug(occupiedRegisters)
     log.debug("Registers Map: ")
     log.debug(registers)
     log.debug("Program Counter: ")
