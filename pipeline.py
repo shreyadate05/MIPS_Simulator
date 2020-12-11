@@ -1,5 +1,6 @@
 from mipsHelper import *
 import logging
+import logHelper
 import mipsDefs
 
 log = logging.getLogger("MIPS Pipeline ")
@@ -24,7 +25,6 @@ programCounter = 0
 iCachePenalty = 0
 iCacheMissQueue = []
 iCacheMissClockCount = 0
-res = []
 dcacheEndCycle = 0
 
 icache_bus_cc = 0
@@ -41,16 +41,16 @@ def fetch():
         return
 
     isCahceHit = isInstInICache(programCounter)
-    if mipsDefs.instructions[programCounter].opcode != 'HLT':
-        if not isCahceHit:
-            mipsDefs.instructions[programCounter].iCache = 'M'
-            mipsDefs.iCacheMisses += 1
-            icache_bus_cc = clockCount
-            log.debug(dcacheEndCycle)
-        else:
-            if mipsDefs.instructions[programCounter].iCache == 'X':
-                mipsDefs.instructions[programCounter].iCache = 'H'
-                mipsDefs.iCacheHits += 1
+    #if mipsDefs.instructions[programCounter].opcode != 'HLT':
+    if not isCahceHit:
+        mipsDefs.instructions[programCounter].iCache = 'M'
+        mipsDefs.iCacheMisses += 1
+        icache_bus_cc = clockCount
+        log.debug(dcacheEndCycle)
+    else:
+        if mipsDefs.instructions[programCounter].iCache == 'X':
+            mipsDefs.instructions[programCounter].iCache = 'H'
+            mipsDefs.iCacheHits += 1
 
     if not isCahceHit:
         iCachePenalty = mipsDefs.iCachePenalty
@@ -89,7 +89,7 @@ def fetch():
 
 def issue():
     global fetchQueue, issueQueue, readQueue, occupiedRegisters, programCounter, iCachePenalty
-    global clockCount, finalOutputString, res, unitsToFree, iCacheMissClockCount
+    global clockCount, finalOutputString, unitsToFree, iCacheMissClockCount
 
     log.debug("Issue Queue Before: ")
     logQueue(issueQueue)
@@ -115,7 +115,7 @@ def issue():
         ret = resolveBranch(currInst, currInst.operand1)
         currInst.ID = str(clockCount)
         unitsToFree.append(currInst)
-        addResult(currInst, res)
+        addResult(currInst, mipsDefs.resultMatrix )
         log.debug("Issued instruction " + str(issueQueue[0].id) + ": " + issueQueue[0].inst + " at clock cycle " + str(clockCount))
         issueQueue.pop(0)
 
@@ -161,8 +161,8 @@ def read():
             ret = resolveBranch(inst, inst.operand3)
             inst.IR = str(clockCount)
             unitsToFree.append(inst)
-            addResult(inst, res)
-            log.debug(res)
+            addResult(inst, mipsDefs.resultMatrix )
+            log.debug(mipsDefs.resultMatrix )
             log.debug("Read instruction " + str(inst.id) + ": " + inst.inst + " at clock cycle " + str(clockCount))
             branchInstToRemove.append(inst)
             continue
@@ -266,7 +266,7 @@ def execute():
 
 def write():
     global writeQueue, doneQueue, unitsToFree
-    global clockCount, done, res
+    global clockCount, done
     deLim = " - "
 
     log.debug("Write Queue Before: ")
@@ -290,8 +290,8 @@ def write():
         else:
             aluDone = True
         currInst.WB = str(clockCount)
-        addResult(currInst, res)
-        log.debug(res)
+        addResult(currInst, mipsDefs.resultMatrix )
+        log.debug(mipsDefs.resultMatrix )
         log.debug("Write Back completed for instruction " + str(currInst.id) + ": " + currInst.inst + " at clock cycle " + str(clockCount))
         log.debug("Completed instruction: ")
         log.debug(currInst)
@@ -316,28 +316,15 @@ def write():
 
 
 def startMIPS():
-    global clockCount, done, allQueue, doneQueue, unitsToFree, occupiedRegisters, regsToFree, finalOutputString, res, iCacheMissQueue
+    global clockCount, done, allQueue, doneQueue, unitsToFree, occupiedRegisters, regsToFree, finalOutputString, iCacheMissQueue
     global issueQueue, writeQueue, execQueue, readQueue, allQueue, programCounter, iCachePenalty, iCacheMissClockCount
     log.debug("Starting Pipeline...\n\n")
 
-    res.append(['ID', 'Instruction', 'FETCH', 'ISSUE', 'READ', 'EXECUTE', 'WRITE', 'RAW', 'WAW', 'STRUCT', 'I-Cache', 'D-Cache'])
+    mipsDefs.resultMatrix .append(['ID', 'Instruction', 'FETCH', 'ISSUE', 'READ', 'EXECUTE', 'WRITE', 'RAW', 'WAW', 'STRUCT', 'I-Cache', 'D-Cache'])
     while not done:
-        log.debug("Clock Cycle: " + str(clockCount))
+        logStateAtClockStart(clockCount, occupiedRegisters, mipsDefs.registers, programCounter, mipsDefs.iCache, iCacheMissQueue, mipsDefs.dCache)
         freeUnits(unitsToFree)
         freeRegisters(regsToFree, occupiedRegisters)
-
-        log.debug("Occupied Registers Map: ")
-        log.debug(occupiedRegisters)
-        log.debug("Registers Map: ")
-        log.debug(mipsDefs.registers)
-        log.debug("Program Counter: ")
-        log.debug(programCounter)
-        log.debug("I-Cache: ")
-        log.debug(mipsDefs.iCache)
-        log.debug("I-Cache Miss Queue: ")
-        log.debug(iCacheMissQueue)
-        log.debug("D-Cache: ")
-        log.debug(mipsDefs.dCache)
 
         write()
         execute()
@@ -348,17 +335,15 @@ def startMIPS():
         if programCounter >= len(mipsDefs.instructions):
             done = True
 
-        if ret1 != -1 :
+        if ret1 != -1 or ret2 != -1 :
             issueQueue.clear()
             readQueue.clear()
-            iCacheMissQueue.append(ret1)
-            ret1 = -1
-
-        if ret2 != -1 :
-            issueQueue.clear()
-            readQueue.clear()
-            iCacheMissQueue.append(ret1)
-            ret2 = -1
+            if ret1 != 1:
+                iCacheMissQueue.append(ret1)
+                ret1 = -1
+            else:
+                iCacheMissQueue.append(ret2)
+                ret2 = -1
 
         if len(iCacheMissQueue) != 0 and iCachePenalty == 0 and iCacheMissClockCount == 0:
             oldPC = programCounter
@@ -381,12 +366,4 @@ def startMIPS():
     # for maintaining count in result file
     if len(mipsDefs.iCacheCheckQueue) != 0:
         mipsDefs.iCacheAccesses += len(mipsDefs.iCacheCheckQueue)
-
-    log.debug(res)
-    resultString = ""
-    res[1:].sort(key = lambda x: int(x[2]))
-    for row in res:
-        resultString += printResult(row) + "\n"
-        print()
-    mipsDefs.resultMatrix = res
-    return resultString
+    mipsDefs.resultString = logResult(mipsDefs.resultMatrix )

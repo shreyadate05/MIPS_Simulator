@@ -6,6 +6,7 @@ instructions = {} # id: <Instruction Object>
 units = {}        # unit_name: <Unit Object>
 labelMap = {}     # label: id of instruction at which label exists
 resultMatrix = []
+resultString = ""
 programCounter = 1
 
 mainMemoryAccessTime = 12

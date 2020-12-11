@@ -118,12 +118,6 @@ def getAddresses(currInst):
 # PRINT HELPERS
 # ----------------------------------------------------------------------------
 
-def printResult(res):
-    s = ""
-    for a, b, c, d, e, f, g, h, i, j, k, l in zip(res[::12], res[1::12], res[2::12], res[3::12], res[4::12], res[5::12], res[6::12], res[7::12], res[8::12], res[9::12],res[10::12], res[11::12]):
-        s = '{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<25}{:<}'.format(a,b,c,d,e,f,g,h,i,j,k,l)
-    return s
-
 def addResult(currInst, res):
     row = []
     row.append(str(currInst.id))
